@@ -1,37 +1,42 @@
-import {login} from '@react-native-seoul/kakao-login';
-import NaverLogin from '@react-native-seoul/naver-login';
+import {kakaoLogin} from '@app/apis/kakao';
+import {naverLogin} from '@app/apis/naver';
 
-import {Text, TouchableOpacity, View} from 'react-native';
+import SocialLoginButton from '@app/components/login/SocialLoginButton';
+import {View} from 'react-native';
 
-import Config from 'react-native-config';
+import naverLogo from '@app/assets/images/naver_logo.png';
+import kakaoLogo from '@app/assets/images/kakao_logo.png';
 
 const LoginScreen = () => {
-  const naverLogin = async () => {
-    const {failureResponse, successResponse} = await NaverLogin.login({
-      appName: Config.NAVER_APP_NAME,
-      consumerKey: Config.NAVER_CLIENT_ID,
-      consumerSecret: Config.NAVER_CLIENT_SECRET,
-      serviceUrlScheme: Config.NAVER_SERVICE_URL_SCHEME,
-    });
+  const naverLoginFn = async () => {
+    const profile = await naverLogin();
 
-    console.log('successResponse', successResponse);
-    console.log('failureResponse', failureResponse);
+    console.log('naver profile', profile);
   };
 
-  const kakaoLogin = async (): Promise<void> => {
-    const res = await login();
+  const kakaoLoginFn = async (): Promise<void> => {
+    const profile = await kakaoLogin();
 
-    console.log('res', res);
+    console.log('kakao profile', profile);
   };
 
   return (
     <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
-      <TouchableOpacity onPress={kakaoLogin}>
-        <Text>kakao login</Text>
-      </TouchableOpacity>
-      <TouchableOpacity onPress={naverLogin}>
-        <Text>naver login</Text>
-      </TouchableOpacity>
+      <SocialLoginButton
+        image={naverLogo}
+        text="네이버 로그인"
+        textColor="#fff"
+        bgColor="#02c759"
+        onPress={naverLoginFn}
+      />
+      <View style={{height: 10}} />
+      <SocialLoginButton
+        image={kakaoLogo}
+        text="카카오 로그인"
+        textColor="#000000d9"
+        bgColor="#ffeb01"
+        onPress={kakaoLoginFn}
+      />
     </View>
   );
 };
