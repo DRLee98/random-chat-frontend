@@ -1,11 +1,14 @@
 apply plugin: "com.android.application"
 apply plugin: "org.jetbrains.kotlin.android"
 apply plugin: "com.facebook.react"
+apply from: project(':react-native-config').projectDir.getPath() + "/dotenv.gradle"
 
 /**
  * This is the configuration block to customize your React Native Android app.
  * By default you don't need to apply any configuration, just uncomment the lines you need.
  */
+
+
 react {
     /* Folders */
     //   The root of your project, i.e. where "package.json" lives. Default is '..'
@@ -81,6 +84,9 @@ android {
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
         versionName "1.0"
+        resValue "string", "build_config_package", "com.random_chat_frontend"
+        resValue "string", "kakao_app_key", project.env.get("KAKAO_NATIVE_APP_KEY")
+        manifestPlaceholders['KAKAO_NATIVE_APP_KEY'] = project.env.get("KAKAO_NATIVE_APP_KEY")
     }
     signingConfigs {
         debug {

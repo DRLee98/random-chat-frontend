@@ -1,6 +1,9 @@
 #import "AppDelegate.h"
+#import "RNCConfig.h"
 
 #import <React/RCTBundleURLProvider.h>
+#import <NaverThirdPartyLogin/NaverThirdPartyLoginConnection.h>
+#import <RNKakaoLogins.h>
 
 @implementation AppDelegate
 
@@ -12,6 +15,24 @@
   self.initialProps = @{};
 
   return [super application:application didFinishLaunchingWithOptions:launchOptions];
+}
+
+- (BOOL)application:(UIApplication *)application
+            openURL:(NSURL *)url
+            options:(NSDictionary<UIApplicationOpenURLOptionsKey,id> *)options {
+
+  // naver
+  NSString *urlScheme = [RNCConfig envFor:@"NAVER_SERVICE_URL_SCHEME"];
+  if ([url.scheme isEqualToString:urlScheme]) {
+    return [[NaverThirdPartyLoginConnection getSharedInstance] application:application openURL:url options:options];
+  }
+  
+  // kakao
+  if([RNKakaoLogins isKakaoTalkLoginUrl:url]) {
+    return [RNKakaoLogins handleOpenUrl: url];
+  }
+
+  return YES;
 }
 
 - (NSURL *)sourceURLForBridge:(RCTBridge *)bridge
