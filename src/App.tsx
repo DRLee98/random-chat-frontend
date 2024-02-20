@@ -3,13 +3,13 @@ import {RecoilRoot} from 'recoil';
 import {ApolloProvider} from '@apollo/client';
 import {client} from './apollo';
 
-import Navigator from './navigators';
+import MainNavigator from './navigators';
 
 function App() {
   return (
     <ApolloProvider client={client}>
       <RecoilRoot>
-        <Navigator />
+        <MainNavigator />
       </RecoilRoot>
     </ApolloProvider>
   );

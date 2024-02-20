@@ -20,37 +20,8 @@
 	<string>$(MARKETING_VERSION)</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
-	<key>CFBundleURLTypes</key>
-	<array>
-		<dict>
-			<key>CFBundleTypeRole</key>
-			<string>Editor</string>
-			<key>CFBundleURLName</key>
-			<string>naver</string>
-			<key>CFBundleURLSchemes</key>
-			<array>
-				<string>${NAVER_SERVICE_URL_SCHEME}</string>
-			</array>
-		</dict>
-		<dict>
-		   <key>CFBundleTypeRole</key>
-		   <string>Editor</string>
-		   <key>CFBundleURLSchemes</key>
-		   <array>
-		     <string>kakao${KAKAO_NATIVE_APP_KEY}</string>
-		   </array>
-		</dict>
-	</array>
 	<key>CFBundleVersion</key>
 	<string>$(CURRENT_PROJECT_VERSION)</string>
-	<key>LSApplicationQueriesSchemes</key>
-	<array>
-		<string>naversearchapp</string>
-		<string>naversearchthirdlogin</string>
-		<string>kakaokompassauth</string>
-		<string>storykompassauth</string>
-		<string>kakaolink</string>
-	</array>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSAppTransportSecurity</key>
@@ -76,7 +47,51 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
+
+
+	<!-- 소셜 로그인 시작 -->
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLName</key>
+			<string>naver</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>${NAVER_SERVICE_URL_SCHEME}</string>
+			</array>
+		</dict>
+		<dict>
+		   <key>CFBundleTypeRole</key>
+		   <string>Editor</string>
+		   <key>CFBundleURLSchemes</key>
+		   <array>
+		     <string>kakao${KAKAO_NATIVE_APP_KEY}</string>
+		   </array>
+		</dict>
+	</array>
+	<key>LSApplicationQueriesSchemes</key>
+	<array>
+		<string>naversearchapp</string>
+		<string>naversearchthirdlogin</string>
+		<string>kakaokompassauth</string>
+		<string>storykompassauth</string>
+		<string>kakaolink</string>
+	</array>
 	<key>KAKAO_APP_KEY</key>
 	<string>${KAKAO_NATIVE_APP_KEY}</string>
+	<!-- 소셜 로그인 끝 -->
+
+	<!-- 카메라 시작 -->
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>$(PRODUCT_NAME) would like access to your photo gallery</string>
+	<key>NSCameraUsageDescription</key>
+	<string>$(PRODUCT_NAME) would like to use your camera</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>$(PRODUCT_NAME) would like to save photos to your photo gallery</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>$(PRODUCT_NAME) would like to use your microphone (for videos)</string>
+	<!-- 카메라 끝 -->
 </dict>
 </plist>

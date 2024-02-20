@@ -1,4 +1,3 @@
-import {useEffect} from 'react';
 import useLogin from '@app/graphql/hooks/useLogin';
 
 import {kakaoLogin} from '@app/apis/kakao';
@@ -10,18 +9,20 @@ import {View} from 'react-native';
 import naverLogo from '@app/assets/images/naver_logo.png';
 import kakaoLogo from '@app/assets/images/kakao_logo.png';
 
-import type {LoginInput} from '@app/graphql/types/graphql';
+import {MainNavigatorScreens} from '@app/navigators';
 
-const LoginScreen = () => {
-  const [login, loginResult] = useLogin();
+import type {StackScreenProps} from '@react-navigation/stack';
+import type {MainNavigatorParamList} from '@app/navigators';
+import type {SignUpScreenParams} from '@app/screens/signUp';
 
-  const loginFn = (input: LoginInput) => {
-    login({
-      variables: {
-        input,
-      },
-    });
-  };
+interface LoginScreenProps
+  extends StackScreenProps<
+    MainNavigatorParamList,
+    MainNavigatorScreens.Login
+  > {}
+
+const LoginScreen = ({navigation}: LoginScreenProps) => {
+  const [login] = useLogin();
 
   const naverLoginFn = async () => {
     const profile = await naverLogin();
@@ -30,28 +31,37 @@ const LoginScreen = () => {
     loginFn({
       socialId: profile.id,
       socialPlatform: 'NAVER',
+      nickname: profile.nickname + '',
+      profileUrl: profile.profile_image ?? undefined,
     });
   };
 
-  const kakaoLoginFn = async (): Promise<void> => {
+  const kakaoLoginFn = async () => {
     const profile = await kakaoLogin();
 
     if (!profile) return;
     loginFn({
       socialId: profile.id + '',
       socialPlatform: 'KAKAO',
+      nickname: profile.nickname,
+      profileUrl: profile.profileImageUrl,
     });
   };
 
-  useEffect(() => {
-    if (loginResult.variables && loginResult.data?.login) {
-      if (loginResult.data.login.ok) {
-        // 유저 세팅
-      } else {
-        // 회원가입 화면으로 이동
-      }
+  const loginFn = async (input: SignUpScreenParams) => {
+    const result = await login({
+      variables: {
+        input: {
+          socialId: input.socialId,
+          socialPlatform: input.socialPlatform,
+        },
+      },
+    });
+    if (result.data?.login.ok) {
+    } else {
+      navigation.navigate(MainNavigatorScreens.SignUp, input);
     }
-  }, [loginResult.data?.login]);
+  };
 
   return (
     <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>

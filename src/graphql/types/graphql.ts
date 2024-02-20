@@ -16,6 +16,8 @@ export type Scalars = {
   Float: { input: number; output: number; }
   /** A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format. */
   DateTime: { input: any; output: any; }
+  /** The `Upload` scalar type represents a file upload. */
+  Upload: { input: any; output: any; }
 };
 
 export type CreateRandomRoomOutput = {
@@ -27,8 +29,8 @@ export type CreateRandomRoomOutput = {
 
 export type CreateUserInput = {
   bio?: InputMaybe<Scalars['String']['input']>;
-  nickname?: InputMaybe<Scalars['String']['input']>;
-  profileUrl?: InputMaybe<Scalars['String']['input']>;
+  nickname: Scalars['String']['input'];
+  profile?: InputMaybe<Scalars['Upload']['input']>;
   socialId: Scalars['String']['input'];
   socialPlatform: Scalars['String']['input'];
 };
@@ -193,6 +195,7 @@ export type Query = {
   login: LoginOutput;
   me: MeOutput;
   myRooms: MyRoomsOutput;
+  randomNickname: RandomNicknameOutput;
   userProfile: UserProfileOutput;
   viewMessages: ViewMessagesOutput;
 };
@@ -215,6 +218,13 @@ export type QueryUserProfileArgs = {
 
 export type QueryViewMessagesArgs = {
   input: ViewMessagesInput;
+};
+
+export type RandomNicknameOutput = {
+  __typename?: 'RandomNicknameOutput';
+  error?: Maybe<Scalars['String']['output']>;
+  nickname?: Maybe<Scalars['String']['output']>;
+  ok: Scalars['Boolean']['output'];
 };
 
 export type ReadMessage = {
@@ -382,11 +392,14 @@ export type ViewMessagesOutput = {
 };
 
 export type CreateUserMutationVariables = Exact<{
-  input: CreateUserInput;
+  socialId: Scalars['String']['input'];
+  socialPlatform: Scalars['String']['input'];
+  nickname: Scalars['String']['input'];
+  profile?: InputMaybe<Scalars['Upload']['input']>;
 }>;
 
 
-export type CreateUserMutation = { __typename?: 'Mutation', createUser: { __typename?: 'CreateUserOutput', ok: boolean, error?: string | null, user?: { __typename?: 'UserObjectType', id: string } | null } };
+export type CreateUserMutation = { __typename?: 'Mutation', createUser: { __typename?: 'CreateUserOutput', ok: boolean, error?: string | null } };
 
 export type LoginQueryVariables = Exact<{
   input: LoginInput;
@@ -396,5 +409,5 @@ export type LoginQueryVariables = Exact<{
 export type LoginQuery = { __typename?: 'Query', login: { __typename?: 'LoginOutput', ok: boolean, error?: string | null, token?: string | null } };
 
 
-export const CreateUserDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"createUser"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"CreateUserInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"createUser"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"ok"}},{"kind":"Field","name":{"kind":"Name","value":"error"}},{"kind":"Field","name":{"kind":"Name","value":"user"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}}]}}]}}]} as unknown as DocumentNode<CreateUserMutation, CreateUserMutationVariables>;
+export const CreateUserDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"createUser"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"socialId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"socialPlatform"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"nickname"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"profile"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Upload"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"createUser"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"socialId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"socialId"}}},{"kind":"ObjectField","name":{"kind":"Name","value":"socialPlatform"},"value":{"kind":"Variable","name":{"kind":"Name","value":"socialPlatform"}}},{"kind":"ObjectField","name":{"kind":"Name","value":"nickname"},"value":{"kind":"Variable","name":{"kind":"Name","value":"nickname"}}},{"kind":"ObjectField","name":{"kind":"Name","value":"profile"},"value":{"kind":"Variable","name":{"kind":"Name","value":"profile"}}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"ok"}},{"kind":"Field","name":{"kind":"Name","value":"error"}}]}}]}}]} as unknown as DocumentNode<CreateUserMutation, CreateUserMutationVariables>;
 export const LoginDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"login"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"LoginInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"login"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"ok"}},{"kind":"Field","name":{"kind":"Name","value":"error"}},{"kind":"Field","name":{"kind":"Name","value":"token"}}]}}]}}]} as unknown as DocumentNode<LoginQuery, LoginQueryVariables>;

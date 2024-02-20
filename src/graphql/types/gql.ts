@@ -13,7 +13,7 @@ import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/
  * Therefore it is highly recommended to use the babel or swc plugin for production.
  */
 const documents = {
-    "\n  mutation createUser($input: CreateUserInput!) {\n    createUser(input: $input) {\n      ok\n      error\n      user {\n        id\n      }\n    }\n  }\n": types.CreateUserDocument,
+    "\n  mutation createUser(\n    $socialId: String!\n    $socialPlatform: String!\n    $nickname: String!\n    $profile: Upload\n  ) {\n    createUser(\n      input: {\n        socialId: $socialId\n        socialPlatform: $socialPlatform\n        nickname: $nickname\n        profile: $profile\n      }\n    ) {\n      ok\n      error\n    }\n  }\n": types.CreateUserDocument,
     "\n  query login($input: LoginInput!) {\n    login(input: $input) {\n      ok\n      error\n      token\n    }\n  }\n": types.LoginDocument,
 };
 
@@ -34,7 +34,7 @@ export function graphql(source: string): unknown;
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n  mutation createUser($input: CreateUserInput!) {\n    createUser(input: $input) {\n      ok\n      error\n      user {\n        id\n      }\n    }\n  }\n"): (typeof documents)["\n  mutation createUser($input: CreateUserInput!) {\n    createUser(input: $input) {\n      ok\n      error\n      user {\n        id\n      }\n    }\n  }\n"];
+export function graphql(source: "\n  mutation createUser(\n    $socialId: String!\n    $socialPlatform: String!\n    $nickname: String!\n    $profile: Upload\n  ) {\n    createUser(\n      input: {\n        socialId: $socialId\n        socialPlatform: $socialPlatform\n        nickname: $nickname\n        profile: $profile\n      }\n    ) {\n      ok\n      error\n    }\n  }\n"): (typeof documents)["\n  mutation createUser(\n    $socialId: String!\n    $socialPlatform: String!\n    $nickname: String!\n    $profile: Upload\n  ) {\n    createUser(\n      input: {\n        socialId: $socialId\n        socialPlatform: $socialPlatform\n        nickname: $nickname\n        profile: $profile\n      }\n    ) {\n      ok\n      error\n    }\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

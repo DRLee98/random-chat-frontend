@@ -1,20 +1,28 @@
 import {createStackNavigator} from '@react-navigation/stack';
 
-import LoginScreen from '@app/screens/login';
-import SignUpStackNavigator from './SignUpStackNavigator';
-import {NavigationContainer} from '@react-navigation/native';
-import {SafeAreaView, StyleSheet} from 'react-native';
 import {useRecoilState} from 'recoil';
 import {user} from '@app/atoms/user';
 
-interface NavigatorProps {
-  Login: undefined;
-  SignUp: undefined;
+import LoginScreen from '@app/screens/login';
+import SignUpScreen from '@app/screens/signUp';
+import {NavigationContainer} from '@react-navigation/native';
+import {SafeAreaView, StyleSheet} from 'react-native';
+
+import type {SignUpScreenParams} from '@app/screens/signUp';
+
+export enum MainNavigatorScreens {
+  Login = 'Login',
+  SignUp = 'SignUp',
 }
 
-const Stack = createStackNavigator();
+export type MainNavigatorParamList = {
+  Login: undefined;
+  SignUp: SignUpScreenParams;
+};
 
-const Navigator = () => {
+const Stack = createStackNavigator<MainNavigatorParamList>();
+
+const MainNavigator = () => {
   const userState = useRecoilState(user);
   console.log('userState', userState);
 
@@ -23,11 +31,14 @@ const Navigator = () => {
       <NavigationContainer>
         <Stack.Navigator>
           <Stack.Screen
-            name="Login"
+            name={MainNavigatorScreens.Login}
             component={LoginScreen}
             options={{headerShown: false}}
           />
-          {/* <Stack.Screen name="SignUp" component={SignUpStackNavigator} /> */}
+          <Stack.Screen
+            name={MainNavigatorScreens.SignUp}
+            component={SignUpScreen}
+          />
         </Stack.Navigator>
       </NavigationContainer>
     </SafeAreaView>
@@ -40,4 +51,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Navigator;
+export default MainNavigator;
