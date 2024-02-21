@@ -1,15 +1,26 @@
 import {ApolloClient, ApolloLink, InMemoryCache, split} from '@apollo/client';
+import {setContext} from '@apollo/client/link/context';
 import {getMainDefinition} from '@apollo/client/utilities';
 import {WebSocketLink} from '@apollo/client/link/ws';
 import {createUploadLink} from 'apollo-upload-client';
+
+import {getToken} from './utils/encStorage';
 
 import Config from 'react-native-config';
 
 const httpLink = createUploadLink({
   uri: Config.API_URL,
-  headers: {
-    'Apollo-Require-Preflight': 'true',
-  },
+});
+
+const authLink = setContext(async (_, {headers}) => {
+  const token = await getToken();
+  return {
+    headers: {
+      ...headers,
+      'Apollo-Require-Preflight': 'true',
+      authorization: token ? `Bearer ${token}` : '',
+    },
+  };
 });
 
 const wsLink = new WebSocketLink({
@@ -25,7 +36,7 @@ const splitLink = split(
     );
   },
   wsLink,
-  httpLink as unknown as ApolloLink,
+  authLink.concat(httpLink as unknown as ApolloLink),
 );
 
 export const client = new ApolloClient({

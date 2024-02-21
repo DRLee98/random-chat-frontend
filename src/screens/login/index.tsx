@@ -1,4 +1,4 @@
-import useLogin from '@app/graphql/hooks/useLogin';
+import useLoginAndSetToken from '@app/hooks/useLoginAndSetToken';
 
 import {kakaoLogin} from '@app/apis/kakao';
 import {naverLogin} from '@app/apis/naver';
@@ -11,6 +11,8 @@ import kakaoLogo from '@app/assets/images/kakao_logo.png';
 
 import {MainNavigatorScreens} from '@app/navigators';
 
+import {setSociald} from '@app/utils/encStorage';
+
 import type {StackScreenProps} from '@react-navigation/stack';
 import type {MainNavigatorParamList} from '@app/navigators';
 import type {SignUpScreenParams} from '@app/screens/signUp';
@@ -22,11 +24,10 @@ interface LoginScreenProps
   > {}
 
 const LoginScreen = ({navigation}: LoginScreenProps) => {
-  const [login] = useLogin();
+  const login = useLoginAndSetToken();
 
   const naverLoginFn = async () => {
     const profile = await naverLogin();
-
     if (!profile) return;
     loginFn({
       socialId: profile.id,
@@ -38,7 +39,6 @@ const LoginScreen = ({navigation}: LoginScreenProps) => {
 
   const kakaoLoginFn = async () => {
     const profile = await kakaoLogin();
-
     if (!profile) return;
     loginFn({
       socialId: profile.id + '',
@@ -50,14 +50,12 @@ const LoginScreen = ({navigation}: LoginScreenProps) => {
 
   const loginFn = async (input: SignUpScreenParams) => {
     const result = await login({
-      variables: {
-        input: {
-          socialId: input.socialId,
-          socialPlatform: input.socialPlatform,
-        },
-      },
+      socialId: input.socialId,
+      socialPlatform: input.socialPlatform,
     });
-    if (result.data?.login.ok) {
+    if (result) {
+      setSociald(input);
+      navigation.replace(MainNavigatorScreens.Home);
     } else {
       navigation.navigate(MainNavigatorScreens.SignUp, input);
     }

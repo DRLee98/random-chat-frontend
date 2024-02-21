@@ -1,21 +1,18 @@
 import {useEffect, useState} from 'react';
+import useLoginAndSetToken from '@app/hooks/useLoginAndSetToken';
 import useCreateUser from '@app/graphql/hooks/useCreateUser';
+import useRandomNickname from '@app/graphql/hooks/useRandomNickname';
 
-import {
-  ActionSheetIOS,
-  Alert,
-  Button,
-  Platform,
-  TextInput,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import {Button, TextInput, View} from 'react-native';
 import ProfileImg from '@app/components/common/ProfileImg';
+import PictureSelectButton from '@app/components/common/PictureSelectButton';
 
-import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import {ReactNativeFile} from 'apollo-upload-client';
+import {ApolloError} from '@apollo/client';
 
 import {MainNavigatorScreens} from '@app/navigators';
+
+import {setSociald} from '@app/utils/encStorage';
 
 import type {StackScreenProps} from '@react-navigation/stack';
 import type {MainNavigatorParamList} from '@app/navigators';
@@ -39,32 +36,13 @@ interface SignUpScreenProps
     MainNavigatorScreens.SignUp
   > {}
 
-const SignUpScreen = ({route}: SignUpScreenProps) => {
+const SignUpScreen = ({route, navigation}: SignUpScreenProps) => {
+  const login = useLoginAndSetToken();
   const [createUser] = useCreateUser();
+  const [randomNickname, randomNicknameResult] = useRandomNickname();
+
   const [profile, setProfile] = useState<Profile>();
   const [values, setValues] = useState<Values>();
-
-  const pickImage = async () => {
-    const result = await launchImageLibrary({
-      mediaType: 'photo',
-      selectionLimit: 1,
-    });
-    if (result.didCancel || !result.assets) {
-      return null;
-    }
-    setImage(result.assets[0]);
-  };
-
-  const takeImage = async () => {
-    const result = await launchCamera({
-      mediaType: 'photo',
-      cameraType: 'back',
-    });
-    if (result.didCancel || !result.assets) {
-      return null;
-    }
-    setImage(result.assets[0]);
-  };
 
   const setImage = (asset: Asset) => {
     if (asset.uri && asset.type) {
@@ -78,29 +56,8 @@ const SignUpScreen = ({route}: SignUpScreenProps) => {
     }
   };
 
-  const press = () => {
-    if (Platform.OS === 'ios') {
-      ActionSheetIOS.showActionSheetWithOptions(
-        {options: ['취소', '사진선택', '사진촬영'], cancelButtonIndex: 0},
-        index => {
-          if (index === 1) {
-            pickImage();
-          }
-          if (index === 2) {
-            takeImage();
-          }
-        },
-      );
-    } else {
-      Alert.alert('프로필 이미지 업로드', undefined, [
-        {text: '사진선택', onPress: pickImage},
-        {text: '사진촬영', onPress: takeImage},
-      ]);
-    }
-  };
-
   const setValuesFn = async (params: SignUpScreenParams) => {
-    const {profileUrl, ...rest} = params;
+    const {profileUrl, ...v} = params;
     if (profileUrl) {
       const file = new ReactNativeFile({
         uri: params.profileUrl,
@@ -109,20 +66,54 @@ const SignUpScreen = ({route}: SignUpScreenProps) => {
       });
       setProfile({uri: profileUrl, file});
     }
-    setValues(rest);
+    setValues(v);
+  };
+
+  const createRandomNickname = async () => {
+    const result = await randomNickname();
+    console.log('randomNickname', result?.randomNickname);
+    if (result?.randomNickname.ok) {
+      setValues(
+        prev =>
+          prev && {
+            ...prev,
+            nickname: result?.randomNickname.nickname ?? prev.nickname,
+          },
+      );
+    }
   };
 
   const regist = async () => {
     try {
       if (values) {
-        console.log('profile', profile);
         const result = await createUser({
-          variables: {input: {...values, profile: profile?.file}},
+          variables: {
+            input: {...values, ...(profile && {profile: profile.file})},
+          },
         });
-        console.log('result', result);
+        console.log('createUser', result.data?.createUser.ok, values, profile);
+        if (result.data?.createUser.ok) {
+          const socialData = {
+            socialId: values.socialId,
+            socialPlatform: values.socialPlatform,
+          };
+          const loginResult = await login(socialData);
+          if (loginResult) {
+            setSociald(socialData);
+            navigation.replace(MainNavigatorScreens.Home);
+          } else {
+            console.error('login failed');
+          }
+        }
       }
     } catch (error) {
-      console.error('error', error);
+      if (error instanceof ApolloError) {
+        error.graphQLErrors.forEach(e => {
+          console.error('error', e.message);
+        });
+      } else {
+        console.error('error', error);
+      }
     }
   };
 
@@ -132,10 +123,17 @@ const SignUpScreen = ({route}: SignUpScreenProps) => {
 
   return (
     <View style={{alignItems: 'center', justifyContent: 'center', flex: 1}}>
-      <TouchableOpacity onPress={press}>
+      <PictureSelectButton onChange={setImage}>
         <ProfileImg url={profile?.uri} />
-      </TouchableOpacity>
-      <TextInput placeholder="nickname" value={values?.nickname} />
+      </PictureSelectButton>
+      <View style={{flexDirection: 'row', marginVertical: 20}}>
+        <TextInput placeholder="nickname" value={values?.nickname} />
+        <Button
+          disabled={randomNicknameResult.loading}
+          title="랜덤 닉네임 생성"
+          onPress={createRandomNickname}
+        />
+      </View>
       <Button title="가입하기" onPress={regist} />
     </View>
   );
