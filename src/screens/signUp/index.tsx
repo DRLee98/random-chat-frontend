@@ -23,12 +23,13 @@ export interface SignUpScreenParams extends Omit<CreateUserInput, 'profile'> {
   profileUrl?: string;
 }
 
-interface Profile {
-  uri: string;
-  file: ReactNativeFile;
-}
-
 interface Values extends Omit<CreateUserInput, 'profile'> {}
+
+interface ReactNativeFileType {
+  uri: string;
+  name: string;
+  type: string;
+}
 
 interface SignUpScreenProps
   extends StackScreenProps<
@@ -41,7 +42,7 @@ const SignUpScreen = ({route, navigation}: SignUpScreenProps) => {
   const [createUser] = useCreateUser();
   const [randomNickname, randomNicknameResult] = useRandomNickname();
 
-  const [profile, setProfile] = useState<Profile>();
+  const [profile, setProfile] = useState<ReactNativeFileType>();
   const [values, setValues] = useState<Values>();
 
   const setImage = (asset: Asset) => {
@@ -51,8 +52,7 @@ const SignUpScreen = ({route, navigation}: SignUpScreenProps) => {
         name: asset.fileName,
         type: asset.type,
       });
-      const uriPath = asset.uri.split('//').pop();
-      setProfile({uri: 'file://' + uriPath, file});
+      setProfile(file);
     }
   };
 
@@ -64,14 +64,13 @@ const SignUpScreen = ({route, navigation}: SignUpScreenProps) => {
         name: `${params.socialPlatform}_profile.${profileUrl.split('.').pop()}`,
         type: 'image',
       });
-      setProfile({uri: profileUrl, file});
+      setProfile(file);
     }
     setValues(v);
   };
 
   const createRandomNickname = async () => {
     const result = await randomNickname();
-    console.log('randomNickname', result?.randomNickname);
     if (result?.randomNickname.ok) {
       setValues(
         prev =>
@@ -88,10 +87,9 @@ const SignUpScreen = ({route, navigation}: SignUpScreenProps) => {
       if (values) {
         const result = await createUser({
           variables: {
-            input: {...values, ...(profile && {profile: profile.file})},
+            input: {...values, ...(profile && {profile})},
           },
         });
-        console.log('createUser', result.data?.createUser.ok, values, profile);
         if (result.data?.createUser.ok) {
           const socialData = {
             socialId: values.socialId,
