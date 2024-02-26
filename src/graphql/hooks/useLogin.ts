@@ -1,5 +1,5 @@
 import {gql} from '@apollo/client';
-import useCustomLazyQuery from './useCustomLazyQuery';
+import useCustomLazyQuery from '../utils/useCustomLazyQuery';
 
 import type {LoginQuery, QueryLoginArgs} from '../types/graphql';
 

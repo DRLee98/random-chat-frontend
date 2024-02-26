@@ -17,6 +17,7 @@ const documents = {
     "\n  mutation createUser($input: CreateUserInput!) {\n    createUser(input: $input) {\n      ok\n      error\n      user {\n        id\n      }\n    }\n  }\n": types.CreateUserDocument,
     "\n  query login($input: LoginInput!) {\n    login(input: $input) {\n      ok\n      error\n      token\n    }\n  }\n": types.LoginDocument,
     "\n  query myRooms($input: MyRoomsInput!) {\n    myRooms(input: $input) {\n      ok\n      error\n      totalPages\n      hasNextPage\n      rooms {\n        id\n        name\n        noti\n        pinned\n        newMessage\n        lastMessage\n      }\n    }\n  }\n": types.MyRoomsDocument,
+    "\n  subscription newRoom {\n    newRoom {\n      id\n      name\n      noti\n      pinned\n      newMessage\n    }\n  }\n": types.NewRoomDocument,
     "\n  query randomNickname {\n    randomNickname {\n      ok\n      error\n      nickname\n    }\n  }\n": types.RandomNicknameDocument,
 };
 
@@ -50,6 +51,10 @@ export function graphql(source: "\n  query login($input: LoginInput!) {\n    log
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(source: "\n  query myRooms($input: MyRoomsInput!) {\n    myRooms(input: $input) {\n      ok\n      error\n      totalPages\n      hasNextPage\n      rooms {\n        id\n        name\n        noti\n        pinned\n        newMessage\n        lastMessage\n      }\n    }\n  }\n"): (typeof documents)["\n  query myRooms($input: MyRoomsInput!) {\n    myRooms(input: $input) {\n      ok\n      error\n      totalPages\n      hasNextPage\n      rooms {\n        id\n        name\n        noti\n        pinned\n        newMessage\n        lastMessage\n      }\n    }\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  subscription newRoom {\n    newRoom {\n      id\n      name\n      noti\n      pinned\n      newMessage\n    }\n  }\n"): (typeof documents)["\n  subscription newRoom {\n    newRoom {\n      id\n      name\n      noti\n      pinned\n      newMessage\n    }\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

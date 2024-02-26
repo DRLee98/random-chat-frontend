@@ -25,6 +25,15 @@ const authLink = setContext(async (_, {headers}) => {
 
 const wsLink = new WebSocketLink({
   uri: Config.WS_API_URL,
+  options: {
+    reconnect: true,
+    connectionParams: async () => {
+      const token = await getToken();
+      return {
+        authorization: token ? `Bearer ${token}` : '',
+      };
+    },
+  },
 });
 
 const splitLink = split(

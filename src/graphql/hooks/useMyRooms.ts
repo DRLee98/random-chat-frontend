@@ -1,5 +1,5 @@
 import {gql} from '@apollo/client';
-import useCustomLazyQuery from './useCustomLazyQuery';
+import useCustomLazyQuery from '../utils/useCustomLazyQuery';
 import {MyRoomsQuery, QueryMyRoomsArgs} from '../types/graphql';
 
 const MY_ROOMS = gql`
