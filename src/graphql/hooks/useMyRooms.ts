@@ -1,6 +1,8 @@
-import {gql} from '@apollo/client';
 import useCustomLazyQuery from '../utils/useCustomLazyQuery';
-import {MyRoomsQuery, QueryMyRoomsArgs} from '../types/graphql';
+import {gql} from '@apollo/client';
+import {MY_ROOM_BASE} from '../fragments/room';
+
+import type {MyRoomsQuery, QueryMyRoomsArgs} from '../types/graphql';
 
 const MY_ROOMS = gql`
   query myRooms($input: MyRoomsInput!) {
@@ -10,15 +12,11 @@ const MY_ROOMS = gql`
       totalPages
       hasNextPage
       rooms {
-        id
-        name
-        noti
-        pinned
-        newMessage
-        lastMessage
+        ...MyRoomBase
       }
     }
   }
+  ${MY_ROOM_BASE}
 `;
 
 const useMyRooms = () => {

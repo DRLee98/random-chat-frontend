@@ -3,21 +3,25 @@ import {createStackNavigator} from '@react-navigation/stack';
 import LoginScreen from '@app/screens/login';
 import SignUpScreen from '@app/screens/signUp';
 import HomeScreen from '@app/screens/home';
+import ChatRoomScreen from '@app/screens/chatRoom';
 import {NavigationContainer} from '@react-navigation/native';
 import {SafeAreaView, StyleSheet} from 'react-native';
 
 import type {SignUpScreenParams} from '@app/screens/signUp';
+import type {ChatRoomScreenParams} from '@app/screens/chatRoom';
 
 export enum MainNavigatorScreens {
   Login = 'Login',
   SignUp = 'SignUp',
   Home = 'Home',
+  ChatRoom = 'ChatRoom',
 }
 
 export type MainNavigatorParamList = {
   Login: undefined;
   SignUp: SignUpScreenParams;
   Home: undefined;
+  ChatRoom: ChatRoomScreenParams;
 };
 
 const Stack = createStackNavigator<MainNavigatorParamList>();
@@ -39,6 +43,10 @@ const MainNavigator = () => {
           <Stack.Screen
             name={MainNavigatorScreens.Home}
             component={HomeScreen}
+          />
+          <Stack.Screen
+            name={MainNavigatorScreens.ChatRoom}
+            component={ChatRoomScreen}
           />
         </Stack.Navigator>
       </NavigationContainer>

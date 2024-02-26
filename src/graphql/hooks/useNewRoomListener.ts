@@ -1,24 +1,22 @@
 import {gql, useSubscription} from '@apollo/client';
+import {MY_ROOM_BASE} from '../fragments/room';
 
-import type {UserRoomObjectType} from '../types/graphql';
+import type {MyRoom} from '../types/graphql';
 import type {SubscriptionHookOptions} from '@apollo/client';
 
 const NEW_ROOM = gql`
   subscription newRoom {
     newRoom {
-      id
-      name
-      noti
-      pinned
-      newMessage
+      ...MyRoomBase
     }
   }
+  ${MY_ROOM_BASE}
 `;
 
-interface Options extends SubscriptionHookOptions<UserRoomObjectType> {}
+interface Options extends SubscriptionHookOptions<MyRoom> {}
 
 const useNewRoomListener = (optiosn: Options) => {
-  return useSubscription<UserRoomObjectType>(NEW_ROOM, optiosn);
+  return useSubscription<MyRoom>(NEW_ROOM, optiosn);
 };
 
 export default useNewRoomListener;

@@ -1,7 +1,6 @@
 import {gql, useMutation} from '@apollo/client';
 import type {
   CreateUserMutation,
-  CreateUserOutput,
   MutationCreateUserArgs,
 } from '../types/graphql';
 
