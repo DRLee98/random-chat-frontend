@@ -1,7 +1,7 @@
 import {gql} from '@apollo/client';
-import useCustomLazyQuery from '../utils/useCustomLazyQuery';
+import useCustomLazyQuery from '../../utils/useCustomLazyQuery';
 
-import type {LoginQuery, QueryLoginArgs} from '../types/graphql';
+import type {LoginQuery, QueryLoginArgs} from '../../types/graphql';
 
 const LOGIN = gql`
   query login($input: LoginInput!) {

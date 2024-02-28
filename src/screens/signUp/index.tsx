@@ -1,7 +1,7 @@
 import {useEffect, useState} from 'react';
 import useLoginAndSetToken from '@app/hooks/useLoginAndSetToken';
-import useCreateUser from '@app/graphql/hooks/useCreateUser';
-import useRandomNickname from '@app/graphql/hooks/useRandomNickname';
+import useCreateUser from '@app/graphql/hooks/user/useCreateUser';
+import useRandomNickname from '@app/graphql/hooks/user/useRandomNickname';
 
 import {Button, TextInput, View} from 'react-native';
 import ProfileImg from '@app/components/common/ProfileImg';

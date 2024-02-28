@@ -1,7 +1,7 @@
 import {gql, useSubscription} from '@apollo/client';
-import {MY_ROOM_BASE} from '../fragments/room';
+import {MY_ROOM_BASE} from '../../fragments/room';
 
-import type {MyRoom} from '../types/graphql';
+import type {MyRoom} from '../../types/graphql';
 import type {SubscriptionHookOptions} from '@apollo/client';
 
 const NEW_ROOM = gql`
@@ -15,8 +15,8 @@ const NEW_ROOM = gql`
 
 interface Options extends SubscriptionHookOptions<MyRoom> {}
 
-const useNewRoomListener = (optiosn: Options) => {
-  return useSubscription<MyRoom>(NEW_ROOM, optiosn);
+const useNewRoomListener = (options: Options) => {
+  return useSubscription<MyRoom>(NEW_ROOM, options);
 };
 
 export default useNewRoomListener;

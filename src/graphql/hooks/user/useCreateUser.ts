@@ -2,7 +2,7 @@ import {gql, useMutation} from '@apollo/client';
 import type {
   CreateUserMutation,
   MutationCreateUserArgs,
-} from '../types/graphql';
+} from '../../types/graphql';
 
 const CREATE_USER = gql`
   mutation createUser($input: CreateUserInput!) {

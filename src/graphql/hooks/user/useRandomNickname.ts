@@ -1,6 +1,6 @@
 import {gql} from '@apollo/client';
-import useCustomLazyQuery from '../utils/useCustomLazyQuery';
-import type {RandomNicknameQuery} from '../types/graphql';
+import useCustomLazyQuery from '../../utils/useCustomLazyQuery';
+import type {RandomNicknameQuery} from '../../types/graphql';
 
 const RANDOM_NICKNAME = gql`
   query randomNickname {

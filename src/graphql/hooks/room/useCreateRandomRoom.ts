@@ -1,7 +1,7 @@
 import {gql, useMutation} from '@apollo/client';
-import {MY_ROOM_BASE} from '../fragments/room';
+import {MY_ROOM_BASE} from '../../fragments/room';
 
-import type {CreateRandomRoomMutation} from '../types/graphql';
+import type {CreateRandomRoomMutation} from '../../types/graphql';
 
 const CREATE_RANDOM_ROOM = gql`
   mutation createRandomRoom {
