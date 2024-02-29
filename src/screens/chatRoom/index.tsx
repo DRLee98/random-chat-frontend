@@ -6,7 +6,7 @@ import useReadMessageListener from '@app/graphql/hooks/message/useReadMessageLis
 import useSendMessage from '@app/graphql/hooks/message/useSendMessage';
 import useMe from '@app/graphql/hooks/user/useMe';
 
-import {Button, Text, TextInput, View} from 'react-native';
+import {Button, ScrollView, Text, TextInput, View} from 'react-native';
 
 import {MainNavigatorScreens} from '@app/navigators';
 import {MessageType} from '@app/graphql/types/graphql';
@@ -33,8 +33,7 @@ const ChatRoomScreen = ({route}: ChatRoomScreenProps) => {
   const room = useRoomDetail({roomId: +route.params.roomId});
   const message = useViewMessages({
     roomId: +route.params.roomId,
-    page: 1,
-    take: 10,
+    take: 5,
   });
 
   const [sendMessage] = useSendMessage();
@@ -58,12 +57,11 @@ const ChatRoomScreen = ({route}: ChatRoomScreenProps) => {
         ...prev.viewMessages,
         messages: prev.viewMessages.messages?.map(m => {
           const findMessage = messages.find(msg => msg.id === m.id);
-          if (findMessage) {
+          if (findMessage)
             return {
               ...m,
               readUsersId: findMessage.readUsersId,
             };
-          }
           return m;
         }),
       },
@@ -123,7 +121,7 @@ const ChatRoomScreen = ({route}: ChatRoomScreenProps) => {
   };
 
   return (
-    <View>
+    <ScrollView>
       <Text>
         Chat Room: {room.data?.roomDetail.room?.name}, id: {route.params.roomId}
       </Text>
@@ -148,7 +146,8 @@ const ChatRoomScreen = ({route}: ChatRoomScreenProps) => {
         onChange={e => setValue(e.nativeEvent.text)}
       />
       <Button title="Send" onPress={sendMessageFn} />
-    </View>
+      <Button title="More" onPress={message.fetchMore} />
+    </ScrollView>
   );
 };
 

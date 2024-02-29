@@ -1,6 +1,6 @@
 import {gql, useSubscription} from '@apollo/client';
 
-import type {UpdateNewMessageInUserRoom} from '../../types/graphql';
+import type {UpdateNewMessageInUserRoomSubscription} from '../../types/graphql';
 import type {SubscriptionHookOptions} from '@apollo/client';
 
 const UPDATE_NEW_MESSAGE = gql`
@@ -14,10 +14,11 @@ const UPDATE_NEW_MESSAGE = gql`
   }
 `;
 
-interface Options extends SubscriptionHookOptions<UpdateNewMessageInUserRoom> {}
+interface Options
+  extends SubscriptionHookOptions<UpdateNewMessageInUserRoomSubscription> {}
 
 const useUpdateNewMessageListener = (options: Options) => {
-  return useSubscription<UpdateNewMessageInUserRoom>(
+  return useSubscription<UpdateNewMessageInUserRoomSubscription>(
     UPDATE_NEW_MESSAGE,
     options,
   );

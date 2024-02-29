@@ -3,7 +3,7 @@ import useCreateRandomRoom from '@app/graphql/hooks/room/useCreateRandomRoom';
 import useNewRoomListener from '@app/graphql/hooks/room/useNewRoomListener';
 import useUpdateNewMessageListener from '@app/graphql/hooks/message/useUpdateNewMessageListener';
 
-import {View, Text, Button} from 'react-native';
+import {Text, Button, ScrollView} from 'react-native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 
 import {MainNavigatorScreens} from '@app/navigators';
@@ -20,9 +20,12 @@ interface HomeScreenProps
 
 const HomeScreen = ({navigation}: HomeScreenProps) => {
   const [createRandomRoom] = useCreateRandomRoom();
-  const {data: myRoomsData, updateQuery} = useMyRooms({
-    page: 1,
-    take: 10,
+  const {
+    data: myRoomsData,
+    updateQuery,
+    fetchMore,
+  } = useMyRooms({
+    take: 5,
   });
 
   const goChatRoom = (roomId: string) => {
@@ -63,7 +66,6 @@ const HomeScreen = ({navigation}: HomeScreenProps) => {
 
   const createRandomRoomFn = async () => {
     const {data} = await createRandomRoom();
-    console.log(data);
     if (data?.createRandomRoom.room) {
       const userRoom = data.createRandomRoom.room as MyRoom;
       updateRoom(userRoom);
@@ -71,23 +73,27 @@ const HomeScreen = ({navigation}: HomeScreenProps) => {
     }
   };
 
-  useNewRoomListener({onData: ({data}) => updateRoom(data.data)});
+  useNewRoomListener({
+    onData: ({data}) => updateRoom(data.data?.newRoom as MyRoom),
+  });
   useUpdateNewMessageListener({
-    onData: ({data}) => updateNewMessage(data.data),
+    onData: ({data}) => updateNewMessage(data.data?.updateNewMessageInUserRoom),
   });
 
   return (
-    <View>
+    <ScrollView>
       <Button title="create room" onPress={createRandomRoomFn} />
       {myRoomsData?.myRooms?.rooms?.map(userRoom => (
         <TouchableOpacity
           key={userRoom.id}
-          onPress={() => goChatRoom(userRoom.room.id)}>
+          onPress={() => goChatRoom(userRoom.room.id)}
+          style={{marginVertical: 10}}>
           <Text>{userRoom.name}</Text>
           <Text>new message: {userRoom.newMessage}</Text>
         </TouchableOpacity>
       ))}
-    </View>
+      <Button title="more" onPress={fetchMore} />
+    </ScrollView>
   );
 };
 
