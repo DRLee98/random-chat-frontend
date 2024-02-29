@@ -20,9 +20,9 @@ const documents = {
     "\n  subscription readMessage($input: ReadMessageInput!) {\n    readMessage(input: $input) {\n      messages {\n        id\n        readUsersId\n      }\n    }\n  }\n": types.ReadMessageDocument,
     "\n  mutation sendMessage($input: SendMessageInput!) {\n    sendMessage(input: $input) {\n      ok\n      error\n      messageId\n    }\n  }\n": types.SendMessageDocument,
     "\n  subscription updateNewMessageInUserRoom {\n    updateNewMessageInUserRoom {\n      id\n      newMessage\n      lastMessage\n      userId\n    }\n  }\n": types.UpdateNewMessageInUserRoomDocument,
-    "\n  query viewMessages($input: ViewMessagesInput!) {\n    viewMessages(input: $input) {\n      ok\n      error\n      currentPage\n      totalPages\n      hasNextPage\n      messages {\n        ...MessageBase\n      }\n    }\n  }\n  \n": types.ViewMessagesDocument,
+    "\n  query viewMessages($input: ViewMessagesInput!) {\n    viewMessages(input: $input) {\n      ok\n      error\n      hasNext\n      messages {\n        ...MessageBase\n      }\n    }\n  }\n  \n": types.ViewMessagesDocument,
     "\n  mutation createRandomRoom {\n    createRandomRoom {\n      ok\n      error\n      room {\n        ...MyRoomBase\n      }\n    }\n  }\n  \n": types.CreateRandomRoomDocument,
-    "\n  query myRooms($input: MyRoomsInput!) {\n    myRooms(input: $input) {\n      ok\n      error\n      currentPage\n      totalPages\n      hasNextPage\n      rooms {\n        ...MyRoomBase\n      }\n    }\n  }\n  \n": types.MyRoomsDocument,
+    "\n  query myRooms($input: MyRoomsInput!) {\n    myRooms(input: $input) {\n      ok\n      error\n      hasNext\n      rooms {\n        ...MyRoomBase\n      }\n    }\n  }\n  \n": types.MyRoomsDocument,
     "\n  subscription newRoom {\n    newRoom {\n      ...MyRoomBase\n    }\n  }\n  \n": types.NewRoomDocument,
     "\n  query roomDetail($input: RoomDetailInput!) {\n    roomDetail(input: $input) {\n      ok\n      error\n      room {\n        id\n        name\n        noti\n        pinned\n        newMessage\n        users {\n          id\n          nickname\n          profileUrl\n          bio\n          language\n        }\n      }\n    }\n  }\n": types.RoomDetailDocument,
     "\n  mutation createUser($input: CreateUserInput!) {\n    createUser(input: $input) {\n      ok\n      error\n      user {\n        id\n      }\n    }\n  }\n": types.CreateUserDocument,
@@ -76,7 +76,7 @@ export function graphql(source: "\n  subscription updateNewMessageInUserRoom {\n
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n  query viewMessages($input: ViewMessagesInput!) {\n    viewMessages(input: $input) {\n      ok\n      error\n      currentPage\n      totalPages\n      hasNextPage\n      messages {\n        ...MessageBase\n      }\n    }\n  }\n  \n"): (typeof documents)["\n  query viewMessages($input: ViewMessagesInput!) {\n    viewMessages(input: $input) {\n      ok\n      error\n      currentPage\n      totalPages\n      hasNextPage\n      messages {\n        ...MessageBase\n      }\n    }\n  }\n  \n"];
+export function graphql(source: "\n  query viewMessages($input: ViewMessagesInput!) {\n    viewMessages(input: $input) {\n      ok\n      error\n      hasNext\n      messages {\n        ...MessageBase\n      }\n    }\n  }\n  \n"): (typeof documents)["\n  query viewMessages($input: ViewMessagesInput!) {\n    viewMessages(input: $input) {\n      ok\n      error\n      hasNext\n      messages {\n        ...MessageBase\n      }\n    }\n  }\n  \n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
@@ -84,7 +84,7 @@ export function graphql(source: "\n  mutation createRandomRoom {\n    createRand
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n  query myRooms($input: MyRoomsInput!) {\n    myRooms(input: $input) {\n      ok\n      error\n      currentPage\n      totalPages\n      hasNextPage\n      rooms {\n        ...MyRoomBase\n      }\n    }\n  }\n  \n"): (typeof documents)["\n  query myRooms($input: MyRoomsInput!) {\n    myRooms(input: $input) {\n      ok\n      error\n      currentPage\n      totalPages\n      hasNextPage\n      rooms {\n        ...MyRoomBase\n      }\n    }\n  }\n  \n"];
+export function graphql(source: "\n  query myRooms($input: MyRoomsInput!) {\n    myRooms(input: $input) {\n      ok\n      error\n      hasNext\n      rooms {\n        ...MyRoomBase\n      }\n    }\n  }\n  \n"): (typeof documents)["\n  query myRooms($input: MyRoomsInput!) {\n    myRooms(input: $input) {\n      ok\n      error\n      hasNext\n      rooms {\n        ...MyRoomBase\n      }\n    }\n  }\n  \n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

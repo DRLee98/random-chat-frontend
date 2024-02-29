@@ -12,9 +12,7 @@ const MY_ROOMS = gql`
     myRooms(input: $input) {
       ok
       error
-      currentPage
-      totalPages
-      hasNextPage
+      hasNext
       rooms {
         ...MyRoomBase
       }
@@ -30,15 +28,13 @@ const useMyRooms = (input: MyRoomsInput) => {
 
   const fetchMore = () => {
     if (result.loading) return;
-    if (!result.data?.myRooms.hasNextPage) return;
-
-    const nextPage = (result.data.myRooms?.currentPage ?? 1) + 1;
+    if (!result.data?.myRooms.hasNext) return;
 
     result.fetchMore({
       variables: {
         input: {
           ...input,
-          page: nextPage,
+          skip: result.data.myRooms.rooms?.length ?? 0,
         },
       },
       updateQuery: (prev, {fetchMoreResult}) => {
@@ -47,13 +43,7 @@ const useMyRooms = (input: MyRoomsInput) => {
         return {
           myRooms: {
             ...fetchMoreResult.myRooms,
-            rooms: [
-              ...prev.myRooms.rooms,
-              ...fetchMoreResult.myRooms.rooms,
-            ].filter(
-              (item, index, list) =>
-                list.findIndex(({id}) => id === item.id) === index,
-            ),
+            rooms: [...prev.myRooms.rooms, ...fetchMoreResult.myRooms.rooms],
           },
         };
       },

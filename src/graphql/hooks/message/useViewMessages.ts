@@ -12,9 +12,7 @@ const VIEW_MESSAGES = gql`
     viewMessages(input: $input) {
       ok
       error
-      currentPage
-      totalPages
-      hasNextPage
+      hasNext
       messages {
         ...MessageBase
       }
@@ -33,15 +31,13 @@ const useViewMessages = (input: ViewMessagesInput) => {
 
   const fetchMore = () => {
     if (result.loading) return;
-    if (!result.data?.viewMessages.hasNextPage) return;
-
-    const nextPage = (result.data.viewMessages?.currentPage ?? 1) + 1;
+    if (!result.data?.viewMessages.hasNext) return;
 
     result.fetchMore({
       variables: {
         input: {
           ...input,
-          page: nextPage,
+          skip: result.data.viewMessages.messages?.length ?? 0,
         },
       },
       updateQuery: (prev, {fetchMoreResult}) => {
@@ -53,10 +49,7 @@ const useViewMessages = (input: ViewMessagesInput) => {
             messages: [
               ...fetchMoreResult.viewMessages.messages,
               ...prev.viewMessages.messages,
-            ].filter(
-              (item, index, list) =>
-                list.findIndex(({id}) => id === item.id) === index,
-            ),
+            ],
           },
         };
       },
