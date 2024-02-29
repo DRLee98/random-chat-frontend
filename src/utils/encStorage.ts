@@ -18,6 +18,11 @@ export const getSociald = async () => {
   return {socialId, socialPlatform};
 };
 
+export const removeSociald = async () => {
+  await EncryptedStorage.removeItem('socialId');
+  await EncryptedStorage.removeItem('socialPlatform');
+};
+
 export const setToken = async (token: string) => {
   await EncryptedStorage.setItem('token', token);
 };

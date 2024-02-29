@@ -1,5 +1,6 @@
 import {createStackNavigator} from '@react-navigation/stack';
 
+import SplashScreen from '@app/screens/splash';
 import LoginScreen from '@app/screens/login';
 import SignUpScreen from '@app/screens/signUp';
 import HomeScreen from '@app/screens/home';
@@ -11,6 +12,7 @@ import type {SignUpScreenParams} from '@app/screens/signUp';
 import type {ChatRoomScreenParams} from '@app/screens/chatRoom';
 
 export enum MainNavigatorScreens {
+  Splash = 'Splash',
   Login = 'Login',
   SignUp = 'SignUp',
   Home = 'Home',
@@ -18,6 +20,7 @@ export enum MainNavigatorScreens {
 }
 
 export type MainNavigatorParamList = {
+  Splash: undefined;
   Login: undefined;
   SignUp: SignUpScreenParams;
   Home: undefined;
@@ -31,6 +34,11 @@ const MainNavigator = () => {
     <SafeAreaView style={styles.container}>
       <NavigationContainer>
         <Stack.Navigator>
+          <Stack.Screen
+            name={MainNavigatorScreens.Splash}
+            component={SplashScreen}
+            options={{headerShown: false}}
+          />
           <Stack.Screen
             name={MainNavigatorScreens.Login}
             component={LoginScreen}
