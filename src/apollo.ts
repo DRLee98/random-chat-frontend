@@ -1,19 +1,45 @@
-import {ApolloClient, ApolloLink, InMemoryCache, split} from '@apollo/client';
+import {
+  ApolloClient,
+  ApolloLink,
+  InMemoryCache,
+  from,
+  split,
+} from '@apollo/client';
 import {setContext} from '@apollo/client/link/context';
 import {getMainDefinition} from '@apollo/client/utilities';
 import {WebSocketLink} from '@apollo/client/link/ws';
 import {createUploadLink} from 'apollo-upload-client';
+import {onError} from '@apollo/client/link/error';
 
-import {getToken} from './utils/encStorage';
+import login from './graphql/apis/login';
+
+import {getSociald, getToken, setToken} from './utils/encStorage';
 
 import Config from 'react-native-config';
+
+let tokenExpired = false;
+
+const loadToken = async () => {
+  if (!tokenExpired) {
+    return await getToken();
+  }
+  const socialData = await getSociald();
+  if (!socialData) return;
+  const newToken = await login(socialData);
+  if (newToken) {
+    setToken(newToken);
+    tokenExpired = false;
+    return newToken;
+  }
+  return null;
+};
 
 const httpLink = createUploadLink({
   uri: Config.API_URL,
 });
 
 const authLink = setContext(async (_, {headers}) => {
-  const token = await getToken();
+  const token = await loadToken();
   return {
     headers: {
       ...headers,
@@ -28,13 +54,32 @@ const wsLink = new WebSocketLink({
   options: {
     reconnect: true,
     connectionParams: async () => {
-      const token = await getToken();
+      const token = await loadToken();
       return {
         authorization: token ? `Bearer ${token}` : '',
       };
     },
   },
 });
+
+const errorLink = onError(
+  ({graphQLErrors, networkError, forward, operation}) => {
+    if (graphQLErrors) {
+      for (let err of graphQLErrors) {
+        switch (err.extensions?.code) {
+          case 'UNAUTHENTICATED':
+            tokenExpired = true;
+
+            return forward(operation);
+        }
+      }
+    }
+
+    if (networkError) {
+      console.log(`[Network error]: ${networkError}`);
+    }
+  },
+);
 
 const splitLink = split(
   ({query}) => {
@@ -49,6 +94,6 @@ const splitLink = split(
 );
 
 export const client = new ApolloClient({
-  link: splitLink,
+  link: from([errorLink, splitLink]),
   cache: new InMemoryCache(),
 });

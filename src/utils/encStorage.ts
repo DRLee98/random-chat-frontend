@@ -7,12 +7,15 @@ export const setSociald = async ({
   socialId,
   socialPlatform,
 }: SetSocialIdProps) => {
-  try {
-    await EncryptedStorage.setItem('socialId', socialId);
-    await EncryptedStorage.setItem('socialPlatform', socialPlatform);
-  } catch (error) {
-    console.error(error);
-  }
+  await EncryptedStorage.setItem('socialId', socialId);
+  await EncryptedStorage.setItem('socialPlatform', socialPlatform);
+};
+
+export const getSociald = async () => {
+  const socialId = await EncryptedStorage.getItem('socialId');
+  const socialPlatform = await EncryptedStorage.getItem('socialPlatform');
+  if (!socialId || !socialPlatform) return null;
+  return {socialId, socialPlatform};
 };
 
 export const setToken = async (token: string) => {

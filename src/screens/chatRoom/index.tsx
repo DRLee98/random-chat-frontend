@@ -4,7 +4,7 @@ import useViewMessages from '@app/graphql/hooks/message/useViewMessages';
 import useNewMessageListener from '@app/graphql/hooks/message/useNewMessageListener';
 import useReadMessageListener from '@app/graphql/hooks/message/useReadMessageListener';
 import useSendMessage from '@app/graphql/hooks/message/useSendMessage';
-import {useMeState} from '@app/atoms/userState';
+import useMe from '@app/graphql/hooks/user/useMe';
 
 import {Button, Text, TextInput, View} from 'react-native';
 
@@ -28,7 +28,7 @@ interface ChatRoomScreenProps
 const ChatRoomScreen = ({route}: ChatRoomScreenProps) => {
   const [value, setValue] = useState('');
 
-  const me = useMeState();
+  const {me} = useMe();
 
   const room = useRoomDetail({roomId: +route.params.roomId});
   const message = useViewMessages({

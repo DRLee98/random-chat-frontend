@@ -1,5 +1,4 @@
-import {gql} from '@apollo/client';
-import useCustomLazyQuery from '../../utils/useCustomLazyQuery';
+import {gql, useQuery} from '@apollo/client';
 
 import type {MeQuery} from '../../types/graphql';
 
@@ -22,9 +21,9 @@ const ME = gql`
 `;
 
 const useMe = () => {
-  return useCustomLazyQuery<MeQuery>(ME, {
-    fetchPolicy: 'no-cache',
-  });
+  const {data, ...rest} = useQuery<MeQuery>(ME);
+
+  return {me: data?.me?.me, ...rest};
 };
 
 export default useMe;
