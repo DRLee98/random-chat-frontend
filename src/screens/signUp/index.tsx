@@ -98,7 +98,7 @@ const SignUpScreen = ({route, navigation}: SignUpScreenProps) => {
           const loginResult = await login(socialData);
           if (loginResult) {
             setSociald(socialData);
-            navigation.replace(MainNavigatorScreens.Home);
+            navigation.reset({routes: [{name: MainNavigatorScreens.Home}]});
           } else {
             console.error('login failed');
           }

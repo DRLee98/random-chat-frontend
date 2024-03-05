@@ -55,7 +55,7 @@ const LoginScreen = ({navigation}: LoginScreenProps) => {
     });
     if (result) {
       setSociald(input);
-      navigation.replace(MainNavigatorScreens.Home);
+      navigation.reset({routes: [{name: MainNavigatorScreens.Home}]});
     } else {
       navigation.navigate(MainNavigatorScreens.SignUp, input);
     }

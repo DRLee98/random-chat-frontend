@@ -7,7 +7,7 @@ import type {
   QueryMyRoomsArgs,
 } from '../../types/graphql';
 
-const MY_ROOMS = gql`
+export const MY_ROOMS = gql`
   query myRooms($input: MyRoomsInput!) {
     myRooms(input: $input) {
       ok

@@ -2,6 +2,7 @@ import useMyRooms from '@app/graphql/hooks/room/useMyRooms';
 import useCreateRandomRoom from '@app/graphql/hooks/room/useCreateRandomRoom';
 import useNewRoomListener from '@app/graphql/hooks/room/useNewRoomListener';
 import useUpdateNewMessageListener from '@app/graphql/hooks/message/useUpdateNewMessageListener';
+import useLogout from '@app/hooks/useLogout';
 
 import {Text, Button, ScrollView} from 'react-native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
@@ -19,11 +20,13 @@ interface HomeScreenProps
   extends StackScreenProps<MainNavigatorParamList, MainNavigatorScreens.Home> {}
 
 const HomeScreen = ({navigation}: HomeScreenProps) => {
+  const logout = useLogout();
   const [createRandomRoom] = useCreateRandomRoom();
   const {
     data: myRoomsData,
     updateQuery,
     fetchMore,
+    refetch,
   } = useMyRooms({
     take: 5,
   });
@@ -82,7 +85,9 @@ const HomeScreen = ({navigation}: HomeScreenProps) => {
 
   return (
     <ScrollView>
-      <Button title="create room" onPress={createRandomRoomFn} />
+      <Button title="logout" onPress={logout} />
+      <Button title="채팅방 생성" onPress={createRandomRoomFn} />
+      <Button title="새로고침" onPress={() => refetch()} />
       {myRoomsData?.myRooms?.rooms?.map(userRoom => (
         <TouchableOpacity
           key={userRoom.id}
@@ -92,7 +97,7 @@ const HomeScreen = ({navigation}: HomeScreenProps) => {
           <Text>new message: {userRoom.newMessage}</Text>
         </TouchableOpacity>
       ))}
-      <Button title="more" onPress={fetchMore} />
+      <Button title="더 불러오기" onPress={fetchMore} />
     </ScrollView>
   );
 };

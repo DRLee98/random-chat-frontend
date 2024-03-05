@@ -1,5 +1,6 @@
 import {useState} from 'react';
 import useRoomDetail from '@app/graphql/hooks/room/useRoomDetail';
+import useDeleteRoom from '@app/graphql/hooks/room/useDeleteRoom';
 import useViewMessages from '@app/graphql/hooks/message/useViewMessages';
 import useNewMessageListener from '@app/graphql/hooks/message/useNewMessageListener';
 import useReadMessageListener from '@app/graphql/hooks/message/useReadMessageListener';
@@ -7,6 +8,8 @@ import useSendMessage from '@app/graphql/hooks/message/useSendMessage';
 import useMe from '@app/graphql/hooks/user/useMe';
 
 import {Button, ScrollView, Text, TextInput, View} from 'react-native';
+
+import {MY_ROOMS} from '@app/graphql/hooks/room/useMyRooms';
 
 import {MainNavigatorScreens} from '@app/navigators';
 import {MessageType} from '@app/graphql/types/graphql';
@@ -25,7 +28,7 @@ interface ChatRoomScreenProps
     MainNavigatorScreens.ChatRoom
   > {}
 
-const ChatRoomScreen = ({route}: ChatRoomScreenProps) => {
+const ChatRoomScreen = ({route, navigation}: ChatRoomScreenProps) => {
   const [value, setValue] = useState('');
 
   const {me} = useMe();
@@ -37,6 +40,7 @@ const ChatRoomScreen = ({route}: ChatRoomScreenProps) => {
   });
 
   const [sendMessage] = useSendMessage();
+  const [deleteRoom] = useDeleteRoom();
 
   const appendMessage = (newMessage?: MessageBaseFragment) => {
     if (!newMessage) return;
@@ -106,6 +110,21 @@ const ChatRoomScreen = ({route}: ChatRoomScreenProps) => {
     setValue('');
   };
 
+  const deleteRoomFn = async () => {
+    const result = await deleteRoom({
+      variables: {
+        input: {
+          roomId: +route.params.roomId,
+        },
+      },
+      refetchQueries: [MY_ROOMS],
+      awaitRefetchQueries: true,
+    });
+    if (result.data?.deleteRoom.ok) {
+      navigation.replace(MainNavigatorScreens.Home);
+    }
+  };
+
   const formatReadCount = (readUsersId: number[]) => {
     if (!me) return;
     let ids = [...readUsersId];
@@ -125,11 +144,13 @@ const ChatRoomScreen = ({route}: ChatRoomScreenProps) => {
       <Text>
         Chat Room: {room.data?.roomDetail.room?.name}, id: {route.params.roomId}
       </Text>
-      <View style={{flexDirection: 'row', marginVertical: 20}}>
+      <View style={{marginVertical: 20}}>
         {room.data?.roomDetail.room?.users?.map(user => (
-          <Text key={user.id}>
-            id: {user.id}, nick: {user.nickname}
-          </Text>
+          <View key={user.id}>
+            <Text>
+              id: {user.id}, nick: {user.nickname}
+            </Text>
+          </View>
         ))}
       </View>
       <View>
@@ -145,8 +166,9 @@ const ChatRoomScreen = ({route}: ChatRoomScreenProps) => {
         value={value}
         onChange={e => setValue(e.nativeEvent.text)}
       />
-      <Button title="Send" onPress={sendMessageFn} />
-      <Button title="More" onPress={message.fetchMore} />
+      <Button title="전송" onPress={sendMessageFn} />
+      <Button title="더 불러오기" onPress={message.fetchMore} />
+      <Button title="나가기" onPress={deleteRoomFn} />
     </ScrollView>
   );
 };
