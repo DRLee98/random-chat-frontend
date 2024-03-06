@@ -28,8 +28,10 @@ const documents = {
     "\n  query roomDetail($input: RoomDetailInput!) {\n    roomDetail(input: $input) {\n      ok\n      error\n      room {\n        id\n        name\n        noti\n        pinned\n        newMessage\n        users {\n          id\n          nickname\n          profileUrl\n          bio\n          language\n        }\n      }\n    }\n  }\n": types.RoomDetailDocument,
     "\n  mutation createUser($input: CreateUserInput!) {\n    createUser(input: $input) {\n      ok\n      error\n      user {\n        id\n      }\n    }\n  }\n": types.CreateUserDocument,
     "\n  query login($input: LoginInput!) {\n    login(input: $input) {\n      ok\n      error\n      token\n    }\n  }\n": types.LoginDocument,
-    "\n  query me {\n    me {\n      ok\n      error\n      me {\n        id\n        nickname\n        profileUrl\n        bio\n        allowMessage\n        language\n        autoTranslation\n      }\n    }\n  }\n": types.MeDocument,
+    "\n  query me {\n    me {\n      ok\n      error\n      me {\n        id\n        nickname\n        profileUrl\n      }\n    }\n  }\n": types.MeDocument,
+    "\n  query meDetail {\n    meDetail {\n      ok\n      error\n      me {\n        id\n        nickname\n        profileUrl\n        bio\n        socialPlatform\n        allowMessage\n        language\n        autoTranslation\n        blockUsers {\n          id\n          nickname\n          profileUrl\n        }\n      }\n    }\n  }\n": types.MeDetailDocument,
     "\n  query randomNickname {\n    randomNickname {\n      ok\n      error\n      nickname\n    }\n  }\n": types.RandomNicknameDocument,
+    "\n  mutation toggleBlockUser($input: ToggleBlockUserInput!) {\n    toggleBlockUser(input: $input) {\n      ok\n      error\n      updateBlockUsers {\n        id\n        nickname\n        profileUrl\n      }\n    }\n  }\n": types.ToggleBlockUserDocument,
 };
 
 /**
@@ -109,11 +111,19 @@ export function graphql(source: "\n  query login($input: LoginInput!) {\n    log
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n  query me {\n    me {\n      ok\n      error\n      me {\n        id\n        nickname\n        profileUrl\n        bio\n        allowMessage\n        language\n        autoTranslation\n      }\n    }\n  }\n"): (typeof documents)["\n  query me {\n    me {\n      ok\n      error\n      me {\n        id\n        nickname\n        profileUrl\n        bio\n        allowMessage\n        language\n        autoTranslation\n      }\n    }\n  }\n"];
+export function graphql(source: "\n  query me {\n    me {\n      ok\n      error\n      me {\n        id\n        nickname\n        profileUrl\n      }\n    }\n  }\n"): (typeof documents)["\n  query me {\n    me {\n      ok\n      error\n      me {\n        id\n        nickname\n        profileUrl\n      }\n    }\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  query meDetail {\n    meDetail {\n      ok\n      error\n      me {\n        id\n        nickname\n        profileUrl\n        bio\n        socialPlatform\n        allowMessage\n        language\n        autoTranslation\n        blockUsers {\n          id\n          nickname\n          profileUrl\n        }\n      }\n    }\n  }\n"): (typeof documents)["\n  query meDetail {\n    meDetail {\n      ok\n      error\n      me {\n        id\n        nickname\n        profileUrl\n        bio\n        socialPlatform\n        allowMessage\n        language\n        autoTranslation\n        blockUsers {\n          id\n          nickname\n          profileUrl\n        }\n      }\n    }\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(source: "\n  query randomNickname {\n    randomNickname {\n      ok\n      error\n      nickname\n    }\n  }\n"): (typeof documents)["\n  query randomNickname {\n    randomNickname {\n      ok\n      error\n      nickname\n    }\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  mutation toggleBlockUser($input: ToggleBlockUserInput!) {\n    toggleBlockUser(input: $input) {\n      ok\n      error\n      updateBlockUsers {\n        id\n        nickname\n        profileUrl\n      }\n    }\n  }\n"): (typeof documents)["\n  mutation toggleBlockUser($input: ToggleBlockUserInput!) {\n    toggleBlockUser(input: $input) {\n      ok\n      error\n      updateBlockUsers {\n        id\n        nickname\n        profileUrl\n      }\n    }\n  }\n"];
 
 export function graphql(source: string) {
   return (documents as any)[source] ?? {};

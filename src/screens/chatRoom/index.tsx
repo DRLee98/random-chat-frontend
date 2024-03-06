@@ -5,11 +5,13 @@ import useViewMessages from '@app/graphql/hooks/message/useViewMessages';
 import useNewMessageListener from '@app/graphql/hooks/message/useNewMessageListener';
 import useReadMessageListener from '@app/graphql/hooks/message/useReadMessageListener';
 import useSendMessage from '@app/graphql/hooks/message/useSendMessage';
+import useToggleBlockUser from '@app/graphql/hooks/user/useToggleBlockUser';
 import useMe from '@app/graphql/hooks/user/useMe';
 
-import {Button, ScrollView, Text, TextInput, View} from 'react-native';
+import {Alert, Button, ScrollView, Text, TextInput, View} from 'react-native';
 
 import {MY_ROOMS} from '@app/graphql/hooks/room/useMyRooms';
+import {ME_DETAIL} from '@app/graphql/hooks/user/useMeDetail';
 
 import {MainNavigatorScreens} from '@app/navigators';
 import {MessageType} from '@app/graphql/types/graphql';
@@ -36,10 +38,11 @@ const ChatRoomScreen = ({route, navigation}: ChatRoomScreenProps) => {
   const room = useRoomDetail({roomId: +route.params.roomId});
   const message = useViewMessages({
     roomId: +route.params.roomId,
-    take: 5,
+    take: 50,
   });
 
   const [sendMessage] = useSendMessage();
+  const [toggleBlockUser] = useToggleBlockUser();
   const [deleteRoom] = useDeleteRoom();
 
   const appendMessage = (newMessage?: MessageBaseFragment) => {
@@ -121,8 +124,29 @@ const ChatRoomScreen = ({route, navigation}: ChatRoomScreenProps) => {
       awaitRefetchQueries: true,
     });
     if (result.data?.deleteRoom.ok) {
-      navigation.replace(MainNavigatorScreens.Home);
+      navigation.reset({routes: [{name: MainNavigatorScreens.Home}]});
     }
+  };
+
+  const blockAndDeleteRoomFn = async (userId: string) => {
+    Alert.alert('차단', '차단하고 나가시겠습니까?', [
+      {text: '취소', style: 'cancel'},
+      {
+        text: '확인',
+        style: 'destructive',
+        onPress: async () => {
+          const result = await toggleBlockUser({
+            variables: {
+              input: {
+                id: userId,
+              },
+            },
+            refetchQueries: [{query: ME_DETAIL}],
+          });
+          result.data?.toggleBlockUser.ok && deleteRoomFn();
+        },
+      },
+    ]);
   };
 
   const formatReadCount = (readUsersId: number[]) => {
@@ -146,10 +170,18 @@ const ChatRoomScreen = ({route, navigation}: ChatRoomScreenProps) => {
       </Text>
       <View style={{marginVertical: 20}}>
         {room.data?.roomDetail.room?.users?.map(user => (
-          <View key={user.id}>
+          <View
+            key={user.id}
+            style={{flexDirection: 'row', alignItems: 'center'}}>
             <Text>
               id: {user.id}, nick: {user.nickname}
             </Text>
+            {user.id !== me?.id && (
+              <Button
+                title="차단"
+                onPress={() => blockAndDeleteRoomFn(user.id)}
+              />
+            )}
           </View>
         ))}
       </View>
@@ -167,7 +199,9 @@ const ChatRoomScreen = ({route, navigation}: ChatRoomScreenProps) => {
         onChange={e => setValue(e.nativeEvent.text)}
       />
       <Button title="전송" onPress={sendMessageFn} />
-      <Button title="더 불러오기" onPress={message.fetchMore} />
+      {message.data?.viewMessages.hasNext && (
+        <Button title="더 불러오기" onPress={message.fetchMore} />
+      )}
       <Button title="나가기" onPress={deleteRoomFn} />
     </ScrollView>
   );

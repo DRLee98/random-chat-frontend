@@ -11,10 +11,6 @@ const ME = gql`
         id
         nickname
         profileUrl
-        bio
-        allowMessage
-        language
-        autoTranslation
       }
     }
   }

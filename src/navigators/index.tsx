@@ -5,8 +5,9 @@ import LoginScreen from '@app/screens/login';
 import SignUpScreen from '@app/screens/signUp';
 import HomeScreen from '@app/screens/home';
 import ChatRoomScreen from '@app/screens/chatRoom';
+import MeScreen from '@app/screens/user/me';
 import {NavigationContainer} from '@react-navigation/native';
-import {SafeAreaView, StyleSheet} from 'react-native';
+import {Button, SafeAreaView, StyleSheet} from 'react-native';
 
 import type {SignUpScreenParams} from '@app/screens/signUp';
 import type {ChatRoomScreenParams} from '@app/screens/chatRoom';
@@ -17,6 +18,7 @@ export enum MainNavigatorScreens {
   SignUp = 'SignUp',
   Home = 'Home',
   ChatRoom = 'ChatRoom',
+  Me = 'Me',
 }
 
 export type MainNavigatorParamList = {
@@ -25,6 +27,7 @@ export type MainNavigatorParamList = {
   SignUp: SignUpScreenParams;
   Home: undefined;
   ChatRoom: ChatRoomScreenParams;
+  Me: undefined;
 };
 
 const Stack = createStackNavigator<MainNavigatorParamList>();
@@ -51,11 +54,20 @@ const MainNavigator = () => {
           <Stack.Screen
             name={MainNavigatorScreens.Home}
             component={HomeScreen}
+            options={({navigation}) => ({
+              headerRight: () => (
+                <Button
+                  title="Me"
+                  onPress={() => navigation.navigate(MainNavigatorScreens.Me)}
+                />
+              ),
+            })}
           />
           <Stack.Screen
             name={MainNavigatorScreens.ChatRoom}
             component={ChatRoomScreen}
           />
+          <Stack.Screen name={MainNavigatorScreens.Me} component={MeScreen} />
         </Stack.Navigator>
       </NavigationContainer>
     </SafeAreaView>

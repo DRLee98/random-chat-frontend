@@ -28,7 +28,7 @@ const HomeScreen = ({navigation}: HomeScreenProps) => {
     fetchMore,
     refetch,
   } = useMyRooms({
-    take: 5,
+    take: 30,
   });
 
   const goChatRoom = (roomId: string) => {
@@ -95,9 +95,12 @@ const HomeScreen = ({navigation}: HomeScreenProps) => {
           style={{marginVertical: 10}}>
           <Text>{userRoom.name}</Text>
           <Text>new message: {userRoom.newMessage}</Text>
+          <Text>last message: {userRoom.lastMessage}</Text>
         </TouchableOpacity>
       ))}
-      <Button title="더 불러오기" onPress={fetchMore} />
+      {myRoomsData?.myRooms.hasNext && (
+        <Button title="더 불러오기" onPress={fetchMore} />
+      )}
     </ScrollView>
   );
 };
