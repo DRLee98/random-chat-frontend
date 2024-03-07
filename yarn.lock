@@ -15,27 +15,7 @@
     "@jridgewell/gen-mapping" "^0.3.0"
     "@jridgewell/trace-mapping" "^0.3.9"
 
-"@apollo/client@^3.7.0":
-  version "3.9.5"
-  resolved "https://registry.yarnpkg.com/@apollo/client/-/client-3.9.5.tgz#502ec191756a7f44788b5f08cbe7b8de594a7656"
-  integrity sha512-7y+c8MTPU+hhTwvcGVtMMGIgWduzrvG1mz5yJMRyqYbheBkkky3Lki6ADWVSBXG1lZoOtPYvB2zDgVfKb2HSsw==
-  dependencies:
-    "@graphql-typed-document-node/core" "^3.1.1"
-    "@wry/caches" "^1.0.0"
-    "@wry/equality" "^0.5.6"
-    "@wry/trie" "^0.5.0"
-    graphql-tag "^2.12.6"
-    hoist-non-react-statics "^3.3.2"
-    optimism "^0.18.0"
-    prop-types "^15.7.2"
-    rehackt "0.0.5"
-    response-iterator "^0.2.6"
-    symbol-observable "^4.0.0"
-    ts-invariant "^0.10.3"
-    tslib "^2.3.0"
-    zen-observable-ts "^1.2.5"
-
-"@apollo/client@^3.9.4":
+"@apollo/client@^3.7.0", "@apollo/client@^3.9.4":
   version "3.9.4"
   resolved "https://registry.npmjs.org/@apollo/client/-/client-3.9.4.tgz"
   integrity sha512-Ip6dxjshDT2Dp6foLASTnKBW45Fytew/5JZutZwgc78hVrrGpO9UtZA9xteHXYdap0wIgCxCfeIQwbSu1ZdQpw==
@@ -2603,7 +2583,7 @@
 
 "@types/apollo-upload-client@^17.0.0":
   version "17.0.5"
-  resolved "https://registry.yarnpkg.com/@types/apollo-upload-client/-/apollo-upload-client-17.0.5.tgz#a03d69b5cb86c7396e466f8029b2fa0943a73cc9"
+  resolved "https://registry.npmjs.org/@types/apollo-upload-client/-/apollo-upload-client-17.0.5.tgz"
   integrity sha512-rPKHaE4QNd06LNtBgz6hfntVO+pOQMS2yTcynrzBPg9+a/nbtJ2gus5KgzRp2rqfzmnKEc/sRGjLen/9Ot0Z2A==
   dependencies:
     "@apollo/client" "^3.7.0"
@@ -2645,7 +2625,7 @@
 
 "@types/extract-files@*":
   version "13.0.1"
-  resolved "https://registry.yarnpkg.com/@types/extract-files/-/extract-files-13.0.1.tgz#3ec057a3fa25f778245a76a17271d23b71ee31d7"
+  resolved "https://registry.npmjs.org/@types/extract-files/-/extract-files-13.0.1.tgz"
   integrity sha512-/fRbzc2lAd7jDJSSnxWiUyXWjdUZZ4HbISLJzVgt1AvrdOa7U49YRPcvuCUywkmURZ7uwJOheDjx19itbQ5KvA==
 
 "@types/graceful-fs@^4.1.3":
@@ -2713,6 +2693,21 @@
   version "15.7.11"
   resolved "https://registry.npmjs.org/@types/prop-types/-/prop-types-15.7.11.tgz"
   integrity sha512-ga8y9v9uyeiLdpKddhxYQkxNDrfvuPrlFb0N1qnZZByvcElJaXthF1UhvCh9TLWJBEHeNtdnbysW7Y6Uq8CVng==
+
+"@types/react-native-vector-icons@^6.4.18":
+  version "6.4.18"
+  resolved "https://registry.yarnpkg.com/@types/react-native-vector-icons/-/react-native-vector-icons-6.4.18.tgz#18671c617b9d0958747bc959903470dde91a8c79"
+  integrity sha512-YGlNWb+k5laTBHd7+uZowB9DpIK3SXUneZqAiKQaj1jnJCZM0x71GDim5JCTMi4IFkhc9m8H/Gm28T5BjyivUw==
+  dependencies:
+    "@types/react" "*"
+    "@types/react-native" "^0.70"
+
+"@types/react-native@^0.70":
+  version "0.70.19"
+  resolved "https://registry.yarnpkg.com/@types/react-native/-/react-native-0.70.19.tgz#b4e651dcf7f49c69ff3a4c3072584cad93155582"
+  integrity sha512-c6WbyCgWTBgKKMESj/8b4w+zWcZSsCforson7UdXtXMecG3MxCinYi6ihhrHVPyUrVzORsvEzK8zg32z4pK6Sg==
+  dependencies:
+    "@types/react" "*"
 
 "@types/react-native@^0.73.0":
   version "0.73.0"
@@ -3063,7 +3058,7 @@ anymatch@^3.0.3:
 
 apollo-upload-client@^17.0.0:
   version "17.0.0"
-  resolved "https://registry.yarnpkg.com/apollo-upload-client/-/apollo-upload-client-17.0.0.tgz#d9baaff8d14e54510de9f2855b487e75ca63b392"
+  resolved "https://registry.npmjs.org/apollo-upload-client/-/apollo-upload-client-17.0.0.tgz"
   integrity sha512-pue33bWVbdlXAGFPkgz53TTmxVMrKeQr0mdRcftNY+PoHIdbGZD0hoaXHvO6OePJAkFz7OiCFUf98p1G/9+Ykw==
   dependencies:
     extract-files "^11.0.0"
@@ -3368,7 +3363,7 @@ babel-preset-jest@^29.6.3:
 
 backo2@^1.0.2:
   version "1.0.2"
-  resolved "https://registry.yarnpkg.com/backo2/-/backo2-1.0.2.tgz#31ab1ac8b129363463e35b3ebb69f4dfcfba7947"
+  resolved "https://registry.npmjs.org/backo2/-/backo2-1.0.2.tgz"
   integrity sha512-zj6Z6M7Eq+PBZ7PQxl5NT665MvJdAkzp0f60nAJ+sLaSCBPMwVak5ZegFbgVCzFcCJTKFoMizvM5Ld7+JrRJHA==
 
 balanced-match@^1.0.0:
@@ -3672,6 +3667,15 @@ cliui@^6.0.0:
     string-width "^4.2.0"
     strip-ansi "^6.0.0"
     wrap-ansi "^6.2.0"
+
+cliui@^7.0.2:
+  version "7.0.4"
+  resolved "https://registry.npmjs.org/cliui/-/cliui-7.0.4.tgz"
+  integrity sha512-OcRE68cOsVMXp1Yvonl/fzkQOyjLSu/8bhPDfQt0e0/Eb283TKP20Fs2MqoPsr9SwA595rRCA+QMzYc9nBP+JQ==
+  dependencies:
+    string-width "^4.2.0"
+    strip-ansi "^6.0.0"
+    wrap-ansi "^7.0.0"
 
 cliui@^8.0.1:
   version "8.0.1"
@@ -4455,7 +4459,7 @@ event-target-shim@^5.0.0, event-target-shim@^5.0.1:
 
 eventemitter3@^3.1.0:
   version "3.1.2"
-  resolved "https://registry.yarnpkg.com/eventemitter3/-/eventemitter3-3.1.2.tgz#2d3d48f9c346698fce83a85d7d664e98535df6e7"
+  resolved "https://registry.npmjs.org/eventemitter3/-/eventemitter3-3.1.2.tgz"
   integrity sha512-tvtQIeLVHjDkJYnzf2dgVMxfuSGJeM/7UCG17TT4EumTfNtF+0nebF/4zWOIkCreAbtNqhGEboB6BWrwqNaw4Q==
 
 execa@^5.0.0, execa@^5.1.1:
@@ -5542,7 +5546,7 @@ istanbul-reports@^3.1.3:
 
 iterall@^1.2.1:
   version "1.3.0"
-  resolved "https://registry.yarnpkg.com/iterall/-/iterall-1.3.0.tgz#afcb08492e2915cbd8a0884eb93a8c94d0d72fea"
+  resolved "https://registry.npmjs.org/iterall/-/iterall-1.3.0.tgz"
   integrity sha512-QZ9qOMdF+QLHxy1QIpUHUU1D5pS2CG2P69LF6L6CPjPYA/XMOmKV3PZpawHoAjHNyB0swdVTRxdYT4tbBbxqwg==
 
 iterator.prototype@^1.1.2:
@@ -7175,7 +7179,7 @@ react-native-config@^1.5.1:
 
 react-native-encrypted-storage@^4.0.3:
   version "4.0.3"
-  resolved "https://registry.yarnpkg.com/react-native-encrypted-storage/-/react-native-encrypted-storage-4.0.3.tgz#2a4d65459870511e8f4ccd22f02433dab7fa5e91"
+  resolved "https://registry.npmjs.org/react-native-encrypted-storage/-/react-native-encrypted-storage-4.0.3.tgz"
   integrity sha512-0pJA4Aj2S1PIJEbU7pN/Qvf7JIJx3hFywx+i+bLHtgK0/6Zryf1V2xVsWcrD50dfiu3jY1eN2gesQ5osGxE7jA==
 
 react-native-gesture-handler@^2.15.0:
@@ -7216,6 +7220,14 @@ react-native-screens@^3.29.0:
   dependencies:
     react-freeze "^1.0.0"
     warn-once "^0.1.0"
+
+react-native-vector-icons@^10.0.3:
+  version "10.0.3"
+  resolved "https://registry.yarnpkg.com/react-native-vector-icons/-/react-native-vector-icons-10.0.3.tgz#369824a3b17994b2cd65edbaa32dbf9540d49678"
+  integrity sha512-ZgVlV5AdQgnPHHvBEihGf2xwyziT1acpXV1U+WfCgCv3lcEeCRsmwAsBU+kUSNsU+8TcWVsX04kdI6qUaS8D7w==
+  dependencies:
+    prop-types "^15.7.2"
+    yargs "^16.1.1"
 
 react-native@*, react-native@0.73.4:
   version "0.73.4"
@@ -7408,11 +7420,6 @@ rehackt@0.0.4:
   version "0.0.4"
   resolved "https://registry.npmjs.org/rehackt/-/rehackt-0.0.4.tgz"
   integrity sha512-xFroSGCbMEK/cTJVhq+c8l/AzIeMeojVyLqtZmr2jmIAFvePjapkCSGg9MnrcNk68HPaMxGf+Ndqozotu78ITw==
-
-rehackt@0.0.5:
-  version "0.0.5"
-  resolved "https://registry.yarnpkg.com/rehackt/-/rehackt-0.0.5.tgz#184c82ea369d5b0b989ede0593ebea8b2bcfb1d6"
-  integrity sha512-BI1rV+miEkaHj8zd2n+gaMgzu/fKz7BGlb4zZ6HAiY9adDmJMkaDcmuXlJFv0eyKUob+oszs3/2gdnXUrzx2Tg==
 
 relay-runtime@12.0.0:
   version "12.0.0"
@@ -8005,7 +8012,7 @@ strnum@^1.0.5:
 
 subscriptions-transport-ws@^0.11.0:
   version "0.11.0"
-  resolved "https://registry.yarnpkg.com/subscriptions-transport-ws/-/subscriptions-transport-ws-0.11.0.tgz#baf88f050cba51d52afe781de5e81b3c31f89883"
+  resolved "https://registry.npmjs.org/subscriptions-transport-ws/-/subscriptions-transport-ws-0.11.0.tgz"
   integrity sha512-8D4C6DIH5tGiAIpp5I0wD/xRlNiZAPGHygzCe7VzyzUoxHtawzjNAY9SUTXU05/EY2NMY9/9GF0ycizkXr1CWQ==
   dependencies:
     backo2 "^1.0.2"
@@ -8054,7 +8061,7 @@ swap-case@^2.0.2:
 
 symbol-observable@^1.0.4:
   version "1.2.0"
-  resolved "https://registry.yarnpkg.com/symbol-observable/-/symbol-observable-1.2.0.tgz#c22688aed4eab3cdc2dfeacbb561660560a00804"
+  resolved "https://registry.npmjs.org/symbol-observable/-/symbol-observable-1.2.0.tgz"
   integrity sha512-e900nM8RRtGhlV36KGEU9k65K3mPb1WV70OdjfxlG2EAuM1noi/E/BaW/uMhL7bPEssK8QV57vN3esixjUvcXQ==
 
 symbol-observable@^4.0.0:
@@ -8620,6 +8627,11 @@ yargs-parser@^18.1.2:
     camelcase "^5.0.0"
     decamelize "^1.2.0"
 
+yargs-parser@^20.2.2:
+  version "20.2.9"
+  resolved "https://registry.npmjs.org/yargs-parser/-/yargs-parser-20.2.9.tgz"
+  integrity sha512-y11nGElTIV+CT3Zv9t7VKl+Q3hTQoT9a1Qzezhhl6Rp21gJ/IVTW7Z3y9EWXhuUBC2Shnf+DX0antecpAwSP8w==
+
 yargs-parser@^21.1.1:
   version "21.1.1"
   resolved "https://registry.npmjs.org/yargs-parser/-/yargs-parser-21.1.1.tgz"
@@ -8641,6 +8653,19 @@ yargs@^15.1.0, yargs@^15.3.1:
     which-module "^2.0.0"
     y18n "^4.0.0"
     yargs-parser "^18.1.2"
+
+yargs@^16.1.1:
+  version "16.2.0"
+  resolved "https://registry.npmjs.org/yargs/-/yargs-16.2.0.tgz"
+  integrity sha512-D1mvvtDG0L5ft/jGWkLpG1+m0eQxOfaBvTNELraWj22wSVUMWxZUvYgJYcKh6jGGIkJFhH4IZPQhR4TKpc8mBw==
+  dependencies:
+    cliui "^7.0.2"
+    escalade "^3.1.1"
+    get-caller-file "^2.0.5"
+    require-directory "^2.1.1"
+    string-width "^4.2.0"
+    y18n "^5.0.5"
+    yargs-parser "^20.2.2"
 
 yargs@^17.0.0, yargs@^17.3.1, yargs@^17.6.2:
   version "17.7.2"

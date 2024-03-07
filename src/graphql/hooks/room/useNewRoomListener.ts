@@ -13,9 +13,9 @@ const NEW_ROOM = gql`
   ${MY_ROOM_BASE}
 `;
 
-interface Options extends SubscriptionHookOptions<NewRoomSubscription> {}
-
-const useNewRoomListener = (options: Options) => {
+const useNewRoomListener = (
+  options?: SubscriptionHookOptions<NewRoomSubscription>,
+) => {
   return useSubscription<NewRoomSubscription>(NEW_ROOM, options);
 };
 

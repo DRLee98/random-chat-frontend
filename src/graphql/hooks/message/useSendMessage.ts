@@ -1,4 +1,6 @@
 import {gql, useMutation} from '@apollo/client';
+
+import type {MutationHookOptions} from '@apollo/client';
 import type {
   MutationSendMessageArgs,
   SendMessageMutation,
@@ -14,9 +16,12 @@ const SEND_MESSAGE = gql`
   }
 `;
 
-const useSendMessage = () => {
+const useSendMessage = (
+  options?: MutationHookOptions<SendMessageMutation, MutationSendMessageArgs>,
+) => {
   return useMutation<SendMessageMutation, MutationSendMessageArgs>(
     SEND_MESSAGE,
+    options,
   );
 };
 

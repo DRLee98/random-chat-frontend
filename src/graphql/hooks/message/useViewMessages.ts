@@ -1,6 +1,7 @@
 import {gql, useQuery} from '@apollo/client';
 import {MESSAGE_BASE} from '../../fragments/message';
 
+import type {QueryHookOptions} from '@apollo/client';
 import type {
   QueryViewMessagesArgs,
   ViewMessagesInput,
@@ -21,10 +22,17 @@ const VIEW_MESSAGES = gql`
   ${MESSAGE_BASE}
 `;
 
-const useViewMessages = (input: ViewMessagesInput) => {
+const useViewMessages = (
+  input: ViewMessagesInput,
+  options?: Omit<
+    QueryHookOptions<ViewMessagesQuery, QueryViewMessagesArgs>,
+    'variables'
+  >,
+) => {
   const result = useQuery<ViewMessagesQuery, QueryViewMessagesArgs>(
     VIEW_MESSAGES,
     {
+      ...options,
       variables: {input},
     },
   );

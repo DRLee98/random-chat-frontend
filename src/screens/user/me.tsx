@@ -1,6 +1,6 @@
 import useMeDetail from '@app/graphql/hooks/user/useMeDetail';
 
-import {ScrollView, Text, View} from 'react-native';
+import {ScrollView, Text, TouchableOpacity, View} from 'react-native';
 import ProfileImg from '@app/components/common/ProfileImg';
 
 import {MainNavigatorScreens} from '@app/navigators';
@@ -11,8 +11,12 @@ import type {MainNavigatorParamList} from '@app/navigators';
 interface MeScreenProps
   extends StackScreenProps<MainNavigatorParamList, MainNavigatorScreens.Me> {}
 
-const MeScreen = ({}: MeScreenProps) => {
+const MeScreen = ({navigation}: MeScreenProps) => {
   const {me} = useMeDetail();
+
+  const goUserProfile = (userId: string) => {
+    navigation.navigate(MainNavigatorScreens.User, {userId});
+  };
 
   return (
     <View style={{paddingVertical: 20, alignItems: 'center'}}>
@@ -32,8 +36,9 @@ const MeScreen = ({}: MeScreenProps) => {
       <ScrollView horizontal showsHorizontalScrollIndicator={false}>
         <View style={{flexDirection: 'row', gap: 15, paddingHorizontal: 10}}>
           {me?.blockUsers.map(user => (
-            <View
+            <TouchableOpacity
               key={`block_user_${user.id}`}
+              onPress={() => goUserProfile(user.id)}
               style={{
                 alignItems: 'center',
                 gap: 10,
@@ -45,7 +50,7 @@ const MeScreen = ({}: MeScreenProps) => {
               }}>
               <ProfileImg size={60} url={user.profileUrl} />
               <Text>{user.nickname}</Text>
-            </View>
+            </TouchableOpacity>
           ))}
         </View>
       </ScrollView>

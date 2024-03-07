@@ -1,6 +1,7 @@
 import {gql, useQuery} from '@apollo/client';
 import {MY_ROOM_BASE} from '../../fragments/room';
 
+import type {QueryHookOptions} from '@apollo/client';
 import type {
   MyRoomsInput,
   MyRoomsQuery,
@@ -21,9 +22,13 @@ export const MY_ROOMS = gql`
   ${MY_ROOM_BASE}
 `;
 
-const useMyRooms = (input: MyRoomsInput) => {
+const useMyRooms = (
+  input?: MyRoomsInput,
+  options?: Omit<QueryHookOptions<MyRoomsQuery, QueryMyRoomsArgs>, 'variables'>,
+) => {
   const result = useQuery<MyRoomsQuery, QueryMyRoomsArgs>(MY_ROOMS, {
-    variables: {input},
+    ...options,
+    variables: {input: input ?? {}},
   });
 
   const fetchMore = () => {

@@ -17,13 +17,12 @@ const READ_MESSAGE = gql`
   }
 `;
 
-interface Options
-  extends SubscriptionHookOptions<
+const useReadMessageListener = (
+  options?: SubscriptionHookOptions<
     ReadMessageSubscription,
     SubscriptionReadMessageArgs
-  > {}
-
-const useReadMessageListener = (options: Options) => {
+  >,
+) => {
   return useSubscription<ReadMessageSubscription, SubscriptionReadMessageArgs>(
     READ_MESSAGE,
     options,

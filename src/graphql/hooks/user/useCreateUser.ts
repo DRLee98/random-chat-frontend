@@ -1,4 +1,6 @@
 import {gql, useMutation} from '@apollo/client';
+
+import type {MutationHookOptions} from '@apollo/client';
 import type {
   CreateUserMutation,
   MutationCreateUserArgs,
@@ -16,8 +18,13 @@ const CREATE_USER = gql`
   }
 `;
 
-const useCreateUser = () => {
-  return useMutation<CreateUserMutation, MutationCreateUserArgs>(CREATE_USER);
+const useCreateUser = (
+  options?: MutationHookOptions<CreateUserMutation, MutationCreateUserArgs>,
+) => {
+  return useMutation<CreateUserMutation, MutationCreateUserArgs>(
+    CREATE_USER,
+    options,
+  );
 };
 
 export default useCreateUser;

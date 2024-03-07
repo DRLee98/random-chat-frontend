@@ -5,7 +5,7 @@ export const USER_ROOM_BASE = gql`
     id
     name
     noti
-    pinned
+    pinnedAt
     newMessage
     room {
       id
@@ -18,7 +18,7 @@ export const MY_ROOM_BASE = gql`
     id
     name
     noti
-    pinned
+    pinnedAt
     newMessage
     lastMessage
     room {
@@ -27,5 +27,6 @@ export const MY_ROOM_BASE = gql`
     users {
       profileUrl
     }
+    updatedAt
   }
 `;

@@ -70,13 +70,14 @@ const SignUpScreen = ({route, navigation}: SignUpScreenProps) => {
   };
 
   const createRandomNickname = async () => {
-    const result = await randomNickname();
-    if (result?.randomNickname.ok) {
+    const data = await randomNickname();
+
+    if (data?.randomNickname.ok) {
       setValues(
         prev =>
           prev && {
             ...prev,
-            nickname: result?.randomNickname.nickname ?? prev.nickname,
+            nickname: data?.randomNickname.nickname ?? prev.nickname,
           },
       );
     }
@@ -85,12 +86,12 @@ const SignUpScreen = ({route, navigation}: SignUpScreenProps) => {
   const regist = async () => {
     try {
       if (values) {
-        const result = await createUser({
+        const {data} = await createUser({
           variables: {
             input: {...values, ...(profile && {profile})},
           },
         });
-        if (result.data?.createUser.ok) {
+        if (data?.createUser.ok) {
           const socialData = {
             socialId: values.socialId,
             socialPlatform: values.socialPlatform,

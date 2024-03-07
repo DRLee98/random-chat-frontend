@@ -1,5 +1,6 @@
 import {gql, useQuery} from '@apollo/client';
 
+import type {QueryHookOptions} from '@apollo/client';
 import type {
   QueryRoomDetailArgs,
   RoomDetailInput,
@@ -15,7 +16,7 @@ const ROOM_DETAIL = gql`
         id
         name
         noti
-        pinned
+        pinnedAt
         newMessage
         users {
           id
@@ -29,8 +30,15 @@ const ROOM_DETAIL = gql`
   }
 `;
 
-const useRoomDetail = (input: RoomDetailInput) => {
+const useRoomDetail = (
+  input: RoomDetailInput,
+  options?: Omit<
+    QueryHookOptions<RoomDetailQuery, QueryRoomDetailArgs>,
+    'variables'
+  >,
+) => {
   return useQuery<RoomDetailQuery, QueryRoomDetailArgs>(ROOM_DETAIL, {
+    ...options,
     variables: {input},
   });
 };

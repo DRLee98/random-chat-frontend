@@ -1,5 +1,6 @@
 import {gql, useMutation} from '@apollo/client';
 
+import type {MutationHookOptions} from '@apollo/client';
 import type {
   DeleteRoomMutation,
   MutationDeleteRoomArgs,
@@ -14,8 +15,13 @@ const DELETE_ROOM = gql`
   }
 `;
 
-const useDeleteRoom = () => {
-  return useMutation<DeleteRoomMutation, MutationDeleteRoomArgs>(DELETE_ROOM);
+const useDeleteRoom = (
+  options?: MutationHookOptions<DeleteRoomMutation, MutationDeleteRoomArgs>,
+) => {
+  return useMutation<DeleteRoomMutation, MutationDeleteRoomArgs>(
+    DELETE_ROOM,
+    options,
+  );
 };
 
 export default useDeleteRoom;

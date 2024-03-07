@@ -16,13 +16,12 @@ const NEW_MESSAGE = gql`
   ${MESSAGE_BASE}
 `;
 
-interface Options
-  extends SubscriptionHookOptions<
+const useNewMessageListener = (
+  options?: SubscriptionHookOptions<
     NewMessageSubscription,
     SubscriptionNewMessageArgs
-  > {}
-
-const useNewMessageListener = (options: Options) => {
+  >,
+) => {
   return useSubscription<NewMessageSubscription, SubscriptionNewMessageArgs>(
     NEW_MESSAGE,
     options,

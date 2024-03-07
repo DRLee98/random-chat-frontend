@@ -14,10 +14,9 @@ const UPDATE_NEW_MESSAGE = gql`
   }
 `;
 
-interface Options
-  extends SubscriptionHookOptions<UpdateNewMessageInUserRoomSubscription> {}
-
-const useUpdateNewMessageListener = (options: Options) => {
+const useUpdateNewMessageListener = (
+  options?: SubscriptionHookOptions<UpdateNewMessageInUserRoomSubscription>,
+) => {
   return useSubscription<UpdateNewMessageInUserRoomSubscription>(
     UPDATE_NEW_MESSAGE,
     options,

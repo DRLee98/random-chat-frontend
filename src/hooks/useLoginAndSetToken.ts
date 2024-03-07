@@ -2,21 +2,28 @@ import useLogin from '@app/graphql/hooks/user/useLogin';
 
 import {setToken} from '@app/utils/encStorage';
 
-import type {LoginInput} from '@app/graphql/types/graphql';
+import type {
+  LoginInput,
+  LoginQuery,
+  QueryLoginArgs,
+} from '@app/graphql/types/graphql';
+import type {LazyQueryHookOptions} from '@apollo/client';
 
-const useLoginAndSetToken = () => {
-  const [login] = useLogin();
+const useLoginAndSetToken = (
+  options?: LazyQueryHookOptions<LoginQuery, QueryLoginArgs>,
+) => {
+  const [login] = useLogin(options);
 
   const loginFn = async (input: LoginInput) => {
-    const result = await login({
+    const data = await login({
       input,
     });
-    if (result?.login.token) {
-      await setToken(result.login.token);
+
+    if (data?.login.token) {
+      await setToken(data.login.token);
       return true;
-    } else {
-      return false;
     }
+    return false;
   };
 
   return loginFn;
