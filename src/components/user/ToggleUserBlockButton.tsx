@@ -1,8 +1,12 @@
+import {useApolloClient} from '@apollo/client';
 import useToggleBlockUser from '@app/graphql/hooks/user/useToggleBlockUser';
 
 import {Alert, Button} from 'react-native';
 
-import type {Me} from '@app/graphql/types/graphql';
+import {ME_DETAIL} from '@app/graphql/hooks/user/useMeDetail';
+import {ME} from '@app/graphql/hooks/user/useMe';
+
+import type {Me, MeDetailQuery, MeQuery} from '@app/graphql/types/graphql';
 
 interface ToggleUserBlockButtonProps {
   me: Me;
@@ -15,16 +19,54 @@ const ToggleUserBlockButton = ({
   userId,
   nickname,
 }: ToggleUserBlockButtonProps) => {
+  const {cache} = useApolloClient();
+
   const [toggleBlockUser] = useToggleBlockUser();
 
   const toggleBlockUserFn = async () => {
-    toggleBlockUser({
+    const {data} = await toggleBlockUser({
       variables: {
         input: {
           id: userId,
         },
       },
     });
+    if (!data || !data.toggleBlockUser.ok) return;
+    cache.updateQuery<MeDetailQuery>(
+      {query: ME_DETAIL},
+      prev =>
+        prev?.meDetail.me && {
+          ...prev,
+          meDetail: {
+            ...prev.meDetail,
+            me: {
+              ...prev.meDetail.me,
+              blockUsers:
+                data?.toggleBlockUser.updateBlockUsers ??
+                prev.meDetail.me?.blockUsers,
+            },
+          },
+        },
+    );
+    cache.updateQuery<MeQuery>(
+      {query: ME},
+      prev =>
+        prev && {
+          ...prev,
+          me: {
+            ...prev.me,
+            ...(prev.me.me && {
+              me: {
+                ...prev.me.me,
+                blockUserIds:
+                  data?.toggleBlockUser.updateBlockUsers?.map(
+                    user => +user.id,
+                  ) ?? prev.me.me.blockUserIds,
+              },
+            }),
+          },
+        },
+    );
   };
 
   const AlertFn = async () => {
