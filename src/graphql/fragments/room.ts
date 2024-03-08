@@ -23,6 +23,7 @@ export const MY_ROOM_BASE = gql`
     lastMessage
     room {
       id
+      updatedAt
     }
     users {
       profileUrl
