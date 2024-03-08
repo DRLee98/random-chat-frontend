@@ -12,6 +12,8 @@ import useMe from '@app/graphql/hooks/user/useMe';
 
 import {Button, ScrollView, Text, TextInput, View} from 'react-native';
 import ToggleUserBlockButton from '@app/components/user/ToggleUserBlockButton';
+import NotiButton from '@app/components/room/NotiButton';
+import PinnedButton from '@app/components/room/PinnedButton';
 
 import {MainNavigatorScreens} from '@app/navigators';
 import {MessageType} from '@app/graphql/types/graphql';
@@ -19,8 +21,6 @@ import {MessageType} from '@app/graphql/types/graphql';
 import type {StackScreenProps} from '@react-navigation/stack';
 import type {MainNavigatorParamList} from '@app/navigators';
 import type {MessageBaseFragment, Messages} from '@app/graphql/types/graphql';
-import NotiButton from '@app/components/room/NotiButton';
-import PinnedButton from '@app/components/room/PinnedButton';
 
 export interface ChatRoomScreenParams {
   roomId: string;
@@ -76,20 +76,8 @@ const ChatRoomScreen = ({route, navigation}: ChatRoomScreenProps) => {
         },
       },
     });
-    if (data?.sendMessage.messageId) {
-      appendMessageFn({
-        __typename: 'MessageObjectType',
-        id: data.sendMessage.messageId + '',
-        contents: value,
-        type: MessageType.Text,
-        readUsersId: [+me.id],
-        user: {
-          __typename: 'UserObjectType',
-          id: me.id,
-          nickname: me.nickname,
-          profileUrl: me.profileUrl,
-        },
-      });
+    if (data?.sendMessage.message) {
+      appendMessageFn(data.sendMessage.message);
     }
     setValue('');
   };

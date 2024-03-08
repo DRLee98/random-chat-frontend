@@ -1,4 +1,5 @@
 import {gql, useMutation} from '@apollo/client';
+import {MESSAGE_BASE} from '../../fragments/message';
 
 import type {MutationHookOptions} from '@apollo/client';
 import type {
@@ -11,9 +12,12 @@ const SEND_MESSAGE = gql`
     sendMessage(input: $input) {
       ok
       error
-      messageId
+      message {
+        ...MessageBase
+      }
     }
   }
+  ${MESSAGE_BASE}
 `;
 
 const useSendMessage = (
