@@ -139,10 +139,12 @@ const ChatRoomScreen = ({route, navigation}: ChatRoomScreenProps) => {
         {room?.roomDetail.room && (
           <View style={{flexDirection: 'row', gap: 10}}>
             <NotiButton
+              roomId={route.params.roomId}
               userRoomId={room.roomDetail.room.userRoom.id}
               noti={room.roomDetail.room.userRoom.noti}
             />
             <PinnedButton
+              roomId={route.params.roomId}
               userRoomId={room.roomDetail.room.userRoom.id}
               pinned={Boolean(room.roomDetail.room.userRoom.pinnedAt)}
             />

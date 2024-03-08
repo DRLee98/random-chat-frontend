@@ -1,17 +1,20 @@
 import {useUpdateMyRooms} from '@app/graphql/hooks/room/useMyRooms';
+import {useUpdateRoomDetail} from '@app/graphql/hooks/room/useRoomDetail';
 import useUpdateRoom from '@app/graphql/hooks/room/useUpdateRoom';
 
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 interface NotiButtonProps {
+  roomId: string;
   userRoomId: string;
   noti: boolean;
 }
 
-const NotiButton = ({userRoomId, noti}: NotiButtonProps) => {
+const NotiButton = ({roomId, userRoomId, noti}: NotiButtonProps) => {
   const [updateRoom] = useUpdateRoom();
   const {updateMyRoom} = useUpdateMyRooms();
+  const {updateRoomDetail} = useUpdateRoomDetail({roomId: +roomId});
 
   const onToggleNoti = async () => {
     const {data} = await updateRoom({
@@ -23,7 +26,9 @@ const NotiButton = ({userRoomId, noti}: NotiButtonProps) => {
       },
     });
     if (data?.updateRoom.ok) {
-      updateMyRoom(userRoomId, {noti: !noti});
+      const updateValue = !noti;
+      updateRoomDetail({noti: updateValue});
+      updateMyRoom(userRoomId, {noti: updateValue});
     }
   };
 

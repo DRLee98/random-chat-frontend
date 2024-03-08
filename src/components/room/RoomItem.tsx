@@ -39,10 +39,15 @@ const RoomItem = ({userRoom}: RoomItemProps) => {
       </TouchableOpacity>
       <View style={{flexDirection: 'row', alignItems: 'center', gap: 20}}>
         <PinnedButton
+          roomId={userRoom.room.id}
           userRoomId={userRoom.id}
           pinned={Boolean(userRoom.pinnedAt)}
         />
-        <NotiButton userRoomId={userRoom.id} noti={userRoom.noti} />
+        <NotiButton
+          roomId={userRoom.room.id}
+          userRoomId={userRoom.id}
+          noti={userRoom.noti}
+        />
       </View>
     </View>
   );

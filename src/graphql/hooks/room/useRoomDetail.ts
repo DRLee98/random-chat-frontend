@@ -1,10 +1,11 @@
-import {gql, useQuery} from '@apollo/client';
+import {gql, useApolloClient, useQuery} from '@apollo/client';
 
 import type {QueryHookOptions} from '@apollo/client';
 import type {
   QueryRoomDetailArgs,
   RoomDetailInput,
   RoomDetailQuery,
+  SimpleUserRoom,
 } from '../../types/graphql';
 
 const ROOM_DETAIL = gql`
@@ -43,6 +44,32 @@ const useRoomDetail = (
     ...options,
     variables: {input},
   });
+};
+
+export const useUpdateRoomDetail = (input: RoomDetailInput) => {
+  const client = useApolloClient();
+
+  const updateRoomDetail = (newUserRoom: Partial<SimpleUserRoom>) => {
+    client.cache.updateQuery<RoomDetailQuery, QueryRoomDetailArgs>(
+      {query: ROOM_DETAIL, variables: {input}},
+      prev =>
+        prev?.roomDetail.room && {
+          ...prev,
+          roomDetail: {
+            ...prev.roomDetail,
+            room: {
+              ...prev.roomDetail.room,
+              userRoom: {
+                ...prev.roomDetail.room.userRoom,
+                ...newUserRoom,
+              },
+            },
+          },
+        },
+    );
+  };
+
+  return {updateRoomDetail};
 };
 
 export default useRoomDetail;
