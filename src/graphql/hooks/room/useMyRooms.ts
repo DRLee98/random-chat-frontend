@@ -61,17 +61,17 @@ const useMyRooms = (
   return {...result, fetchMore};
 };
 
-export const useUpdateMyRoom = () => {
+export const useUpdateMyRooms = (input?: MyRoomsInput) => {
   const client = useApolloClient();
 
-  const getPrevData = (input?: MyRoomsInput) => {
+  const getPrevData = () => {
     return client.readQuery<MyRoomsQuery, QueryMyRoomsArgs>({
       query: MY_ROOMS,
       variables: {input: input ?? {}},
     });
   };
 
-  const updateFn = (rooms: MyRoom[], input?: MyRoomsInput) => {
+  const updateFn = (rooms: MyRoom[]) => {
     client.cache.updateQuery<MyRoomsQuery, QueryMyRoomsArgs>(
       {query: MY_ROOMS, variables: {input: input ?? {}}},
       prev =>
@@ -87,30 +87,42 @@ export const useUpdateMyRoom = () => {
 
   const updateMyRoom = (
     id: string,
-    newRoom: Partial<MyRoom>,
-    input?: MyRoomsInput,
+    newUserRoom: Partial<Omit<MyRoom, 'room'>>,
+    newRoom?: Partial<MyRoom['room']>,
   ) => {
-    const prevData = getPrevData(input);
-    const updateRooms = (prevData?.myRooms.rooms?.map(room => {
-      if (room.id === id) {
-        return {...room, ...newRoom};
+    const prevData = getPrevData();
+    const updateRooms = (prevData?.myRooms.rooms?.map(userRoom => {
+      if (userRoom.id === id) {
+        return {
+          ...userRoom,
+          ...newUserRoom,
+          ...(newRoom && {room: {...userRoom.room, ...newRoom}}),
+        };
       }
-      return room;
+      return userRoom;
     }) ?? []) as MyRoom[];
-    updateFn(updateRooms, input);
+    updateFn(updateRooms);
   };
 
-  const appendMyRooms = (newRoom: MyRoom, input?: MyRoomsInput) => {
-    const prevData = getPrevData(input);
+  const appendMyRoom = (newRoom: MyRoom) => {
+    const prevData = getPrevData();
     const updateRooms = [
       newRoom,
       ...(prevData?.myRooms.rooms ?? []),
     ] as MyRoom[];
-    updateFn(updateRooms, input);
+    updateFn(updateRooms);
   };
 
-  const sortMyRooms = (input?: MyRoomsInput) => {
-    const prevData = getPrevData(input);
+  const removeMyRoom = (id: string) => {
+    const prevData = getPrevData();
+    const updateRooms = (prevData?.myRooms.rooms?.filter(
+      ({room}) => room.id !== id,
+    ) ?? []) as MyRoom[];
+    updateFn(updateRooms);
+  };
+
+  const sortMyRooms = () => {
+    const prevData = getPrevData();
     const updateRooms = [...(prevData?.myRooms.rooms ?? [])]
       .sort(
         (a, b) =>
@@ -134,10 +146,10 @@ export const useUpdateMyRoom = () => {
         if (a.pinnedAt && !b.pinnedAt) return -1;
         return 0;
       }) as MyRoom[];
-    updateFn(updateRooms, input);
+    updateFn(updateRooms);
   };
 
-  return {updateMyRoom, appendMyRooms, sortMyRooms};
+  return {updateMyRoom, appendMyRoom, removeMyRoom, sortMyRooms};
 };
 
 export default useMyRooms;

@@ -1,4 +1,4 @@
-import useMyRooms, {useUpdateMyRoom} from '@app/graphql/hooks/room/useMyRooms';
+import useMyRooms, {useUpdateMyRooms} from '@app/graphql/hooks/room/useMyRooms';
 import useCreateRandomRoom from '@app/graphql/hooks/room/useCreateRandomRoom';
 import useNewRoomListener from '@app/graphql/hooks/room/useNewRoomListener';
 import useUpdateNewMessageListener from '@app/graphql/hooks/message/useUpdateNewMessageListener';
@@ -25,7 +25,7 @@ const HomeScreen = ({navigation}: HomeScreenProps) => {
   const [createRandomRoom] = useCreateRandomRoom();
 
   const {data: myRoomsData, fetchMore, refetch} = useMyRooms();
-  const {updateMyRoom, appendMyRooms, sortMyRooms} = useUpdateMyRoom();
+  const {updateMyRoom, appendMyRoom, sortMyRooms} = useUpdateMyRooms();
 
   const goChatRoom = (roomId: string) => {
     navigation.navigate(MainNavigatorScreens.ChatRoom, {roomId});
@@ -35,7 +35,7 @@ const HomeScreen = ({navigation}: HomeScreenProps) => {
     const {data} = await createRandomRoom();
     if (data?.createRandomRoom.room) {
       const userRoom = data.createRandomRoom.room as MyRoom;
-      appendMyRooms(userRoom);
+      appendMyRoom(userRoom);
       sortMyRooms();
       goChatRoom(userRoom.room.id);
     }
@@ -49,7 +49,7 @@ const HomeScreen = ({navigation}: HomeScreenProps) => {
 
   useNewRoomListener({
     onData: ({data}) =>
-      data.data?.newRoom && appendMyRooms(data.data.newRoom as MyRoom),
+      data.data?.newRoom && appendMyRoom(data.data.newRoom as MyRoom),
   });
   useUpdateNewMessageListener({
     onData: ({data}) => updateNewMessage(data.data?.updateNewMessageInUserRoom),

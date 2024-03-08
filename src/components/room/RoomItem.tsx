@@ -1,10 +1,9 @@
 import {useNavigation} from '@react-navigation/native';
-import {useUpdateMyRoom} from '@app/graphql/hooks/room/useMyRooms';
-import useUpdateRoom from '@app/graphql/hooks/room/useUpdateRoom';
 
 import {View, Text} from 'react-native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import PinnedButton from './PinnedButton';
+import NotiButton from './NotiButton';
 
 import {MainNavigatorScreens} from '@app/navigators';
 
@@ -19,42 +18,10 @@ interface RoomItemProps {
 const RoomItem = ({userRoom}: RoomItemProps) => {
   const navigation = useNavigation<NavigationProp<MainNavigatorParamList>>();
 
-  const [updateRoom] = useUpdateRoom();
-  const {updateMyRoom, sortMyRooms} = useUpdateMyRoom();
-
   const goChatRoom = () => {
     navigation.navigate(MainNavigatorScreens.ChatRoom, {
       roomId: userRoom.room.id,
     });
-  };
-
-  const onToggleNoti = async (userRoomId: string, noti: boolean) => {
-    const {data} = await updateRoom({
-      variables: {
-        input: {
-          userRoomId: +userRoomId,
-          noti,
-        },
-      },
-    });
-    if (data?.updateRoom.ok) {
-      updateMyRoom(userRoomId, {noti});
-    }
-  };
-
-  const onTogglePinned = async (userRoomId: string, pinned: boolean) => {
-    const {data} = await updateRoom({
-      variables: {
-        input: {
-          userRoomId: +userRoomId,
-          pinned,
-        },
-      },
-    });
-    if (data?.updateRoom.ok) {
-      updateMyRoom(userRoomId, {pinnedAt: pinned ? new Date() : null});
-      sortMyRooms();
-    }
   };
 
   return (
@@ -71,22 +38,11 @@ const RoomItem = ({userRoom}: RoomItemProps) => {
         <Text>last message: {userRoom.lastMessage}</Text>
       </TouchableOpacity>
       <View style={{flexDirection: 'row', alignItems: 'center', gap: 20}}>
-        <TouchableOpacity
-          onPress={() =>
-            onTogglePinned(userRoom.id, !Boolean(userRoom.pinnedAt))
-          }>
-          <Icon
-            name={Boolean(userRoom.pinnedAt) ? 'pin' : 'pin-off-outline'}
-            size={20}
-          />
-        </TouchableOpacity>
-        <TouchableOpacity
-          onPress={() => onToggleNoti(userRoom.id, !userRoom.noti)}>
-          <Icon
-            name={userRoom.noti ? 'bell-ring' : 'bell-cancel-outline'}
-            size={20}
-          />
-        </TouchableOpacity>
+        <PinnedButton
+          userRoomId={userRoom.id}
+          pinned={Boolean(userRoom.pinnedAt)}
+        />
+        <NotiButton userRoomId={userRoom.id} noti={userRoom.noti} />
       </View>
     </View>
   );

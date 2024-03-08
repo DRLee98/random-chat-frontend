@@ -13,11 +13,13 @@ const ROOM_DETAIL = gql`
       ok
       error
       room {
-        id
-        name
-        noti
-        pinnedAt
-        newMessage
+        userRoom {
+          id
+          name
+          noti
+          pinnedAt
+          newMessage
+        }
         users {
           id
           nickname

@@ -1,8 +1,9 @@
-import {gql, useQuery} from '@apollo/client';
+import {gql, useApolloClient, useQuery} from '@apollo/client';
 import {MESSAGE_BASE} from '../../fragments/message';
 
 import type {QueryHookOptions} from '@apollo/client';
 import type {
+  MessageBaseFragment,
   QueryViewMessagesArgs,
   ViewMessagesInput,
   ViewMessagesQuery,
@@ -65,6 +66,80 @@ const useViewMessages = (
   };
 
   return {...result, fetchMore};
+};
+
+export const useUpdateViewMessages = (input: ViewMessagesInput) => {
+  const client = useApolloClient();
+
+  const getPrevData = () => {
+    return client.readQuery<ViewMessagesQuery, QueryViewMessagesArgs>({
+      query: VIEW_MESSAGES,
+      variables: {input},
+    });
+  };
+
+  const updateFn = (messages: MessageBaseFragment[]) => {
+    client.cache.updateQuery<ViewMessagesQuery, QueryViewMessagesArgs>(
+      {query: VIEW_MESSAGES, variables: {input}},
+      prev =>
+        prev?.viewMessages && {
+          ...prev,
+          viewMessages: {
+            ...prev.viewMessages,
+            messages,
+          },
+        },
+    );
+  };
+
+  const updateMessage = (
+    id: string,
+    newMessage: Partial<MessageBaseFragment>,
+  ) => {
+    const prevData = getPrevData();
+    const messages = (prevData?.viewMessages.messages?.map(message => {
+      if (message.id === id) {
+        return {
+          ...message,
+          ...newMessage,
+        };
+      }
+      return message;
+    }) ?? []) as MessageBaseFragment[];
+    updateFn(messages);
+  };
+
+  const updateMessages = (
+    newMessages: Array<
+      Pick<MessageBaseFragment, 'id'> &
+        Omit<Partial<MessageBaseFragment>, 'id' | '__typename'>
+    >,
+  ) => {
+    const prevData = getPrevData();
+    const messages = (prevData?.viewMessages.messages?.map(message => {
+      const findMessage = newMessages.find(nMsg => nMsg.id === message.id);
+      if (findMessage) {
+        return {
+          ...message,
+          ...findMessage,
+          __typename: 'MessageObjectType',
+        };
+      }
+      return message;
+    }) ?? []) as MessageBaseFragment[];
+    updateFn(messages);
+  };
+
+  const appendMessage = (newMessage: MessageBaseFragment) => {
+    const prevData = getPrevData();
+    const messages = [
+      ...(prevData?.viewMessages.messages ?? []),
+      newMessage,
+    ] as MessageBaseFragment[];
+    updateFn(messages);
+  };
+
+  return {updateMessage, updateMessages, appendMessage};
 };
 
 export default useViewMessages;

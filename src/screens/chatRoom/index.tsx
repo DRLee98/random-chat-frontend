@@ -1,8 +1,10 @@
 import {useState} from 'react';
-import {useApolloClient} from '@apollo/client';
+import {useUpdateMyRooms} from '@app/graphql/hooks/room/useMyRooms';
 import useRoomDetail from '@app/graphql/hooks/room/useRoomDetail';
 import useDeleteRoom from '@app/graphql/hooks/room/useDeleteRoom';
-import useViewMessages from '@app/graphql/hooks/message/useViewMessages';
+import useViewMessages, {
+  useUpdateViewMessages,
+} from '@app/graphql/hooks/message/useViewMessages';
 import useNewMessageListener from '@app/graphql/hooks/message/useNewMessageListener';
 import useReadMessageListener from '@app/graphql/hooks/message/useReadMessageListener';
 import useSendMessage from '@app/graphql/hooks/message/useSendMessage';
@@ -11,19 +13,14 @@ import useMe from '@app/graphql/hooks/user/useMe';
 import {Button, ScrollView, Text, TextInput, View} from 'react-native';
 import ToggleUserBlockButton from '@app/components/user/ToggleUserBlockButton';
 
-import {MY_ROOMS} from '@app/graphql/hooks/room/useMyRooms';
-
 import {MainNavigatorScreens} from '@app/navigators';
 import {MessageType} from '@app/graphql/types/graphql';
 
 import type {StackScreenProps} from '@react-navigation/stack';
 import type {MainNavigatorParamList} from '@app/navigators';
-import type {
-  MessageBaseFragment,
-  Messages,
-  MyRoomsQuery,
-  MyRoomsQueryVariables,
-} from '@app/graphql/types/graphql';
+import type {MessageBaseFragment, Messages} from '@app/graphql/types/graphql';
+import NotiButton from '@app/components/room/NotiButton';
+import PinnedButton from '@app/components/room/PinnedButton';
 
 export interface ChatRoomScreenParams {
   roomId: string;
@@ -36,80 +33,40 @@ interface ChatRoomScreenProps
   > {}
 
 const ChatRoomScreen = ({route, navigation}: ChatRoomScreenProps) => {
-  const {cache} = useApolloClient();
-
   const [value, setValue] = useState('');
 
   const [sendMessage] = useSendMessage();
   const [deleteRoom] = useDeleteRoom();
 
-  const {me} = useMe();
-  const {data: room} = useRoomDetail({roomId: +route.params.roomId});
-  const {
-    data: message,
-    updateQuery,
-    fetchMore,
-  } = useViewMessages({
+  const {updateMyRoom, removeMyRoom, sortMyRooms} = useUpdateMyRooms();
+  const {updateMessages, appendMessage} = useUpdateViewMessages({
     roomId: +route.params.roomId,
-    take: 50,
   });
 
-  const appendMessage = (newMessage?: MessageBaseFragment) => {
-    if (!newMessage) return;
-    updateQuery(prev => ({
-      ...prev,
-      viewMessages: {
-        ...prev.viewMessages,
-        messages: [...(prev.viewMessages.messages ?? []), newMessage],
-      },
-    }));
-    cache.updateQuery<MyRoomsQuery, MyRoomsQueryVariables>(
-      {query: MY_ROOMS, variables: {input: {}}},
-      prev => {
-        if (!prev) return prev;
-        const newRooms: MyRoomsQuery['myRooms']['rooms'] = [];
-        prev?.myRooms.rooms?.forEach(room => {
-          if (room.room.id === route.params.roomId) {
-            newRooms.unshift({
-              ...room,
-              lastMessage: newMessage.contents,
-            });
-            return;
-          }
-          newRooms.push(room);
-        });
-        return {
-          ...prev,
-          myRooms: {
-            ...prev.myRooms,
-            rooms: newRooms,
-          },
-        };
-      },
+  const {me} = useMe();
+  const {data: room} = useRoomDetail({roomId: +route.params.roomId});
+  const {data: message, fetchMore} = useViewMessages({
+    roomId: +route.params.roomId,
+  });
+
+  const appendMessageFn = (newMessage: MessageBaseFragment) => {
+    if (!room?.roomDetail.room) return;
+    appendMessage(newMessage);
+    updateMyRoom(
+      room.roomDetail.room.userRoom.id,
+      {lastMessage: newMessage.contents},
+      {updatedAt: new Date()},
     );
+    sortMyRooms();
   };
 
   const updateReadMessages = (messages?: Messages[]) => {
     if (!messages || messages.length === 0) return;
-    updateQuery(prev => ({
-      ...prev,
-      viewMessages: {
-        ...prev.viewMessages,
-        messages: prev.viewMessages.messages?.map(m => {
-          const findMessage = messages.find(msg => msg.id === m.id);
-          if (findMessage)
-            return {
-              ...m,
-              readUsersId: findMessage.readUsersId,
-            };
-          return m;
-        }),
-      },
-    }));
+    updateMessages(messages);
   };
 
   const sendMessageFn = async () => {
-    if (!me) return;
+    if (!me || !value) return;
     const {data} = await sendMessage({
       variables: {
         input: {
@@ -120,7 +77,7 @@ const ChatRoomScreen = ({route, navigation}: ChatRoomScreenProps) => {
       },
     });
     if (data?.sendMessage.messageId) {
-      appendMessage({
+      appendMessageFn({
         __typename: 'MessageObjectType',
         id: data.sendMessage.messageId + '',
         contents: value,
@@ -137,6 +94,17 @@ const ChatRoomScreen = ({route, navigation}: ChatRoomScreenProps) => {
     setValue('');
   };
 
+  const formatReadCount = (readUsersId: number[]) => {
+    if (!me) return;
+    let ids = [...readUsersId];
+    if (!ids.includes(+me.id)) {
+      ids.push(+me.id);
+    }
+    const roomUserIds =
+      room?.roomDetail.room?.users?.map(user => user.id) ?? [];
+    return roomUserIds.filter(id => ids.includes(+id)).length;
+  };
+
   const deleteRoomFn = async () => {
     const {data} = await deleteRoom({
       variables: {
@@ -146,40 +114,15 @@ const ChatRoomScreen = ({route, navigation}: ChatRoomScreenProps) => {
       },
     });
     if (data?.deleteRoom.ok) {
-      cache.updateQuery<MyRoomsQuery, MyRoomsQueryVariables>(
-        {query: MY_ROOMS, variables: {input: {}}},
-        prev =>
-          prev && {
-            ...prev,
-            myRooms: {
-              ...prev.myRooms,
-              rooms: prev.myRooms.rooms?.filter(
-                room => room.room.id !== route.params.roomId,
-              ),
-            },
-          },
-      );
+      removeMyRoom(route.params.roomId);
       navigation.reset({routes: [{name: MainNavigatorScreens.Home}]});
     }
   };
 
-  const formatReadCount = (readUsersId: number[]) => {
-    if (!me) return;
-    let ids = [...readUsersId];
-    if (!ids.includes(+me.id)) {
-      ids.push(+me.id);
-    }
-
-    const roomUserIds =
-      room?.roomDetail.room?.users?.map(user => user.id) ?? [];
-    const readCount = roomUserIds.filter(id => ids.includes(+id)).length;
-
-    return readCount;
-  };
-
   useNewMessageListener({
     variables: {input: {roomId: +route.params.roomId}},
-    onData: ({data}) => appendMessage(data.data?.newMessage),
+    onData: ({data}) =>
+      data.data?.newMessage && appendMessageFn(data.data?.newMessage),
   });
   useReadMessageListener({
     variables: {input: {roomId: +route.params.roomId}},
@@ -188,9 +131,24 @@ const ChatRoomScreen = ({route, navigation}: ChatRoomScreenProps) => {
 
   return (
     <ScrollView>
-      <Text>
-        Chat Room: {room?.roomDetail.room?.name}, id: {route.params.roomId}
-      </Text>
+      <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+        <Text>
+          Chat Room: {room?.roomDetail.room?.userRoom.name}, id:{' '}
+          {route.params.roomId}
+        </Text>
+        {room?.roomDetail.room && (
+          <View style={{flexDirection: 'row', gap: 10}}>
+            <NotiButton
+              userRoomId={room.roomDetail.room.userRoom.id}
+              noti={room.roomDetail.room.userRoom.noti}
+            />
+            <PinnedButton
+              userRoomId={room.roomDetail.room.userRoom.id}
+              pinned={Boolean(room.roomDetail.room.userRoom.pinnedAt)}
+            />
+          </View>
+        )}
+      </View>
       <View style={{marginVertical: 20}}>
         {room?.roomDetail.room?.users?.map(user => (
           <View
