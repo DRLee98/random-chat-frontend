@@ -14,13 +14,13 @@ interface PinnedButtonProps {
 const PinnedButton = ({roomId, userRoomId, pinned}: PinnedButtonProps) => {
   const [updateRoom] = useUpdateRoom();
   const {updateMyRoom, sortMyRooms} = useUpdateMyRooms();
-  const {updateRoomDetail} = useUpdateRoomDetail({roomId: +roomId});
+  const {updateRoomDetail} = useUpdateRoomDetail({roomId});
 
   const onTogglePinned = async () => {
     const {data} = await updateRoom({
       variables: {
         input: {
-          userRoomId: +userRoomId,
+          userRoomId,
           pinned: !pinned,
         },
       },

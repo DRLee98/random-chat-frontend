@@ -14,13 +14,13 @@ interface NotiButtonProps {
 const NotiButton = ({roomId, userRoomId, noti}: NotiButtonProps) => {
   const [updateRoom] = useUpdateRoom();
   const {updateMyRoom} = useUpdateMyRooms();
-  const {updateRoomDetail} = useUpdateRoomDetail({roomId: +roomId});
+  const {updateRoomDetail} = useUpdateRoomDetail({roomId});
 
   const onToggleNoti = async () => {
     const {data} = await updateRoom({
       variables: {
         input: {
-          userRoomId: +userRoomId,
+          userRoomId,
           noti: !noti,
         },
       },

@@ -33,6 +33,8 @@ interface ChatRoomScreenProps
   > {}
 
 const ChatRoomScreen = ({route, navigation}: ChatRoomScreenProps) => {
+  const roomId = route.params.roomId;
+
   const [value, setValue] = useState('');
 
   const [sendMessage] = useSendMessage();
@@ -40,13 +42,13 @@ const ChatRoomScreen = ({route, navigation}: ChatRoomScreenProps) => {
 
   const {updateMyRoom, removeMyRoom, sortMyRooms} = useUpdateMyRooms();
   const {updateMessages, appendMessage} = useUpdateViewMessages({
-    roomId: +route.params.roomId,
+    roomId,
   });
 
   const {me} = useMe();
-  const {data: room} = useRoomDetail({roomId: +route.params.roomId});
+  const {data: room} = useRoomDetail({roomId});
   const {data: message, fetchMore} = useViewMessages({
-    roomId: +route.params.roomId,
+    roomId,
   });
 
   const appendMessageFn = (newMessage: MessageBaseFragment) => {
@@ -70,7 +72,7 @@ const ChatRoomScreen = ({route, navigation}: ChatRoomScreenProps) => {
     const {data} = await sendMessage({
       variables: {
         input: {
-          roomId: +route.params.roomId,
+          roomId: route.params.roomId,
           contents: value,
           type: MessageType.Text,
         },
@@ -82,22 +84,22 @@ const ChatRoomScreen = ({route, navigation}: ChatRoomScreenProps) => {
     setValue('');
   };
 
-  const formatReadCount = (readUsersId: number[]) => {
+  const formatReadCount = (readUsersId: string[]) => {
     if (!me) return;
     let ids = [...readUsersId];
-    if (!ids.includes(+me.id)) {
-      ids.push(+me.id);
+    if (!ids.includes(me.id)) {
+      ids.push(me.id);
     }
     const roomUserIds =
       room?.roomDetail.room?.users?.map(user => user.id) ?? [];
-    return roomUserIds.filter(id => ids.includes(+id)).length;
+    return roomUserIds.filter(id => ids.includes(id)).length;
   };
 
   const deleteRoomFn = async () => {
     const {data} = await deleteRoom({
       variables: {
         input: {
-          roomId: +route.params.roomId,
+          roomId,
         },
       },
     });
@@ -108,12 +110,12 @@ const ChatRoomScreen = ({route, navigation}: ChatRoomScreenProps) => {
   };
 
   useNewMessageListener({
-    variables: {input: {roomId: +route.params.roomId}},
+    variables: {input: {roomId}},
     onData: ({data}) =>
       data.data?.newMessage && appendMessageFn(data.data?.newMessage),
   });
   useReadMessageListener({
-    variables: {input: {roomId: +route.params.roomId}},
+    variables: {input: {roomId}},
     onData: ({data}) => updateReadMessages(data.data?.readMessage.messages),
   });
 

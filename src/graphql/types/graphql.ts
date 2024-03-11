@@ -43,7 +43,7 @@ export type CreateUserOutput = {
 };
 
 export type DeleteRoomInput = {
-  roomId: Scalars['Float']['input'];
+  roomId: Scalars['ID']['input'];
 };
 
 export type DeleteRoomOutput = {
@@ -88,7 +88,7 @@ export type LoginOutput = {
 
 export type Me = {
   __typename?: 'Me';
-  blockUserIds: Array<Scalars['Float']['output']>;
+  blockUserIds: Array<Scalars['ID']['output']>;
   id: Scalars['ID']['output'];
   nickname: Scalars['String']['output'];
   profileUrl?: Maybe<Scalars['String']['output']>;
@@ -128,7 +128,7 @@ export type MessageObjectType = {
   contents: Scalars['String']['output'];
   createdAt: Scalars['DateTime']['output'];
   id: Scalars['ID']['output'];
-  readUsersId: Array<Scalars['Float']['output']>;
+  readUsersId: Array<Scalars['ID']['output']>;
   room: Room;
   type: MessageType;
   updatedAt: Scalars['DateTime']['output'];
@@ -144,7 +144,7 @@ export enum MessageType {
 export type Messages = {
   __typename?: 'Messages';
   id: Scalars['ID']['output'];
-  readUsersId: Array<Scalars['Float']['output']>;
+  readUsersId: Array<Scalars['ID']['output']>;
 };
 
 export type Mutation = {
@@ -223,7 +223,7 @@ export type MyRoomsOutput = {
 };
 
 export type NewMessageInput = {
-  roomId: Scalars['Float']['input'];
+  roomId: Scalars['ID']['input'];
 };
 
 export type Query = {
@@ -273,12 +273,12 @@ export type RandomNicknameOutput = {
 export type ReadMessage = {
   __typename?: 'ReadMessage';
   messages: Array<Messages>;
-  roomId: Scalars['Float']['output'];
-  userId: Scalars['Float']['output'];
+  roomId: Scalars['ID']['output'];
+  userId: Scalars['ID']['output'];
 };
 
 export type ReadMessageInput = {
-  roomId: Scalars['Float']['input'];
+  roomId: Scalars['ID']['input'];
 };
 
 export type Room = {
@@ -297,7 +297,7 @@ export type RoomDetail = {
 };
 
 export type RoomDetailInput = {
-  roomId: Scalars['Float']['input'];
+  roomId: Scalars['ID']['input'];
 };
 
 export type RoomDetailOutput = {
@@ -309,7 +309,7 @@ export type RoomDetailOutput = {
 
 export type SendMessageInput = {
   contents: Scalars['String']['input'];
-  roomId: Scalars['Float']['input'];
+  roomId: Scalars['ID']['input'];
   type: MessageType;
 };
 
@@ -378,7 +378,7 @@ export type UpdateRoomInput = {
   name?: InputMaybe<Scalars['String']['input']>;
   noti?: InputMaybe<Scalars['Boolean']['input']>;
   pinned?: InputMaybe<Scalars['Boolean']['input']>;
-  userRoomId: Scalars['Float']['input'];
+  userRoomId: Scalars['ID']['input'];
 };
 
 export type UpdateRoomOutput = {
@@ -454,7 +454,7 @@ export type UserRoomObjectType = {
 };
 
 export type ViewMessagesInput = {
-  roomId: Scalars['Float']['input'];
+  roomId: Scalars['ID']['input'];
   skip?: Scalars['Float']['input'];
   take?: Scalars['Float']['input'];
 };
@@ -467,7 +467,7 @@ export type ViewMessagesOutput = {
   ok: Scalars['Boolean']['output'];
 };
 
-export type MessageBaseFragment = { __typename?: 'MessageObjectType', id: string, contents: string, type: MessageType, readUsersId: Array<number>, user: { __typename?: 'UserObjectType', id: string, nickname: string, profileUrl?: string | null } };
+export type MessageBaseFragment = { __typename?: 'MessageObjectType', id: string, contents: string, type: MessageType, readUsersId: Array<string>, user: { __typename?: 'UserObjectType', id: string, nickname: string, profileUrl?: string | null } };
 
 export type UserRoomBaseFragment = { __typename?: 'UserRoomObjectType', id: string, name: string, noti: boolean, pinnedAt?: any | null, newMessage: number, room: { __typename?: 'Room', id: string } };
 
@@ -478,21 +478,21 @@ export type NewMessageSubscriptionVariables = Exact<{
 }>;
 
 
-export type NewMessageSubscription = { __typename?: 'Subscription', newMessage: { __typename?: 'MessageObjectType', id: string, contents: string, type: MessageType, readUsersId: Array<number>, user: { __typename?: 'UserObjectType', id: string, nickname: string, profileUrl?: string | null } } };
+export type NewMessageSubscription = { __typename?: 'Subscription', newMessage: { __typename?: 'MessageObjectType', id: string, contents: string, type: MessageType, readUsersId: Array<string>, user: { __typename?: 'UserObjectType', id: string, nickname: string, profileUrl?: string | null } } };
 
 export type ReadMessageSubscriptionVariables = Exact<{
   input: ReadMessageInput;
 }>;
 
 
-export type ReadMessageSubscription = { __typename?: 'Subscription', readMessage: { __typename?: 'ReadMessage', messages: Array<{ __typename?: 'Messages', id: string, readUsersId: Array<number> }> } };
+export type ReadMessageSubscription = { __typename?: 'Subscription', readMessage: { __typename?: 'ReadMessage', messages: Array<{ __typename?: 'Messages', id: string, readUsersId: Array<string> }> } };
 
 export type SendMessageMutationVariables = Exact<{
   input: SendMessageInput;
 }>;
 
 
-export type SendMessageMutation = { __typename?: 'Mutation', sendMessage: { __typename?: 'SendMessageOutput', ok: boolean, error?: string | null, message?: { __typename?: 'MessageObjectType', id: string, contents: string, type: MessageType, readUsersId: Array<number>, user: { __typename?: 'UserObjectType', id: string, nickname: string, profileUrl?: string | null } } | null } };
+export type SendMessageMutation = { __typename?: 'Mutation', sendMessage: { __typename?: 'SendMessageOutput', ok: boolean, error?: string | null, message?: { __typename?: 'MessageObjectType', id: string, contents: string, type: MessageType, readUsersId: Array<string>, user: { __typename?: 'UserObjectType', id: string, nickname: string, profileUrl?: string | null } } | null } };
 
 export type UpdateNewMessageInUserRoomSubscriptionVariables = Exact<{ [key: string]: never; }>;
 
@@ -504,7 +504,7 @@ export type ViewMessagesQueryVariables = Exact<{
 }>;
 
 
-export type ViewMessagesQuery = { __typename?: 'Query', viewMessages: { __typename?: 'ViewMessagesOutput', ok: boolean, error?: string | null, hasNext?: boolean | null, messages?: Array<{ __typename?: 'MessageObjectType', id: string, contents: string, type: MessageType, readUsersId: Array<number>, user: { __typename?: 'UserObjectType', id: string, nickname: string, profileUrl?: string | null } }> | null } };
+export type ViewMessagesQuery = { __typename?: 'Query', viewMessages: { __typename?: 'ViewMessagesOutput', ok: boolean, error?: string | null, hasNext?: boolean | null, messages?: Array<{ __typename?: 'MessageObjectType', id: string, contents: string, type: MessageType, readUsersId: Array<string>, user: { __typename?: 'UserObjectType', id: string, nickname: string, profileUrl?: string | null } }> | null } };
 
 export type CreateRandomRoomMutationVariables = Exact<{ [key: string]: never; }>;
 
@@ -561,7 +561,7 @@ export type LoginQuery = { __typename?: 'Query', login: { __typename?: 'LoginOut
 export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type MeQuery = { __typename?: 'Query', me: { __typename?: 'MeOutput', ok: boolean, error?: string | null, me?: { __typename?: 'Me', id: string, nickname: string, profileUrl?: string | null, blockUserIds: Array<number> } | null } };
+export type MeQuery = { __typename?: 'Query', me: { __typename?: 'MeOutput', ok: boolean, error?: string | null, me?: { __typename?: 'Me', id: string, nickname: string, profileUrl?: string | null, blockUserIds: Array<string> } | null } };
 
 export type MeDetailQueryVariables = Exact<{ [key: string]: never; }>;
 

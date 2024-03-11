@@ -60,7 +60,7 @@ const ToggleUserBlockButton = ({
                 ...prev.me.me,
                 blockUserIds:
                   data?.toggleBlockUser.updateBlockUsers?.map(
-                    user => +user.id,
+                    user => user.id,
                   ) ?? prev.me.me.blockUserIds,
               },
             }),
@@ -73,7 +73,7 @@ const ToggleUserBlockButton = ({
     Alert.alert(
       '차단',
       `${nickname}님을 차단${
-        me?.blockUserIds.includes(+userId) ? '해제' : ''
+        me?.blockUserIds.includes(userId) ? '해제' : ''
       }하시겠습니까?`,
       [
         {text: '취소', style: 'cancel'},
@@ -88,7 +88,7 @@ const ToggleUserBlockButton = ({
 
   return (
     <Button
-      title={me?.blockUserIds.includes(+userId) ? '차단해제' : '차단'}
+      title={me?.blockUserIds.includes(userId) ? '차단해제' : '차단'}
       onPress={AlertFn}
     />
   );
