@@ -85,14 +85,9 @@ const ChatRoomScreen = ({route, navigation}: ChatRoomScreenProps) => {
   };
 
   const formatReadCount = (readUsersId: string[]) => {
-    if (!me) return;
-    let ids = [...readUsersId];
-    if (!ids.includes(me.id)) {
-      ids.push(me.id);
-    }
     const roomUserIds =
       room?.roomDetail.room?.users?.map(user => user.id) ?? [];
-    return roomUserIds.filter(id => ids.includes(id)).length;
+    return roomUserIds.filter(id => readUsersId.includes(id)).length;
   };
 
   const deleteRoomFn = async () => {
