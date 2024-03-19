@@ -1,5 +1,5 @@
 PODS:
-  - Alamofire (5.8.1)
+  - Alamofire (5.9.0)
   - boost (1.83.0)
   - CocoaAsyncSocket (7.6.5)
   - DoubleConversion (1.1.6)
@@ -11,6 +11,33 @@ PODS:
     - React-Core (= 0.73.4)
     - React-jsi (= 0.73.4)
     - ReactCommon/turbomodule/core (= 0.73.4)
+  - Firebase/CoreOnly (10.22.0):
+    - FirebaseCore (= 10.22.0)
+  - Firebase/Messaging (10.22.0):
+    - Firebase/CoreOnly
+    - FirebaseMessaging (~> 10.22.0)
+  - FirebaseCore (10.22.0):
+    - FirebaseCoreInternal (~> 10.0)
+    - GoogleUtilities/Environment (~> 7.12)
+    - GoogleUtilities/Logger (~> 7.12)
+  - FirebaseCoreExtension (10.22.0):
+    - FirebaseCore (~> 10.0)
+  - FirebaseCoreInternal (10.22.0):
+    - "GoogleUtilities/NSData+zlib (~> 7.8)"
+  - FirebaseInstallations (10.22.0):
+    - FirebaseCore (~> 10.0)
+    - GoogleUtilities/Environment (~> 7.8)
+    - GoogleUtilities/UserDefaults (~> 7.8)
+    - PromisesObjC (~> 2.1)
+  - FirebaseMessaging (10.22.0):
+    - FirebaseCore (~> 10.0)
+    - FirebaseInstallations (~> 10.0)
+    - GoogleDataTransport (~> 9.3)
+    - GoogleUtilities/AppDelegateSwizzler (~> 7.8)
+    - GoogleUtilities/Environment (~> 7.8)
+    - GoogleUtilities/Reachability (~> 7.8)
+    - GoogleUtilities/UserDefaults (~> 7.8)
+    - nanopb (< 2.30911.0, >= 2.30908.0)
   - Flipper (0.201.0):
     - Flipper-Folly (~> 2.6)
   - Flipper-Boost-iOSX (1.76.0.1.11)
@@ -69,6 +96,54 @@ PODS:
     - FlipperKit/FlipperKitNetworkPlugin
   - fmt (6.2.1)
   - glog (0.3.5)
+  - GoogleDataTransport (9.4.1):
+    - GoogleUtilities/Environment (~> 7.7)
+    - nanopb (< 2.30911.0, >= 2.30908.0)
+    - PromisesObjC (< 3.0, >= 1.2)
+  - GoogleUtilities (7.13.0):
+    - GoogleUtilities/AppDelegateSwizzler (= 7.13.0)
+    - GoogleUtilities/Environment (= 7.13.0)
+    - GoogleUtilities/ISASwizzler (= 7.13.0)
+    - GoogleUtilities/Logger (= 7.13.0)
+    - GoogleUtilities/MethodSwizzler (= 7.13.0)
+    - GoogleUtilities/Network (= 7.13.0)
+    - "GoogleUtilities/NSData+zlib (= 7.13.0)"
+    - GoogleUtilities/Privacy (= 7.13.0)
+    - GoogleUtilities/Reachability (= 7.13.0)
+    - GoogleUtilities/SwizzlerTestHelpers (= 7.13.0)
+    - GoogleUtilities/UserDefaults (= 7.13.0)
+  - GoogleUtilities/AppDelegateSwizzler (7.13.0):
+    - GoogleUtilities/Environment
+    - GoogleUtilities/Logger
+    - GoogleUtilities/Network
+    - GoogleUtilities/Privacy
+  - GoogleUtilities/Environment (7.13.0):
+    - GoogleUtilities/Privacy
+    - PromisesObjC (< 3.0, >= 1.2)
+  - GoogleUtilities/ISASwizzler (7.13.0):
+    - GoogleUtilities/Privacy
+  - GoogleUtilities/Logger (7.13.0):
+    - GoogleUtilities/Environment
+    - GoogleUtilities/Privacy
+  - GoogleUtilities/MethodSwizzler (7.13.0):
+    - GoogleUtilities/Logger
+    - GoogleUtilities/Privacy
+  - GoogleUtilities/Network (7.13.0):
+    - GoogleUtilities/Logger
+    - "GoogleUtilities/NSData+zlib"
+    - GoogleUtilities/Privacy
+    - GoogleUtilities/Reachability
+  - "GoogleUtilities/NSData+zlib (7.13.0)":
+    - GoogleUtilities/Privacy
+  - GoogleUtilities/Privacy (7.13.0)
+  - GoogleUtilities/Reachability (7.13.0):
+    - GoogleUtilities/Logger
+    - GoogleUtilities/Privacy
+  - GoogleUtilities/SwizzlerTestHelpers (7.13.0):
+    - GoogleUtilities/MethodSwizzler
+  - GoogleUtilities/UserDefaults (7.13.0):
+    - GoogleUtilities/Logger
+    - GoogleUtilities/Privacy
   - hermes-engine (0.73.4):
     - hermes-engine/Pre-built (= 0.73.4)
   - hermes-engine/Pre-built (0.73.4)
@@ -89,8 +164,14 @@ PODS:
   - KakaoSDKUser (2.11.1):
     - KakaoSDKAuth (= 2.11.1)
   - libevent (2.1.12)
+  - nanopb (2.30910.0):
+    - nanopb/decode (= 2.30910.0)
+    - nanopb/encode (= 2.30910.0)
+  - nanopb/decode (2.30910.0)
+  - nanopb/encode (2.30910.0)
   - naveridlogin-sdk-ios (4.1.6)
   - OpenSSL-Universal (1.1.1100)
+  - PromisesObjC (2.4.0)
   - RCT-Folly (2022.05.16.00):
     - boost
     - DoubleConversion
@@ -968,7 +1049,7 @@ PODS:
     - React-Core
   - react-native-encrypted-storage (4.0.3):
     - React-Core
-  - react-native-image-picker (7.1.0):
+  - react-native-image-picker (7.1.1):
     - glog
     - RCT-Folly (= 2022.05.16.00)
     - React-Core
@@ -1143,6 +1224,14 @@ PODS:
     - React-perflogger (= 0.73.4)
   - RNCMaskedView (0.1.11):
     - React
+  - RNFBApp (19.0.1):
+    - Firebase/CoreOnly (= 10.22.0)
+    - React-Core
+  - RNFBMessaging (19.0.1):
+    - Firebase/Messaging (= 10.22.0)
+    - FirebaseCoreExtension (= 10.22.0)
+    - React-Core
+    - RNFBApp
   - RNGestureHandler (2.15.0):
     - glog
     - RCT-Folly (= 2022.05.16.00)
@@ -1150,7 +1239,7 @@ PODS:
   - RNNaverLogin (3.0.0):
     - naveridlogin-sdk-ios (~> 4.1.5)
     - React
-  - RNReanimated (3.7.0):
+  - RNReanimated (3.8.1):
     - glog
     - RCT-Folly (= 2022.05.16.00)
     - React-Core
@@ -1171,6 +1260,7 @@ DEPENDENCIES:
   - DoubleConversion (from `../node_modules/react-native/third-party-podspecs/DoubleConversion.podspec`)
   - FBLazyVector (from `../node_modules/react-native/Libraries/FBLazyVector`)
   - FBReactNativeSpec (from `../node_modules/react-native/React/FBReactNativeSpec`)
+  - FirebaseCore
   - Flipper (= 0.201.0)
   - Flipper-Boost-iOSX (= 1.76.0.1.11)
   - Flipper-DoubleConversion (= 3.2.0.1)
@@ -1192,6 +1282,7 @@ DEPENDENCIES:
   - FlipperKit/FlipperKitUserDefaultsPlugin (= 0.201.0)
   - FlipperKit/SKIOSNetworkPlugin (= 0.201.0)
   - glog (from `../node_modules/react-native/third-party-podspecs/glog.podspec`)
+  - GoogleUtilities
   - hermes-engine (from `../node_modules/react-native/sdks/hermes-engine/hermes-engine.podspec`)
   - "kakao-login (from `../node_modules/@react-native-seoul/kakao-login`)"
   - libevent (~> 2.1.12)
@@ -1245,6 +1336,8 @@ DEPENDENCIES:
   - React-utils (from `../node_modules/react-native/ReactCommon/react/utils`)
   - ReactCommon/turbomodule/core (from `../node_modules/react-native/ReactCommon`)
   - "RNCMaskedView (from `../node_modules/@react-native-community/masked-view`)"
+  - "RNFBApp (from `../node_modules/@react-native-firebase/app`)"
+  - "RNFBMessaging (from `../node_modules/@react-native-firebase/messaging`)"
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
   - "RNNaverLogin (from `../node_modules/@react-native-seoul/naver-login`)"
   - RNReanimated (from `../node_modules/react-native-reanimated`)
@@ -1256,6 +1349,12 @@ SPEC REPOS:
   trunk:
     - Alamofire
     - CocoaAsyncSocket
+    - Firebase
+    - FirebaseCore
+    - FirebaseCoreExtension
+    - FirebaseCoreInternal
+    - FirebaseInstallations
+    - FirebaseMessaging
     - Flipper
     - Flipper-Boost-iOSX
     - Flipper-DoubleConversion
@@ -1265,12 +1364,16 @@ SPEC REPOS:
     - Flipper-PeerTalk
     - FlipperKit
     - fmt
+    - GoogleDataTransport
+    - GoogleUtilities
     - KakaoSDKAuth
     - KakaoSDKCommon
     - KakaoSDKUser
     - libevent
+    - nanopb
     - naveridlogin-sdk-ios
     - OpenSSL-Universal
+    - PromisesObjC
     - SocketRocket
 
 EXTERNAL SOURCES:
@@ -1381,6 +1484,10 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon"
   RNCMaskedView:
     :path: "../node_modules/@react-native-community/masked-view"
+  RNFBApp:
+    :path: "../node_modules/@react-native-firebase/app"
+  RNFBMessaging:
+    :path: "../node_modules/@react-native-firebase/messaging"
   RNGestureHandler:
     :path: "../node_modules/react-native-gesture-handler"
   RNNaverLogin:
@@ -1395,12 +1502,18 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/yoga"
 
 SPEC CHECKSUMS:
-  Alamofire: 3ca42e259043ee0dc5c0cdd76c4bc568b8e42af7
+  Alamofire: 02b772c9910e8eba1a079227c32fbd9e46c90a24
   boost: d3f49c53809116a5d38da093a8aa78bf551aed09
   CocoaAsyncSocket: 065fd1e645c7abab64f7a6a2007a48038fdc6a99
   DoubleConversion: fea03f2699887d960129cc54bba7e52542b6f953
   FBLazyVector: 84f6edbe225f38aebd9deaf1540a4160b1f087d7
   FBReactNativeSpec: d0086a479be91c44ce4687a962956a352d2dc697
+  Firebase: 797fd7297b7e1be954432743a0b3f90038e45a71
+  FirebaseCore: 0326ec9b05fbed8f8716cddbf0e36894a13837f7
+  FirebaseCoreExtension: 6394c00b887d0bebadbc7049c464aa0cbddc5d41
+  FirebaseCoreInternal: bca337352024b18424a61e478460547d46c4c753
+  FirebaseInstallations: 763814908793c0da14c18b3dcffdec71e29ed55e
+  FirebaseMessaging: 9f71037fd9db3376a4caa54e5a3949d1027b4b6e
   Flipper: c7a0093234c4bdd456e363f2f19b2e4b27652d44
   Flipper-Boost-iOSX: fd1e2b8cbef7e662a122412d7ac5f5bea715403c
   Flipper-DoubleConversion: 2dc99b02f658daf147069aad9dbd29d8feb06d30
@@ -1411,14 +1524,18 @@ SPEC CHECKSUMS:
   FlipperKit: 37525a5d056ef9b93d1578e04bc3ea1de940094f
   fmt: ff9d55029c625d3757ed641535fd4a75fedc7ce9
   glog: c5d68082e772fa1c511173d6b30a9de2c05a69a2
+  GoogleDataTransport: 6c09b596d841063d76d4288cc2d2f42cc36e1e2a
+  GoogleUtilities: d053d902a8edaa9904e1bd00c37535385b8ed152
   hermes-engine: b2669ce35fc4ac14f523b307aff8896799829fe2
   kakao-login: d3dad7a7bc1a3d187cedb4de83b1ec2e9b1cda30
   KakaoSDKAuth: bb2dfa7be30daa8403c9cfc8001aa6fde7a5b779
   KakaoSDKCommon: 555e1bb46595b842ded01cf7888cc17bbae4e113
   KakaoSDKUser: 08c0a4f40bebdebdf948a9e3d0e44ed5c2754f99
   libevent: 4049cae6c81cdb3654a443be001fb9bdceff7913
+  nanopb: 438bc412db1928dac798aa6fd75726007be04262
   naveridlogin-sdk-ios: cdd34e3585a3d5aaf37c1d84c1f41faba4a25d1a
   OpenSSL-Universal: ebc357f1e6bc71fa463ccb2fe676756aff50e88c
+  PromisesObjC: f5707f49cb48b9636751c5b2e7d227e43fba9f47
   RCT-Folly: 7169b2b1c44399c76a47b5deaaba715eeeb476c0
   RCTRequired: ab7f915c15569f04a49669e573e6e319a53f9faa
   RCTTypeSafety: 63b97ced7b766865057e7154db0e81ce4ee6cf1e
@@ -1442,7 +1559,7 @@ SPEC CHECKSUMS:
   React-Mapbuffer: 63913773ed7f96b814a2521e13e6d010282096ad
   react-native-config: 86038147314e2e6d10ea9972022aa171e6b1d4d8
   react-native-encrypted-storage: db300a3f2f0aba1e818417c1c0a6be549038deb7
-  react-native-image-picker: 6c51359eca7a7df9f07e297218c25696eb9da976
+  react-native-image-picker: 1a7cd3224036e080fe46bcb955f2eb42fcbf7acc
   react-native-safe-area-context: b97eb6f9e3b7f437806c2ce5983f479f8eb5de4b
   React-nativeconfig: d7af5bae6da70fa15ce44f045621cf99ed24087c
   React-NativeModulesApple: 0123905d5699853ac68519607555a9a4f5c7b3ac
@@ -1465,14 +1582,16 @@ SPEC CHECKSUMS:
   React-utils: 6e5ad394416482ae21831050928ae27348f83487
   ReactCommon: 840a955d37b7f3358554d819446bffcf624b2522
   RNCMaskedView: 0e1bc4bfa8365eba5fbbb71e07fbdc0555249489
+  RNFBApp: 94f7fca150585cb1ad3802a6c6d356e9a8b95b34
+  RNFBMessaging: cad9f5dcd04671a01621135b55b892b8b2547da2
   RNGestureHandler: deda62b8339496ba721a45e0f3e2d7a319932cee
   RNNaverLogin: dc2758a157dafaa1ffca63079cad4d4c75208a30
-  RNReanimated: 7d6d32f238f914f13d9d6fb45c0aef557f7f901e
+  RNReanimated: 3e23d4be380e295e504b7b3b3a357df60e1168a2
   RNScreens: b582cb834dc4133307562e930e8fa914b8c04ef2
   RNVectorIcons: 210f910e834e3485af40693ad4615c1ec22fc02b
   SocketRocket: f32cd54efbe0f095c4d7594881e52619cfe80b17
   Yoga: 64cd2a583ead952b0315d5135bf39e053ae9be70
 
-PODFILE CHECKSUM: 39f88719e6efcc6407e74067c4b571aedaa544ca
+PODFILE CHECKSUM: ff629c155f416aa6005ba2f82b1c09222824d79c
 
 COCOAPODS: 1.12.0

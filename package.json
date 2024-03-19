@@ -7,13 +7,17 @@
     "ios": "react-native run-ios",
     "lint": "eslint .",
     "start": "react-native start",
+    "start:reset-cache": "react-native start --reset-cache",
     "test": "jest",
     "pod-install": "cd ios && pod install && cd ..",
-    "codegen": "graphql-codegen --config src/graphql/types/codegen.ts"
+    "codegen": "graphql-codegen --config src/graphql/types/codegen.ts",
+    "clear": "rm -rf yarn.lock package-lock.json node_modules && rm -rf android/app/build && rm -rf ios/Pods ios/Podfile.lock && yarn && yarn pod-install"
   },
   "dependencies": {
     "@apollo/client": "^3.9.4",
     "@react-native-community/masked-view": "^0.1.11",
+    "@react-native-firebase/app": "^19.0.1",
+    "@react-native-firebase/messaging": "^19.0.1",
     "@react-native-seoul/kakao-login": "^5.3.1",
     "@react-native-seoul/naver-login": "^3.0.0",
     "@react-navigation/native": "^6.1.10",
