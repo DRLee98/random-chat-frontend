@@ -87,6 +87,11 @@ android {
         versionCode 1
         versionName "1.0"
         resValue "string", "build_config_package", "com.random_chat_frontend"
+        resValue "string", "firebase_api_key", project.env.get("FIREBASE_API_KEY")
+        resValue "string", "firebase_project_id", project.env.get("FIREBASE_PROJECT_ID")
+        resValue "string", "firebase_gcm_sender_id", project.env.get("FIREBASE_GCM_SENDER_ID")
+        resValue "string", "firebase_storage_bucket", project.env.get("FIREBASE_STORAGE_BUCKET")
+        resValue "string", "firebase_aos_app_id", project.env.get("FIREBASE_AOS_APP_ID")
         resValue "string", "kakao_app_key", project.env.get("KAKAO_NATIVE_APP_KEY")
         manifestPlaceholders['KAKAO_NATIVE_APP_KEY'] = project.env.get("KAKAO_NATIVE_APP_KEY")
     }

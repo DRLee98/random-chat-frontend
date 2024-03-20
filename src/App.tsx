@@ -11,7 +11,14 @@ import messaging from '@react-native-firebase/messaging';
 import type {FirebaseMessagingTypes} from '@react-native-firebase/messaging/lib';
 
 function App() {
+  const getFcmToken = async () => {
+    const fcmToken = await messaging().getToken();
+    console.log('[+] FCM Token :: ', fcmToken);
+  };
+
   useEffect(() => {
+    getFcmToken();
+
     const unsubscribe = messaging().onMessage(
       async (remoteMessage: FirebaseMessagingTypes.RemoteMessage) => {
         Alert.alert(
