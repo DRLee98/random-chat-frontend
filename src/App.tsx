@@ -7,6 +7,7 @@ import MainNavigator from './navigators';
 
 import {Alert} from 'react-native';
 import messaging from '@react-native-firebase/messaging';
+import {requestUserPermission} from './utils/fmc';
 
 import type {FirebaseMessagingTypes} from '@react-native-firebase/messaging/lib';
 
@@ -18,6 +19,7 @@ function App() {
 
   useEffect(() => {
     getFcmToken();
+    requestUserPermission();
 
     const unsubscribe = messaging().onMessage(
       async (remoteMessage: FirebaseMessagingTypes.RemoteMessage) => {

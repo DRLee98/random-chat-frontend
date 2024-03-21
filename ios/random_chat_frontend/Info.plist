@@ -59,7 +59,7 @@
 			<string>naver</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>${NAVER_SERVICE_URL_SCHEME}</string>
+				<string>$(NAVER_SERVICE_URL_SCHEME)</string>
 			</array>
 		</dict>
 		<dict>
@@ -67,7 +67,7 @@
 		   <string>Editor</string>
 		   <key>CFBundleURLSchemes</key>
 		   <array>
-		     <string>kakao${KAKAO_NATIVE_APP_KEY}</string>
+		     <string>kakao$(KAKAO_NATIVE_APP_KEY)</string>
 		   </array>
 		</dict>
 	</array>
@@ -80,7 +80,7 @@
 		<string>kakaolink</string>
 	</array>
 	<key>KAKAO_APP_KEY</key>
-	<string>${KAKAO_NATIVE_APP_KEY}</string>
+	<string>$(KAKAO_NATIVE_APP_KEY)</string>
 	<!-- 소셜 로그인 끝 -->
 
 	<!-- 카메라 시작 -->

@@ -15,7 +15,6 @@
 		7699B88040F8A987B510C191 /* libPods-random_chat_frontend-random_chat_frontendTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 19F6CBCC0A4E27FBF8BF4A61 /* libPods-random_chat_frontend-random_chat_frontendTests.a */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 		E97D137E2B7DE0D100837DAD /* Config.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = E97D137D2B7DE0D100837DAD /* Config.xcconfig */; };
-		E9C5702F2BA964B5009D51FC /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = E9C5702E2BA964B5009D51FC /* GoogleService-Info.plist */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -46,6 +45,7 @@
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = random_chat_frontend/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		89C6BE57DB24E9ADA2F236DE /* Pods-random_chat_frontend-random_chat_frontendTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-random_chat_frontend-random_chat_frontendTests.release.xcconfig"; path = "Target Support Files/Pods-random_chat_frontend-random_chat_frontendTests/Pods-random_chat_frontend-random_chat_frontendTests.release.xcconfig"; sourceTree = "<group>"; };
 		E97D137D2B7DE0D100837DAD /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
+		E98AA3CA2BAC26F400C39E18 /* random_chat_frontend.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = random_chat_frontend.entitlements; path = random_chat_frontend/random_chat_frontend.entitlements; sourceTree = "<group>"; };
 		E9BF098E2B9955F900A62514 /* Feather.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Feather.ttf; sourceTree = "<group>"; };
 		E9BF098F2B9955F900A62514 /* FontAwesome6_Brands.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = FontAwesome6_Brands.ttf; sourceTree = "<group>"; };
 		E9BF09902B9955F900A62514 /* SimpleLineIcons.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = SimpleLineIcons.ttf; sourceTree = "<group>"; };
@@ -109,6 +109,7 @@
 		13B07FAE1A68108700A75B9A /* random_chat_frontend */ = {
 			isa = PBXGroup;
 			children = (
+				E98AA3CA2BAC26F400C39E18 /* random_chat_frontend.entitlements */,
 				E9C5702E2BA964B5009D51FC /* GoogleService-Info.plist */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.mm */,
@@ -232,10 +233,11 @@
 				13B07F871A680F5B00A75B9A /* Sources */,
 				13B07F8C1A680F5B00A75B9A /* Frameworks */,
 				13B07F8E1A680F5B00A75B9A /* Resources */,
+				E98AA3C92BAC13C800C39E18 /* GoogleService Info ENV */,
 				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
 				00EEFC60759A1932668264C0 /* [CP] Embed Pods Frameworks */,
 				E235C05ADACE081382539298 /* [CP] Copy Pods Resources */,
-				29566F0E1ED68D7BE296E11F /* [CP-User] [RNFB] Core Configuration */,
+				1D192980C0B4FC6E8DEF49CB /* [CP-User] [RNFB] Core Configuration */,
 			);
 			buildRules = (
 			);
@@ -294,9 +296,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
-				E9C5702F2BA964B5009D51FC /* GoogleService-Info.plist in Resources */,
 				E97D137E2B7DE0D100837DAD /* Config.xcconfig in Resources */,
+				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -337,7 +338,7 @@
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-random_chat_frontend/Pods-random_chat_frontend-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		29566F0E1ED68D7BE296E11F /* [CP-User] [RNFB] Core Configuration */ = {
+		1D192980C0B4FC6E8DEF49CB /* [CP-User] [RNFB] Core Configuration */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -427,6 +428,24 @@
 			shellPath = /bin/sh;
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-random_chat_frontend/Pods-random_chat_frontend-resources.sh\"\n";
 			showEnvVarsInLog = 0;
+		};
+		E98AA3C92BAC13C800C39E18 /* GoogleService Info ENV */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "GoogleService Info ENV";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\nsourcePlist=\"${PROJECT_DIR}/${PRODUCT_NAME}/GoogleService-Info.plist\"\ntargetPlist=\"$BUILT_PRODUCTS_DIR/$CONTENTS_FOLDER_PATH/GoogleService-Info.plist\"\n\ncp \"$sourcePlist\" \"$targetPlist\"\n\n# PlistBuddy를 사용하여 키의 값을 변경합니다.\n/usr/libexec/PlistBuddy -c \"Set :GOOGLE_APP_ID $FIREBASE_IOS_APP_ID\" \"${targetPlist}\"\n/usr/libexec/PlistBuddy -c \"Set :API_KEY $FIREBASE_API_KEY\" \"${targetPlist}\"\n/usr/libexec/PlistBuddy -c \"Set :GCM_SENDER_ID $FIREBASE_GCM_SENDER_ID\" \"${targetPlist}\"\n/usr/libexec/PlistBuddy -c \"Set :PROJECT_ID $FIREBASE_PROJECT_ID\" \"${targetPlist}\"\n/usr/libexec/PlistBuddy -c \"Set :STORAGE_BUCKET $FIREBASE_STORAGE_BUCKET\" \"${targetPlist}\"\n";
 		};
 		F6A41C54EA430FDDC6A6ED99 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -533,7 +552,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = random_chat_frontend/random_chat_frontend.entitlements;
+				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = random_chat_frontend/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -548,6 +570,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = random_chat_frontend;
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -560,7 +583,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = random_chat_frontend/random_chat_frontend.entitlements;
+				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = random_chat_frontend/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -574,6 +600,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = random_chat_frontend;
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
