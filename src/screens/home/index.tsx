@@ -15,6 +15,7 @@ import type {
   UpdateNewMessageInUserRoom,
   MyRoom,
 } from '@app/graphql/types/graphql';
+import styled from 'styled-components/native';
 
 interface HomeScreenProps
   extends StackScreenProps<MainNavigatorParamList, MainNavigatorScreens.Home> {}
@@ -56,7 +57,7 @@ const HomeScreen = ({navigation}: HomeScreenProps) => {
   });
 
   return (
-    <ScrollView>
+    <Container>
       <Button title="logout" onPress={logout} />
       <Button title="채팅방 생성" onPress={createRandomRoomFn} />
       <Button title="새로고침" onPress={() => refetch()} />
@@ -66,8 +67,12 @@ const HomeScreen = ({navigation}: HomeScreenProps) => {
       {myRoomsData?.myRooms.hasNext && (
         <Button title="더 불러오기" onPress={fetchMore} />
       )}
-    </ScrollView>
+    </Container>
   );
 };
+
+const Container = styled.ScrollView`
+  background-color: ${({theme}) => theme.bgColor};
+`;
 
 export default HomeScreen;

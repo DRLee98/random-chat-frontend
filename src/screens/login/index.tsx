@@ -3,8 +3,8 @@ import useLoginAndSetToken from '@app/hooks/useLoginAndSetToken';
 import {kakaoLogin} from '@app/apis/kakao';
 import {naverLogin} from '@app/apis/naver';
 
+import styled from 'styled-components/native';
 import SocialLoginButton from '@app/components/login/SocialLoginButton';
-import {View} from 'react-native';
 
 import naverLogo from '@app/assets/images/naver_logo.png';
 import kakaoLogo from '@app/assets/images/kakao_logo.png';
@@ -62,7 +62,7 @@ const LoginScreen = ({navigation}: LoginScreenProps) => {
   };
 
   return (
-    <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+    <Container>
       <SocialLoginButton
         image={naverLogo}
         text="네이버 로그인"
@@ -70,7 +70,6 @@ const LoginScreen = ({navigation}: LoginScreenProps) => {
         bgColor="#02c759"
         onPress={naverLoginFn}
       />
-      <View style={{height: 10}} />
       <SocialLoginButton
         image={kakaoLogo}
         text="카카오 로그인"
@@ -78,8 +77,16 @@ const LoginScreen = ({navigation}: LoginScreenProps) => {
         bgColor="#ffeb01"
         onPress={kakaoLoginFn}
       />
-    </View>
+    </Container>
   );
 };
+
+const Container = styled.View`
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+  background-color: ${({theme}) => theme.bgColor};
+`;
 
 export default LoginScreen;

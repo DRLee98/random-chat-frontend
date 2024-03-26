@@ -1,14 +1,9 @@
 import {useState} from 'react';
 
-import {
-  ActionSheetIOS,
-  Modal,
-  Platform,
-  TouchableOpacity,
-  View,
-  Text,
-  StyleSheet,
-} from 'react-native';
+import styled from 'styled-components/native';
+
+import {ActionSheetIOS, Modal, Platform, TouchableOpacity} from 'react-native';
+import Divider from './Divider';
 
 import {launchImageLibrary, launchCamera} from 'react-native-image-picker';
 
@@ -71,19 +66,17 @@ const PictureSelectButton = ({
     <>
       {Platform.OS !== 'ios' && (
         <Modal visible={visible} transparent={true}>
-          <TouchableOpacity
-            style={styles.overlay}
-            onPress={() => setVisible(false)}>
-            <View style={styles.container}>
-              <TouchableOpacity style={styles.button} onPress={pickImage}>
-                <Text style={styles.buttonText}>사진선택</Text>
-              </TouchableOpacity>
-              <View style={styles.divider} />
-              <TouchableOpacity style={styles.button} onPress={takeImage}>
-                <Text style={styles.buttonText}>사진촬영</Text>
-              </TouchableOpacity>
-            </View>
-          </TouchableOpacity>
+          <Overlay onPress={() => setVisible(false)}>
+            <Container>
+              <Button onPress={pickImage}>
+                <ButtonText>사진선택</ButtonText>
+              </Button>
+              <Divider />
+              <Button onPress={takeImage}>
+                <ButtonText>사진촬영</ButtonText>
+              </Button>
+            </Container>
+          </Overlay>
         </Modal>
       )}
       <TouchableOpacity onPress={press}>{children}</TouchableOpacity>
@@ -91,30 +84,27 @@ const PictureSelectButton = ({
   );
 };
 
-const styles = StyleSheet.create({
-  overlay: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: 'rgba(0,0,0,0.3)',
-  },
-  container: {
-    width: '50%',
-    backgroundColor: 'white',
-    borderRadius: 15,
-  },
-  button: {
-    width: '100%',
-    paddingVertical: 20,
-  },
-  buttonText: {
-    textAlign: 'center',
-    color: 'rgb(10, 132, 255)',
-  },
-  divider: {
-    borderBottomColor: 'rgb(174,174,178)',
-    borderBottomWidth: StyleSheet.hairlineWidth,
-  },
-});
+const Overlay = styled.TouchableOpacity`
+  flex: 1;
+  align-items: 'center';
+  justify-content: 'center';
+  background-color: 'rgba(0,0,0,0.3)';
+`;
+
+const Container = styled.View`
+  width: 50%;
+  background-color: ${({theme}) => theme.bgColor};
+  border-radius: 15px;
+`;
+
+const Button = styled.TouchableOpacity`
+  width: 100%;
+  padding: 20px 0px;
+`;
+
+const ButtonText = styled.Text`
+  text-align: center;
+  color: rgb(10, 132, 255);
+`;
 
 export default PictureSelectButton;

@@ -1,4 +1,4 @@
-import {Image, View} from 'react-native';
+import styled from 'styled-components/native';
 
 interface ProfileImgProps {
   url?: string | null;
@@ -7,24 +7,23 @@ interface ProfileImgProps {
 
 const ProfileImg = ({url, size = 60}: ProfileImgProps) => {
   if (!url) {
-    return (
-      <View
-        style={{
-          width: size,
-          height: size,
-          borderRadius: size / 2,
-          backgroundColor: 'skyblue',
-        }}
-      />
-    );
+    return <DefaultImage size={size} />;
   }
 
-  return (
-    <Image
-      source={{uri: url}}
-      style={{width: size, height: size, borderRadius: size / 2}}
-    />
-  );
+  return <Image source={{uri: url}} size={size} />;
 };
+
+const DefaultImage = styled.View<Required<Pick<ProfileImgProps, 'size'>>>`
+  width: ${({size}) => size}px;
+  height: ${({size}) => size}px;
+  border-radius: ${({size}) => size / 2}px;
+  background-color: skyblue;
+`;
+
+const Image = styled.Image<Required<Pick<ProfileImgProps, 'size'>>>`
+  width: ${({size}) => size}px;
+  height: ${({size}) => size}px;
+  border-radius: ${({size}) => size / 2}px;
+`;
 
 export default ProfileImg;

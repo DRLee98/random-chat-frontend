@@ -2,6 +2,7 @@ import {useNavigation} from '@react-navigation/native';
 
 import {View, Text} from 'react-native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
+import ProfileImg from '@app/components/common/ProfileImg';
 import PinnedButton from './PinnedButton';
 import NotiButton from './NotiButton';
 
@@ -27,17 +28,44 @@ const RoomItem = ({userRoom}: RoomItemProps) => {
   return (
     <View
       style={{
+        flex: 1,
         flexDirection: 'row',
         justifyContent: 'space-between',
         marginVertical: 10,
         marginHorizontal: 15,
       }}>
       <TouchableOpacity onPress={goChatRoom}>
-        <Text>{userRoom.name}</Text>
-        <Text>new message: {userRoom.newMessage}</Text>
-        <Text>last message: {userRoom.lastMessage}</Text>
+        <View style={{flexDirection: 'row', gap: 10}}>
+          <ProfileImg url={userRoom.users[0].profileUrl} size={50} />
+          <View style={{justifyContent: 'center', gap: 8}}>
+            <View
+              style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+              <Text style={{fontWeight: '700'}}>{userRoom.name}</Text>
+              <Text>{new Date(userRoom.room.updatedAt).toDateString()}</Text>
+            </View>
+            <View
+              style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+              <Text>{userRoom.lastMessage}</Text>
+              {userRoom.newMessage > 0 && (
+                <View
+                  style={{
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    paddingVertical: 2,
+                    paddingHorizontal: 6,
+                    backgroundColor: 'red',
+                    borderRadius: 10,
+                  }}>
+                  <Text style={{color: '#fff', fontWeight: '600'}}>
+                    {userRoom.newMessage}
+                  </Text>
+                </View>
+              )}
+            </View>
+          </View>
+        </View>
       </TouchableOpacity>
-      <View style={{flexDirection: 'row', alignItems: 'center', gap: 20}}>
+      {/* <View style={{flexDirection: 'row', alignItems: 'center', gap: 20}}>
         <PinnedButton
           roomId={userRoom.room.id}
           userRoomId={userRoom.id}
@@ -48,7 +76,7 @@ const RoomItem = ({userRoom}: RoomItemProps) => {
           userRoomId={userRoom.id}
           noti={userRoom.noti}
         />
-      </View>
+      </View> */}
     </View>
   );
 };

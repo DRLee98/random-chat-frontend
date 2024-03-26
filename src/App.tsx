@@ -3,19 +3,19 @@ import {RecoilRoot} from 'recoil';
 import {ApolloProvider} from '@apollo/client';
 import {client} from './apollo';
 
+import {ThemeProvider} from 'styled-components/native';
+import {lightTheme} from './styles/theme';
+
 import MainNavigator from './navigators';
 
 import {Alert} from 'react-native';
 import messaging from '@react-native-firebase/messaging';
-import {requestUserPermission} from './utils/fmc';
+import {requestUserPermission} from './utils/fcm';
 
 import type {FirebaseMessagingTypes} from '@react-native-firebase/messaging/lib';
 
 function App() {
-    console.log('[+] FCM Token :: ', fcmToken);
-
   useEffect(() => {
-    getFcmToken();
     requestUserPermission();
 
     const unsubscribe = messaging().onMessage(
@@ -33,7 +33,9 @@ function App() {
   return (
     <ApolloProvider client={client}>
       <RecoilRoot>
-        <MainNavigator />
+        <ThemeProvider theme={lightTheme}>
+          <MainNavigator />
+        </ThemeProvider>
       </RecoilRoot>
     </ApolloProvider>
   );
