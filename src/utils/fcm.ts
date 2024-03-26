@@ -8,3 +8,7 @@ export async function requestUserPermission() {
 
   return enabled;
 }
+
+export function getFcmToken() {
+  return messaging().getToken();
+}

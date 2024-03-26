@@ -29,6 +29,7 @@ export type CreateRandomRoomOutput = {
 
 export type CreateUserInput = {
   bio?: InputMaybe<Scalars['String']['input']>;
+  fcmToken?: InputMaybe<Scalars['String']['input']>;
   nickname: Scalars['String']['input'];
   profile?: InputMaybe<Scalars['Upload']['input']>;
   socialId: Scalars['String']['input'];
@@ -101,6 +102,7 @@ export type MeDetail = {
   bio?: Maybe<Scalars['String']['output']>;
   blockUsers: Array<UserObjectType>;
   createdAt: Scalars['DateTime']['output'];
+  fcmToken?: Maybe<Scalars['String']['output']>;
   id: Scalars['ID']['output'];
   language: Language;
   nickname: Scalars['String']['output'];
@@ -149,7 +151,6 @@ export type Messages = {
 
 export type Mutation = {
   __typename?: 'Mutation';
-  createManyUser: Scalars['Boolean']['output'];
   createRandomRoom: CreateRandomRoomOutput;
   createUser: CreateUserOutput;
   deleteRoom: DeleteRoomOutput;
@@ -158,11 +159,6 @@ export type Mutation = {
   toggleBlockUser: ToggleBlockUserOutput;
   updateRoom: UpdateRoomOutput;
   updateUser: UpdateUserOutput;
-};
-
-
-export type MutationCreateManyUserArgs = {
-  number: Scalars['Float']['input'];
 };
 
 
@@ -391,9 +387,10 @@ export type UpdateUserInput = {
   allowMessage?: InputMaybe<Scalars['Boolean']['input']>;
   autoTranslation?: InputMaybe<Scalars['Boolean']['input']>;
   bio?: InputMaybe<Scalars['String']['input']>;
+  fcmToken?: InputMaybe<Scalars['String']['input']>;
   language?: InputMaybe<Language>;
   nickname?: InputMaybe<Scalars['String']['input']>;
-  profileUrl?: InputMaybe<Scalars['String']['input']>;
+  profile?: InputMaybe<Scalars['Upload']['input']>;
 };
 
 export type UpdateUserOutput = {
@@ -418,6 +415,7 @@ export type UserObjectType = {
   bio?: Maybe<Scalars['String']['output']>;
   blockUsers: Array<UserObjectType>;
   createdAt: Scalars['DateTime']['output'];
+  fcmToken?: Maybe<Scalars['String']['output']>;
   id: Scalars['ID']['output'];
   language: Language;
   messages: Array<MessageObjectType>;
@@ -580,6 +578,13 @@ export type ToggleBlockUserMutationVariables = Exact<{
 
 export type ToggleBlockUserMutation = { __typename?: 'Mutation', toggleBlockUser: { __typename?: 'ToggleBlockUserOutput', ok: boolean, error?: string | null, updateBlockUsers?: Array<{ __typename?: 'UserObjectType', id: string, nickname: string, profileUrl?: string | null }> | null } };
 
+export type UpdateUserMutationVariables = Exact<{
+  input: UpdateUserInput;
+}>;
+
+
+export type UpdateUserMutation = { __typename?: 'Mutation', updateUser: { __typename?: 'UpdateUserOutput', ok: boolean, error?: string | null } };
+
 export type UserProfileQueryVariables = Exact<{
   input: UserProfileInput;
 }>;
@@ -607,4 +612,5 @@ export const MeDocument = {"kind":"Document","definitions":[{"kind":"OperationDe
 export const MeDetailDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"meDetail"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"meDetail"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"ok"}},{"kind":"Field","name":{"kind":"Name","value":"error"}},{"kind":"Field","name":{"kind":"Name","value":"me"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"nickname"}},{"kind":"Field","name":{"kind":"Name","value":"profileUrl"}},{"kind":"Field","name":{"kind":"Name","value":"bio"}},{"kind":"Field","name":{"kind":"Name","value":"socialPlatform"}},{"kind":"Field","name":{"kind":"Name","value":"allowMessage"}},{"kind":"Field","name":{"kind":"Name","value":"language"}},{"kind":"Field","name":{"kind":"Name","value":"autoTranslation"}},{"kind":"Field","name":{"kind":"Name","value":"blockUsers"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"nickname"}},{"kind":"Field","name":{"kind":"Name","value":"profileUrl"}}]}}]}}]}}]}}]} as unknown as DocumentNode<MeDetailQuery, MeDetailQueryVariables>;
 export const RandomNicknameDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"randomNickname"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"randomNickname"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"ok"}},{"kind":"Field","name":{"kind":"Name","value":"error"}},{"kind":"Field","name":{"kind":"Name","value":"nickname"}}]}}]}}]} as unknown as DocumentNode<RandomNicknameQuery, RandomNicknameQueryVariables>;
 export const ToggleBlockUserDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"toggleBlockUser"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ToggleBlockUserInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"toggleBlockUser"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"ok"}},{"kind":"Field","name":{"kind":"Name","value":"error"}},{"kind":"Field","name":{"kind":"Name","value":"updateBlockUsers"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"nickname"}},{"kind":"Field","name":{"kind":"Name","value":"profileUrl"}}]}}]}}]}}]} as unknown as DocumentNode<ToggleBlockUserMutation, ToggleBlockUserMutationVariables>;
+export const UpdateUserDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"updateUser"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"UpdateUserInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"updateUser"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"ok"}},{"kind":"Field","name":{"kind":"Name","value":"error"}}]}}]}}]} as unknown as DocumentNode<UpdateUserMutation, UpdateUserMutationVariables>;
 export const UserProfileDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"userProfile"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"UserProfileInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"userProfile"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"ok"}},{"kind":"Field","name":{"kind":"Name","value":"error"}},{"kind":"Field","name":{"kind":"Name","value":"user"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"nickname"}},{"kind":"Field","name":{"kind":"Name","value":"profileUrl"}},{"kind":"Field","name":{"kind":"Name","value":"bio"}}]}}]}}]}}]} as unknown as DocumentNode<UserProfileQuery, UserProfileQueryVariables>;

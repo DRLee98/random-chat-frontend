@@ -12,10 +12,7 @@ import {requestUserPermission} from './utils/fmc';
 import type {FirebaseMessagingTypes} from '@react-native-firebase/messaging/lib';
 
 function App() {
-  const getFcmToken = async () => {
-    const fcmToken = await messaging().getToken();
     console.log('[+] FCM Token :: ', fcmToken);
-  };
 
   useEffect(() => {
     getFcmToken();
