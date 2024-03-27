@@ -9,9 +9,17 @@ interface NotiButtonProps {
   roomId: string;
   userRoomId: string;
   noti: boolean;
+  size?: number;
+  color?: string;
 }
 
-const NotiButton = ({roomId, userRoomId, noti}: NotiButtonProps) => {
+const NotiButton = ({
+  roomId,
+  userRoomId,
+  noti,
+  size = 20,
+  color,
+}: NotiButtonProps) => {
   const [updateRoom] = useUpdateRoom();
   const {updateMyRoom} = useUpdateMyRooms();
   const {updateRoomDetail} = useUpdateRoomDetail({roomId});
@@ -34,7 +42,11 @@ const NotiButton = ({roomId, userRoomId, noti}: NotiButtonProps) => {
 
   return (
     <TouchableOpacity onPress={onToggleNoti}>
-      <Icon name={noti ? 'bell-ring' : 'bell-cancel-outline'} size={20} />
+      <Icon
+        name={noti ? 'bell-ring' : 'bell-cancel-outline'}
+        size={size}
+        color={color}
+      />
     </TouchableOpacity>
   );
 };

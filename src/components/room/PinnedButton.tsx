@@ -9,9 +9,17 @@ interface PinnedButtonProps {
   roomId: string;
   userRoomId: string;
   pinned: boolean;
+  size?: number;
+  color?: string;
 }
 
-const PinnedButton = ({roomId, userRoomId, pinned}: PinnedButtonProps) => {
+const PinnedButton = ({
+  roomId,
+  userRoomId,
+  pinned,
+  size = 20,
+  color,
+}: PinnedButtonProps) => {
   const [updateRoom] = useUpdateRoom();
   const {updateMyRoom, sortMyRooms} = useUpdateMyRooms();
   const {updateRoomDetail} = useUpdateRoomDetail({roomId});
@@ -35,7 +43,11 @@ const PinnedButton = ({roomId, userRoomId, pinned}: PinnedButtonProps) => {
 
   return (
     <TouchableOpacity onPress={onTogglePinned}>
-      <Icon name={pinned ? 'pin' : 'pin-off-outline'} size={20} />
+      <Icon
+        name={pinned ? 'pin' : 'pin-off-outline'}
+        size={size}
+        color={color}
+      />
     </TouchableOpacity>
   );
 };

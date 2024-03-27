@@ -1,7 +1,6 @@
 import {useState} from 'react';
 import {useUpdateMyRooms} from '@app/graphql/hooks/room/useMyRooms';
 import useRoomDetail from '@app/graphql/hooks/room/useRoomDetail';
-import useDeleteRoom from '@app/graphql/hooks/room/useDeleteRoom';
 import useViewMessages, {
   useUpdateViewMessages,
 } from '@app/graphql/hooks/message/useViewMessages';
@@ -14,6 +13,7 @@ import {Button, ScrollView, Text, TextInput, View} from 'react-native';
 import ToggleUserBlockButton from '@app/components/user/ToggleUserBlockButton';
 import NotiButton from '@app/components/room/NotiButton';
 import PinnedButton from '@app/components/room/PinnedButton';
+import ExitButton from '@app/components/room/ExitButton';
 
 import {MainNavigatorScreens} from '@app/navigators';
 import {MessageType} from '@app/graphql/types/graphql';
@@ -38,9 +38,8 @@ const ChatRoomScreen = ({route, navigation}: ChatRoomScreenProps) => {
   const [value, setValue] = useState('');
 
   const [sendMessage] = useSendMessage();
-  const [deleteRoom] = useDeleteRoom();
 
-  const {updateMyRoom, removeMyRoom, sortMyRooms} = useUpdateMyRooms();
+  const {updateMyRoom, sortMyRooms} = useUpdateMyRooms();
   const {updateMessages, appendMessage} = useUpdateViewMessages({
     roomId,
   });
@@ -90,18 +89,8 @@ const ChatRoomScreen = ({route, navigation}: ChatRoomScreenProps) => {
     return roomUserIds.filter(id => readUsersId.includes(id)).length;
   };
 
-  const deleteRoomFn = async () => {
-    const {data} = await deleteRoom({
-      variables: {
-        input: {
-          roomId,
-        },
-      },
-    });
-    if (data?.deleteRoom.ok) {
-      removeMyRoom(route.params.roomId);
-      navigation.reset({routes: [{name: MainNavigatorScreens.Home}]});
-    }
+  const deleteRoomAfterFn = async () => {
+    navigation.reset({routes: [{name: MainNavigatorScreens.Home}]});
   };
 
   useNewMessageListener({
@@ -171,7 +160,11 @@ const ChatRoomScreen = ({route, navigation}: ChatRoomScreenProps) => {
       {message?.viewMessages.hasNext && (
         <Button title="더 불러오기" onPress={fetchMore} />
       )}
-      <Button title="나가기" onPress={deleteRoomFn} />
+      <ExitButton
+        roomId={roomId}
+        type="icon"
+        onAfterDelete={deleteRoomAfterFn}
+      />
     </ScrollView>
   );
 };

@@ -4,7 +4,7 @@ import useNewRoomListener from '@app/graphql/hooks/room/useNewRoomListener';
 import useUpdateNewMessageListener from '@app/graphql/hooks/message/useUpdateNewMessageListener';
 import useLogout from '@app/hooks/useLogout';
 
-import {Button, ScrollView} from 'react-native';
+import {Button} from 'react-native';
 import RoomItem from '@app/components/room/RoomItem';
 
 import {MainNavigatorScreens} from '@app/navigators';
@@ -45,7 +45,7 @@ const HomeScreen = ({navigation}: HomeScreenProps) => {
   const updateNewMessage = (data?: UpdateNewMessageInUserRoom) => {
     if (!data) return;
     const {id, newMessage, lastMessage} = data;
-    updateMyRoom(id, {newMessage, lastMessage});
+    updateMyRoom(id, {newMessage, lastMessage}, {updatedAt: new Date()});
   };
 
   useNewRoomListener({
@@ -58,9 +58,9 @@ const HomeScreen = ({navigation}: HomeScreenProps) => {
 
   return (
     <Container>
-      <Button title="logout" onPress={logout} />
+      {/* <Button title="logout" onPress={logout} /> */}
       <Button title="채팅방 생성" onPress={createRandomRoomFn} />
-      <Button title="새로고침" onPress={() => refetch()} />
+      {/* <Button title="새로고침" onPress={() => refetch()} /> */}
       {myRoomsData?.myRooms?.rooms?.map(userRoom => (
         <RoomItem key={userRoom.id} userRoom={userRoom as MyRoom} />
       ))}
@@ -72,6 +72,7 @@ const HomeScreen = ({navigation}: HomeScreenProps) => {
 };
 
 const Container = styled.ScrollView`
+  width: 100%;
   background-color: ${({theme}) => theme.bgColor};
 `;
 

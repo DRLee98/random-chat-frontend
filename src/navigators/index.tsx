@@ -40,7 +40,7 @@ const MainNavigator = () => {
   return (
     <SafeAreaView style={styles.container}>
       <NavigationContainer>
-        <Stack.Navigator>
+        <Stack.Navigator screenOptions={{headerTitleAlign: 'left'}}>
           <Stack.Screen
             name={MainNavigatorScreens.Splash}
             component={SplashScreen}

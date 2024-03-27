@@ -26,6 +26,7 @@ export const MY_ROOM_BASE = gql`
       updatedAt
     }
     users {
+      id
       profileUrl
     }
     updatedAt
