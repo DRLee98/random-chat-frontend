@@ -2,7 +2,7 @@ import {useMemo} from 'react';
 
 import styled from 'styled-components/native';
 
-import {shuffleList} from '@app/utils/functions';
+import {areColorsSimilar, shuffleList} from '@app/utils/functions';
 import {profileColors} from '@app/utils/constants';
 
 interface ProfileImgProps {
@@ -18,12 +18,17 @@ const ProfileImg = ({id, url, size = 60}: ProfileImgProps) => {
     return list[+id % list.length];
   };
 
-  const bgColor = useMemo(() => getColor(+id % 10), [profileColors, id]);
+  const bgColor = useMemo(
+    () => (url ? '' : getColor(+id % 10)),
+    [profileColors, id],
+  );
   const textColor = useMemo(() => {
+    if (url) return '';
     let num = 8;
     let color = getColor(+id % num);
     while (true) {
-      if (color === bgColor) {
+      const similarColor = areColorsSimilar(color, bgColor);
+      if (similarColor) {
         num++;
         color = getColor(+id % num);
       } else {

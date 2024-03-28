@@ -2,7 +2,6 @@ import {useNavigation} from '@react-navigation/native';
 
 import styled, {useTheme} from 'styled-components/native';
 
-import {View, Text} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import SwipeableListItem from '@app/components/common/SwipeableListItem';
 import ProfileImg from '@app/components/common/ProfileImg';
@@ -72,16 +71,10 @@ const RoomItem = ({userRoom}: RoomItemProps) => {
           url={userRoom.users[0].profileUrl}
           size={50}
         />
-        <View
-          style={{
-            flex: 1,
-            justifyContent: 'center',
-            gap: 8,
-            alignItems: 'stretch',
-          }}>
+        <ContentsBox>
           <SpaceBetween>
-            <View style={{flexDirection: 'row', alignItems: 'center', gap: 4}}>
-              <Text style={{fontWeight: '700'}}>{userRoom.name}</Text>
+            <TitleBox>
+              <Title>{userRoom.name}</Title>
               {userRoom.pinnedAt && (
                 <Icon color={theme.gray200.default} size={14} name="pin" />
               )}
@@ -92,18 +85,18 @@ const RoomItem = ({userRoom}: RoomItemProps) => {
                   name="bell-cancel-outline"
                 />
               )}
-            </View>
+            </TitleBox>
             <DateText>{getTimestamp(userRoom.room.updatedAt)}</DateText>
           </SpaceBetween>
           <SpaceBetween>
-            <Text>{userRoom.lastMessage}</Text>
+            <LastMessage>{userRoom.lastMessage}</LastMessage>
             {userRoom.newMessage > 0 && (
               <NewMessage>
                 <NewMessageText>{userRoom.newMessage}</NewMessageText>
               </NewMessage>
             )}
           </SpaceBetween>
-        </View>
+        </ContentsBox>
       </Container>
     </SwipeableListItem>
   );
@@ -112,7 +105,7 @@ const RoomItem = ({userRoom}: RoomItemProps) => {
 const Container = styled.TouchableOpacity`
   flex-direction: row;
   gap: 10px;
-  padding: 10px 15px;
+  padding: 10px 20px;
   background-color: ${({theme}) => theme.bgColor};
 `;
 
@@ -151,9 +144,33 @@ const ButtonBox = styled.View<ButtonBoxProps>`
   background-color: ${({color}) => color};
 `;
 
+const ContentsBox = styled.View`
+  flex: 1;
+  align-items: stretch;
+  justify-content: center;
+  gap: 8px;
+`;
+
+const TitleBox = styled.View`
+  flex-direction: row;
+  align-items: center;
+  gap: 4px;
+`;
+
+const Title = styled.Text`
+  font-weight: 500;
+  font-size: 14px;
+  color: ${({theme}) => theme.fontColor};
+`;
+
 const DateText = styled.Text`
   font-size: 12px;
   color: ${({theme}) => theme.gray100.default};
+`;
+
+const LastMessage = styled.Text`
+  font-size: 13px;
+  color: ${({theme}) => theme.gray200.default};
 `;
 
 export default RoomItem;

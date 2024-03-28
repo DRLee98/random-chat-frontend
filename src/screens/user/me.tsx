@@ -18,9 +18,10 @@ const MeScreen = ({navigation}: MeScreenProps) => {
     navigation.navigate(MainNavigatorScreens.User, {userId});
   };
 
+  if (!me) return null;
   return (
     <View style={{paddingVertical: 20, alignItems: 'center'}}>
-      <ProfileImg size={120} url={me?.profileUrl} />
+      <ProfileImg id={me.id} size={120} url={me.profileUrl} />
       <View style={{height: 20}} />
       <View style={{flexDirection: 'row', gap: 10}}>
         <Text>{me?.nickname ?? '-'}</Text>
@@ -48,7 +49,7 @@ const MeScreen = ({navigation}: MeScreenProps) => {
                 paddingVertical: 10,
                 paddingHorizontal: 5,
               }}>
-              <ProfileImg size={60} url={user.profileUrl} />
+              <ProfileImg id={user.id} size={60} url={user.profileUrl} />
               <Text>{user.nickname}</Text>
             </TouchableOpacity>
           ))}

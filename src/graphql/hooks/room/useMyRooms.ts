@@ -34,11 +34,11 @@ const useMyRooms = (
     variables: {input: input ?? {}},
   });
 
-  const fetchMore = () => {
-    if (result.loading) return;
+  const fetchMore = async () => {
+    if (result.networkStatus !== 7) return;
     if (!result.data?.myRooms.hasNext) return;
 
-    result.fetchMore({
+    await result.fetchMore({
       variables: {
         input: {
           ...input,

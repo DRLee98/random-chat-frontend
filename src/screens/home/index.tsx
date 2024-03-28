@@ -5,6 +5,8 @@ import useUpdateNewMessageListener from '@app/graphql/hooks/message/useUpdateNew
 import useLogout from '@app/hooks/useLogout';
 
 import {Button} from 'react-native';
+import CustomScrollView from '@app/components/common/CustomScrollView';
+
 import RoomItem from '@app/components/room/RoomItem';
 
 import {MainNavigatorScreens} from '@app/navigators';
@@ -15,8 +17,6 @@ import type {
   UpdateNewMessageInUserRoom,
   MyRoom,
 } from '@app/graphql/types/graphql';
-import styled from 'styled-components/native';
-
 interface HomeScreenProps
   extends StackScreenProps<MainNavigatorParamList, MainNavigatorScreens.Home> {}
 
@@ -25,7 +25,7 @@ const HomeScreen = ({navigation}: HomeScreenProps) => {
 
   const [createRandomRoom] = useCreateRandomRoom();
 
-  const {data: myRoomsData, fetchMore, refetch} = useMyRooms();
+  const {data: myRoomsData, fetchMore, refetch, loading} = useMyRooms();
   const {updateMyRoom, appendMyRoom, sortMyRooms} = useUpdateMyRooms();
 
   const goChatRoom = (roomId: string) => {
@@ -57,23 +57,15 @@ const HomeScreen = ({navigation}: HomeScreenProps) => {
   });
 
   return (
-    <Container>
+    <CustomScrollView fetchMore={fetchMore}>
       {/* <Button title="logout" onPress={logout} /> */}
       <Button title="채팅방 생성" onPress={createRandomRoomFn} />
       {/* <Button title="새로고침" onPress={() => refetch()} /> */}
       {myRoomsData?.myRooms?.rooms?.map(userRoom => (
         <RoomItem key={userRoom.id} userRoom={userRoom as MyRoom} />
       ))}
-      {myRoomsData?.myRooms.hasNext && (
-        <Button title="더 불러오기" onPress={fetchMore} />
-      )}
-    </Container>
+    </CustomScrollView>
   );
 };
-
-const Container = styled.ScrollView`
-  width: 100%;
-  background-color: ${({theme}) => theme.bgColor};
-`;
 
 export default HomeScreen;
