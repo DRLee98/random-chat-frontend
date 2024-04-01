@@ -74,7 +74,9 @@ const RoomItem = ({userRoom}: RoomItemProps) => {
         <ContentsBox>
           <SpaceBetween>
             <TitleBox>
-              <Title>{userRoom.name}</Title>
+              <Title ellipsizeMode="tail" numberOfLines={1}>
+                {userRoom.name}
+              </Title>
               {userRoom.pinnedAt && (
                 <Icon color={theme.gray200.default} size={14} name="pin" />
               )}
@@ -89,7 +91,9 @@ const RoomItem = ({userRoom}: RoomItemProps) => {
             <DateText>{getTimestamp(userRoom.room.updatedAt)}</DateText>
           </SpaceBetween>
           <SpaceBetween>
-            <LastMessage>{userRoom.lastMessage}</LastMessage>
+            <LastMessage ellipsizeMode="tail" numberOfLines={1}>
+              {userRoom.lastMessage}
+            </LastMessage>
             {userRoom.newMessage > 0 && (
               <NewMessage>
                 <NewMessageText>{userRoom.newMessage}</NewMessageText>
@@ -111,7 +115,7 @@ const Container = styled.TouchableOpacity`
 
 const SpaceBetween = styled.View`
   flex-direction: row;
-  align-items: stretch;
+  align-items: center;
   justify-content: space-between;
 `;
 
@@ -169,6 +173,7 @@ const DateText = styled.Text`
 `;
 
 const LastMessage = styled.Text`
+  width: 85%;
   font-size: 13px;
   color: ${({theme}) => theme.gray200.default};
 `;

@@ -59,6 +59,7 @@ const MainNavigator = () => {
             name={MainNavigatorScreens.Home}
             component={HomeScreen}
             options={({navigation}) => ({
+              title: '홈',
               headerRight: () => (
                 <Button
                   title="Me"

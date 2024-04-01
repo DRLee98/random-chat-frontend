@@ -10,7 +10,7 @@ import type {
 
 interface CustomScrollViewProps
   extends Omit<ScrollViewProps, 'onScroll' | 'scrollEventThrottle'> {
-  fetchMore: () => Promise<void>;
+  fetchMore?: () => Promise<void>;
 }
 
 const CustomScrollView = ({
@@ -23,6 +23,7 @@ const CustomScrollView = ({
   const onScrollEndDrag = async (
     e: NativeSyntheticEvent<NativeScrollEvent>,
   ) => {
+    if (!fetchMore) return;
     const {layoutMeasurement, contentSize, contentOffset} = e.nativeEvent;
     if (
       !fetching.current &&

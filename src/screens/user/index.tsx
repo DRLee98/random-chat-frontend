@@ -23,9 +23,14 @@ const UserScreen = ({route}: UserScreenProps) => {
     id: route.params.userId,
   });
 
+  if (!data?.userProfile.user) return null;
   return (
     <View style={{paddingVertical: 20, alignItems: 'center'}}>
-      <ProfileImg size={120} url={data?.userProfile.user?.profileUrl} />
+      <ProfileImg
+        id={data.userProfile.user.id}
+        size={120}
+        url={data?.userProfile.user.profileUrl}
+      />
       <View style={{height: 20}} />
       <View style={{flexDirection: 'row', gap: 10}}>
         <Text>{data?.userProfile.user?.nickname ?? '-'}</Text>
