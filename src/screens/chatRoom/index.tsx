@@ -9,11 +9,17 @@ import useReadMessageListener from '@app/graphql/hooks/message/useReadMessageLis
 import useSendMessage from '@app/graphql/hooks/message/useSendMessage';
 import useMe from '@app/graphql/hooks/user/useMe';
 
-import {Button, ScrollView, Text, TextInput, View} from 'react-native';
+import styled from 'styled-components/native';
+
+import {Button, Text, TextInput, View} from 'react-native';
+import CustomScrollView from '@app/components/common/CustomScrollView';
+import Message from '@app/components/chat/message';
+import Input from '@app/components/common/Input';
 import ToggleUserBlockButton from '@app/components/user/ToggleUserBlockButton';
 import NotiButton from '@app/components/room/NotiButton';
 import PinnedButton from '@app/components/room/PinnedButton';
 import ExitButton from '@app/components/room/ExitButton';
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 import {MainNavigatorScreens} from '@app/navigators';
 import {MessageType} from '@app/graphql/__generated__/graphql';
@@ -91,7 +97,10 @@ const ChatRoomScreen = ({route, navigation}: ChatRoomScreenProps) => {
   const formatReadCount = (readUsersId: string[]) => {
     const roomUserIds =
       room?.roomDetail.room?.users?.map(user => user.id) ?? [];
-    return roomUserIds.filter(id => readUsersId.includes(id)).length;
+    return (
+      roomUserIds.length -
+      roomUserIds.filter(id => [...readUsersId, me?.id].includes(id)).length
+    );
   };
 
   const deleteRoomAfterFn = async () => {
@@ -114,69 +123,91 @@ const ChatRoomScreen = ({route, navigation}: ChatRoomScreenProps) => {
   }, [messages, room?.roomDetail.room]);
 
   return (
-    <ScrollView>
-      <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-        <Text>
-          Chat Room: {room?.roomDetail.room?.userRoom.name}, id:{' '}
-          {route.params.roomId}
-        </Text>
-        {room?.roomDetail.room && (
-          <View style={{flexDirection: 'row', gap: 10}}>
-            <NotiButton
-              roomId={route.params.roomId}
-              userRoomId={room.roomDetail.room.userRoom.id}
-              noti={room.roomDetail.room.userRoom.noti}
-            />
-            <PinnedButton
-              roomId={route.params.roomId}
-              userRoomId={room.roomDetail.room.userRoom.id}
-              pinned={Boolean(room.roomDetail.room.userRoom.pinnedAt)}
-            />
-          </View>
-        )}
-      </View>
-      <View style={{marginVertical: 20}}>
-        {room?.roomDetail.room?.users?.map(user => (
-          <View
-            key={user.id}
-            style={{flexDirection: 'row', alignItems: 'center'}}>
-            <Text>
-              id: {user.id}, nick: {user.nickname}
-            </Text>
-            {me && user.id !== me.id && (
-              <ToggleUserBlockButton
-                me={me}
-                userId={user.id}
-                nickname={user.nickname}
-              />
-            )}
-          </View>
-        ))}
-      </View>
-      <View>
-        {message?.viewMessages.messages?.map(m => (
-          <Text key={m.id}>
-            {m.user.nickname}: {m.contents} (read:{' '}
-            {formatReadCount(m.readUsersId)})
+    <Container>
+      <CustomScrollView>
+        {/* <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+          <Text>
+            Chat Room: {room?.roomDetail.room?.userRoom.name}, id:{' '}
+            {route.params.roomId}
           </Text>
-        ))}
-      </View>
-      <TextInput
-        style={{borderStyle: 'solid', borderWidth: 1, borderColor: 'black'}}
-        value={value}
-        onChange={e => setValue(e.nativeEvent.text)}
-      />
-      <Button title="전송" onPress={sendMessageFn} />
-      {message?.viewMessages.hasNext && (
+          {room?.roomDetail.room && (
+            <View style={{flexDirection: 'row', gap: 10}}>
+              <NotiButton
+                roomId={route.params.roomId}
+                userRoomId={room.roomDetail.room.userRoom.id}
+                noti={room.roomDetail.room.userRoom.noti}
+              />
+              <PinnedButton
+                roomId={route.params.roomId}
+                userRoomId={room.roomDetail.room.userRoom.id}
+                pinned={Boolean(room.roomDetail.room.userRoom.pinnedAt)}
+              />
+            </View>
+          )}
+        </View>
+        <View style={{marginVertical: 20}}>
+          {room?.roomDetail.room?.users?.map(user => (
+            <View
+              key={user.id}
+              style={{flexDirection: 'row', alignItems: 'center'}}>
+              <Text>
+                id: {user.id}, nick: {user.nickname}
+              </Text>
+              {me && user.id !== me.id && (
+                <ToggleUserBlockButton
+                  me={me}
+                  userId={user.id}
+                  nickname={user.nickname}
+                />
+              )}
+            </View>
+          ))}
+        </View> */}
+        <View>
+          {messages?.map(m => (
+            <Message
+              key={`message-${m.id}`}
+              unReadCount={formatReadCount(m.readUsersId)}
+              {...m}
+            />
+          ))}
+        </View>
+        {/* {message?.viewMessages.hasNext && (
         <Button title="더 불러오기" onPress={fetchMore} />
-      )}
-      <ExitButton
+      )} */}
+        {/* <ExitButton
         roomId={roomId}
         type="icon"
         onAfterDelete={deleteRoomAfterFn}
+      /> */}
+      </CustomScrollView>
+      <Input
+        value={value}
+        onChange={e => setValue(e.nativeEvent.text)}
+        right={
+          <SendButton>
+            <SendIcon name="send" size={16} />
+          </SendButton>
+        }
       />
-    </ScrollView>
+    </Container>
   );
 };
+
+const Container = styled.View`
+  flex: 1;
+  padding: 15px;
+  background-color: ${({theme}) => theme.bgColor};
+`;
+
+const SendButton = styled.TouchableOpacity`
+  padding: 10px;
+  background-color: ${({theme}) => theme.blue.default};
+  border-radius: 999px;
+`;
+
+const SendIcon = styled(Icon)`
+  color: ${({theme}) => theme.bgColor};
+`;
 
 export default ChatRoomScreen;
