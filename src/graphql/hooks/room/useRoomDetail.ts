@@ -1,4 +1,5 @@
-import {gql, useApolloClient, useQuery} from '@apollo/client';
+import {useApolloClient, useQuery} from '@apollo/client';
+import {graphql} from '@app/graphql/__generated__';
 
 import type {QueryHookOptions} from '@apollo/client';
 import type {
@@ -6,9 +7,9 @@ import type {
   RoomDetailInput,
   RoomDetailQuery,
   SimpleUserRoom,
-} from '../../types/graphql';
+} from '@app/graphql/__generated__/graphql';
 
-const ROOM_DETAIL = gql`
+const ROOM_DETAIL = graphql(`
   query roomDetail($input: RoomDetailInput!) {
     roomDetail(input: $input) {
       ok
@@ -31,7 +32,7 @@ const ROOM_DETAIL = gql`
       }
     }
   }
-`;
+`);
 
 const useRoomDetail = (
   input: RoomDetailInput,

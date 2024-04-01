@@ -1,4 +1,4 @@
-import {Me} from '@app/graphql/types/graphql';
+import {Me} from '@app/graphql/__generated__/graphql';
 import {atom, useRecoilValue, useSetRecoilState} from 'recoil';
 
 export const meState = atom<Me | null>({

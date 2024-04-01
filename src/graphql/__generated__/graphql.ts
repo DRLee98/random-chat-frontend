@@ -465,18 +465,21 @@ export type ViewMessagesOutput = {
   ok: Scalars['Boolean']['output'];
 };
 
-export type MessageBaseFragment = { __typename?: 'MessageObjectType', id: string, contents: string, type: MessageType, readUsersId: Array<string>, user: { __typename?: 'UserObjectType', id: string, nickname: string, profileUrl?: string | null } };
+export type MessageBaseFragment = { __typename?: 'MessageObjectType', id: string, contents: string, type: MessageType, readUsersId: Array<string>, user: { __typename?: 'UserObjectType', id: string, nickname: string, profileUrl?: string | null } } & { ' $fragmentName'?: 'MessageBaseFragment' };
 
-export type UserRoomBaseFragment = { __typename?: 'UserRoomObjectType', id: string, name: string, noti: boolean, pinnedAt?: any | null, newMessage: number, room: { __typename?: 'Room', id: string } };
+export type UserRoomBaseFragment = { __typename?: 'UserRoomObjectType', id: string, name: string, noti: boolean, pinnedAt?: any | null, newMessage: number, room: { __typename?: 'Room', id: string } } & { ' $fragmentName'?: 'UserRoomBaseFragment' };
 
-export type MyRoomBaseFragment = { __typename?: 'MyRoom', id: string, name: string, noti: boolean, pinnedAt?: any | null, newMessage: number, lastMessage: string, updatedAt: any, room: { __typename?: 'Room', id: string, updatedAt: any }, users: Array<{ __typename?: 'SimpleUser', id: string, profileUrl?: string | null }> };
+export type MyRoomBaseFragment = { __typename?: 'MyRoom', id: string, name: string, noti: boolean, pinnedAt?: any | null, newMessage: number, lastMessage: string, updatedAt: any, room: { __typename?: 'Room', id: string, updatedAt: any }, users: Array<{ __typename?: 'SimpleUser', id: string, profileUrl?: string | null }> } & { ' $fragmentName'?: 'MyRoomBaseFragment' };
 
 export type NewMessageSubscriptionVariables = Exact<{
   input: NewMessageInput;
 }>;
 
 
-export type NewMessageSubscription = { __typename?: 'Subscription', newMessage: { __typename?: 'MessageObjectType', id: string, contents: string, type: MessageType, readUsersId: Array<string>, user: { __typename?: 'UserObjectType', id: string, nickname: string, profileUrl?: string | null } } };
+export type NewMessageSubscription = { __typename?: 'Subscription', newMessage: (
+    { __typename?: 'MessageObjectType' }
+    & { ' $fragmentRefs'?: { 'MessageBaseFragment': MessageBaseFragment } }
+  ) };
 
 export type ReadMessageSubscriptionVariables = Exact<{
   input: ReadMessageInput;
@@ -490,7 +493,10 @@ export type SendMessageMutationVariables = Exact<{
 }>;
 
 
-export type SendMessageMutation = { __typename?: 'Mutation', sendMessage: { __typename?: 'SendMessageOutput', ok: boolean, error?: string | null, message?: { __typename?: 'MessageObjectType', id: string, contents: string, type: MessageType, readUsersId: Array<string>, user: { __typename?: 'UserObjectType', id: string, nickname: string, profileUrl?: string | null } } | null } };
+export type SendMessageMutation = { __typename?: 'Mutation', sendMessage: { __typename?: 'SendMessageOutput', ok: boolean, error?: string | null, message?: (
+      { __typename?: 'MessageObjectType' }
+      & { ' $fragmentRefs'?: { 'MessageBaseFragment': MessageBaseFragment } }
+    ) | null } };
 
 export type UpdateNewMessageInUserRoomSubscriptionVariables = Exact<{ [key: string]: never; }>;
 
@@ -502,12 +508,18 @@ export type ViewMessagesQueryVariables = Exact<{
 }>;
 
 
-export type ViewMessagesQuery = { __typename?: 'Query', viewMessages: { __typename?: 'ViewMessagesOutput', ok: boolean, error?: string | null, hasNext?: boolean | null, messages?: Array<{ __typename?: 'MessageObjectType', id: string, contents: string, type: MessageType, readUsersId: Array<string>, user: { __typename?: 'UserObjectType', id: string, nickname: string, profileUrl?: string | null } }> | null } };
+export type ViewMessagesQuery = { __typename?: 'Query', viewMessages: { __typename?: 'ViewMessagesOutput', ok: boolean, error?: string | null, hasNext?: boolean | null, messages?: Array<(
+      { __typename?: 'MessageObjectType' }
+      & { ' $fragmentRefs'?: { 'MessageBaseFragment': MessageBaseFragment } }
+    )> | null } };
 
 export type CreateRandomRoomMutationVariables = Exact<{ [key: string]: never; }>;
 
 
-export type CreateRandomRoomMutation = { __typename?: 'Mutation', createRandomRoom: { __typename?: 'CreateRandomRoomOutput', ok: boolean, error?: string | null, room?: { __typename?: 'MyRoom', id: string, name: string, noti: boolean, pinnedAt?: any | null, newMessage: number, lastMessage: string, updatedAt: any, room: { __typename?: 'Room', id: string, updatedAt: any }, users: Array<{ __typename?: 'SimpleUser', id: string, profileUrl?: string | null }> } | null } };
+export type CreateRandomRoomMutation = { __typename?: 'Mutation', createRandomRoom: { __typename?: 'CreateRandomRoomOutput', ok: boolean, error?: string | null, room?: (
+      { __typename?: 'MyRoom' }
+      & { ' $fragmentRefs'?: { 'MyRoomBaseFragment': MyRoomBaseFragment } }
+    ) | null } };
 
 export type DeleteRoomMutationVariables = Exact<{
   input: DeleteRoomInput;
@@ -521,12 +533,18 @@ export type MyRoomsQueryVariables = Exact<{
 }>;
 
 
-export type MyRoomsQuery = { __typename?: 'Query', myRooms: { __typename?: 'MyRoomsOutput', ok: boolean, error?: string | null, hasNext?: boolean | null, rooms?: Array<{ __typename?: 'MyRoom', id: string, name: string, noti: boolean, pinnedAt?: any | null, newMessage: number, lastMessage: string, updatedAt: any, room: { __typename?: 'Room', id: string, updatedAt: any }, users: Array<{ __typename?: 'SimpleUser', id: string, profileUrl?: string | null }> }> | null } };
+export type MyRoomsQuery = { __typename?: 'Query', myRooms: { __typename?: 'MyRoomsOutput', ok: boolean, error?: string | null, hasNext?: boolean | null, rooms?: Array<(
+      { __typename?: 'MyRoom' }
+      & { ' $fragmentRefs'?: { 'MyRoomBaseFragment': MyRoomBaseFragment } }
+    )> | null } };
 
 export type NewRoomSubscriptionVariables = Exact<{ [key: string]: never; }>;
 
 
-export type NewRoomSubscription = { __typename?: 'Subscription', newRoom: { __typename?: 'MyRoom', id: string, name: string, noti: boolean, pinnedAt?: any | null, newMessage: number, lastMessage: string, updatedAt: any, room: { __typename?: 'Room', id: string, updatedAt: any }, users: Array<{ __typename?: 'SimpleUser', id: string, profileUrl?: string | null }> } };
+export type NewRoomSubscription = { __typename?: 'Subscription', newRoom: (
+    { __typename?: 'MyRoom' }
+    & { ' $fragmentRefs'?: { 'MyRoomBaseFragment': MyRoomBaseFragment } }
+  ) };
 
 export type RoomDetailQueryVariables = Exact<{
   input: RoomDetailInput;

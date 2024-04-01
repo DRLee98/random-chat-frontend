@@ -1,12 +1,13 @@
-import {gql, useMutation} from '@apollo/client';
+import {useMutation} from '@apollo/client';
+import {graphql} from '@app/graphql/__generated__';
 
 import type {MutationHookOptions} from '@apollo/client';
 import type {
   CreateUserMutation,
   MutationCreateUserArgs,
-} from '../../types/graphql';
+} from '@app/graphql/__generated__/graphql';
 
-const CREATE_USER = gql`
+const CREATE_USER = graphql(`
   mutation createUser($input: CreateUserInput!) {
     createUser(input: $input) {
       ok
@@ -16,7 +17,7 @@ const CREATE_USER = gql`
       }
     }
   }
-`;
+`);
 
 const useCreateUser = (
   options?: MutationHookOptions<CreateUserMutation, MutationCreateUserArgs>,

@@ -1,10 +1,10 @@
-import {gql} from '@apollo/client';
+import {graphql} from '@app/graphql/__generated__';
 import useCustomLazyQuery from '../../utils/useCustomLazyQuery';
 
 import type {LazyQueryHookOptions} from '@apollo/client';
-import type {RandomNicknameQuery} from '../../types/graphql';
+import type {RandomNicknameQuery} from '@app/graphql/__generated__/graphql';
 
-const RANDOM_NICKNAME = gql`
+const RANDOM_NICKNAME = graphql(`
   query randomNickname {
     randomNickname {
       ok
@@ -12,7 +12,7 @@ const RANDOM_NICKNAME = gql`
       nickname
     }
   }
-`;
+`);
 
 const useRandomNickname = (
   options?: LazyQueryHookOptions<RandomNicknameQuery>,

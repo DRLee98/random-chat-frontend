@@ -6,17 +6,13 @@ import useLogout from '@app/hooks/useLogout';
 
 import {Button} from 'react-native';
 import CustomScrollView from '@app/components/common/CustomScrollView';
-
 import RoomItem from '@app/components/room/RoomItem';
 
 import {MainNavigatorScreens} from '@app/navigators';
 
 import type {StackScreenProps} from '@react-navigation/stack';
 import type {MainNavigatorParamList} from '@app/navigators';
-import type {
-  UpdateNewMessageInUserRoom,
-  MyRoom,
-} from '@app/graphql/types/graphql';
+import type {UpdateNewMessageInUserRoom} from '@app/graphql/__generated__/graphql';
 interface HomeScreenProps
   extends StackScreenProps<MainNavigatorParamList, MainNavigatorScreens.Home> {}
 
@@ -25,7 +21,7 @@ const HomeScreen = ({navigation}: HomeScreenProps) => {
 
   const [createRandomRoom] = useCreateRandomRoom();
 
-  const {data: myRoomsData, fetchMore, refetch, loading} = useMyRooms();
+  const {rooms, fetchMore, refetch, loading} = useMyRooms();
   const {updateMyRoom, appendMyRoom, sortMyRooms} = useUpdateMyRooms();
 
   const goChatRoom = (roomId: string) => {
@@ -35,10 +31,10 @@ const HomeScreen = ({navigation}: HomeScreenProps) => {
   const createRandomRoomFn = async () => {
     const {data} = await createRandomRoom();
     if (data?.createRandomRoom.room) {
-      const userRoom = data.createRandomRoom.room as MyRoom;
+      const userRoom = data.createRandomRoom.room;
       appendMyRoom(userRoom);
       sortMyRooms();
-      goChatRoom(userRoom.room.id);
+      // goChatRoom(userRoom.room.id);
     }
   };
 
@@ -49,8 +45,7 @@ const HomeScreen = ({navigation}: HomeScreenProps) => {
   };
 
   useNewRoomListener({
-    onData: ({data}) =>
-      data.data?.newRoom && appendMyRoom(data.data.newRoom as MyRoom),
+    onData: ({data}) => data.data?.newRoom && appendMyRoom(data.data.newRoom),
   });
   useUpdateNewMessageListener({
     onData: ({data}) => updateNewMessage(data.data?.updateNewMessageInUserRoom),
@@ -61,8 +56,8 @@ const HomeScreen = ({navigation}: HomeScreenProps) => {
       {/* <Button title="logout" onPress={logout} /> */}
       <Button title="채팅방 생성" onPress={createRandomRoomFn} />
       {/* <Button title="새로고침" onPress={() => refetch()} /> */}
-      {myRoomsData?.myRooms?.rooms?.map(userRoom => (
-        <RoomItem key={userRoom.id} userRoom={userRoom as MyRoom} />
+      {rooms.map(userRoom => (
+        <RoomItem key={userRoom.id} userRoom={userRoom} />
       ))}
     </CustomScrollView>
   );

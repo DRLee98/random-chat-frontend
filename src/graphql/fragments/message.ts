@@ -1,6 +1,6 @@
-import {gql} from '@apollo/client';
+import {graphql} from '../__generated__';
 
-export const MESSAGE_BASE = gql`
+export const MESSAGE_BASE = graphql(`
   fragment MessageBase on MessageObjectType {
     id
     contents
@@ -12,4 +12,4 @@ export const MESSAGE_BASE = gql`
       profileUrl
     }
   }
-`;
+`);

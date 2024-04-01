@@ -1,17 +1,21 @@
-import {gql, useApolloClient, useQuery} from '@apollo/client';
-import {MY_ROOM_BASE} from '../../fragments/room';
+import {useApolloClient, useQuery} from '@apollo/client';
+import {getFragmentData, graphql} from '@app/graphql/__generated__';
+
+import {MY_ROOM_BASE} from '@app/graphql/fragments/room';
 
 import {dateStringToNumber} from '@app/utils/functions';
 
 import type {QueryHookOptions} from '@apollo/client';
 import type {
   MyRoom,
+  MyRoomBaseFragment,
   MyRoomsInput,
   MyRoomsQuery,
   QueryMyRoomsArgs,
-} from '../../types/graphql';
+} from '@app/graphql/__generated__/graphql';
+import type {FragmentType} from '@app/graphql/__generated__';
 
-export const MY_ROOMS = gql`
+export const MY_ROOMS = graphql(`
   query myRooms($input: MyRoomsInput!) {
     myRooms(input: $input) {
       ok
@@ -22,27 +26,28 @@ export const MY_ROOMS = gql`
       }
     }
   }
-  ${MY_ROOM_BASE}
-`;
+`);
 
 const useMyRooms = (
   input?: MyRoomsInput,
   options?: Omit<QueryHookOptions<MyRoomsQuery, QueryMyRoomsArgs>, 'variables'>,
 ) => {
-  const result = useQuery<MyRoomsQuery, QueryMyRoomsArgs>(MY_ROOMS, {
+  const {data, ...result} = useQuery<MyRoomsQuery, QueryMyRoomsArgs>(MY_ROOMS, {
     ...options,
     variables: {input: input ?? {}},
   });
 
+  const rooms = getFragmentData(MY_ROOM_BASE, data?.myRooms.rooms) ?? [];
+
   const fetchMore = async () => {
     if (result.networkStatus !== 7) return;
-    if (!result.data?.myRooms.hasNext) return;
+    if (!data?.myRooms.hasNext) return;
 
     await result.fetchMore({
       variables: {
         input: {
           ...input,
-          skip: result.data.myRooms.rooms?.length ?? 0,
+          skip: data.myRooms.rooms?.length ?? 0,
         },
       },
       updateQuery: (prev, {fetchMoreResult}) => {
@@ -58,20 +63,23 @@ const useMyRooms = (
     });
   };
 
-  return {...result, fetchMore};
+  return {...result, rooms, fetchMore};
 };
 
 export const useUpdateMyRooms = (input?: MyRoomsInput) => {
   const client = useApolloClient();
 
   const getPrevData = () => {
-    return client.readQuery<MyRoomsQuery, QueryMyRoomsArgs>({
+    const data = client.cache.readQuery<MyRoomsQuery, QueryMyRoomsArgs>({
       query: MY_ROOMS,
       variables: {input: input ?? {}},
     });
+
+    const rooms = getFragmentData(MY_ROOM_BASE, data?.myRooms.rooms) ?? [];
+    return rooms;
   };
 
-  const updateFn = (rooms: MyRoom[]) => {
+  const updateFn = (rooms: MyRoomBaseFragment[]) => {
     client.cache.updateQuery<MyRoomsQuery, QueryMyRoomsArgs>(
       {query: MY_ROOMS, variables: {input: input ?? {}}},
       prev =>
@@ -90,40 +98,36 @@ export const useUpdateMyRooms = (input?: MyRoomsInput) => {
     newUserRoom: Partial<Omit<MyRoom, 'room'>>,
     newRoom?: Partial<MyRoom['room']>,
   ) => {
-    const prevData = getPrevData();
-    const updateRooms = (prevData?.myRooms.rooms?.map(userRoom => {
-      if (userRoom.id === id) {
-        return {
-          ...userRoom,
+    client.cache.updateFragment(
+      {
+        id: `MyRoom:${id}`,
+        fragment: MY_ROOM_BASE,
+      },
+      prev =>
+        prev && {
+          ...prev,
           ...newUserRoom,
-          ...(newRoom && {room: {...userRoom.room, ...newRoom}}),
-        };
-      }
-      return userRoom;
-    }) ?? []) as MyRoom[];
-    updateFn(updateRooms);
+          ...(newRoom && {room: {...prev.room, ...newRoom}}),
+        },
+    );
   };
 
-  const appendMyRoom = (newRoom: MyRoom) => {
-    const prevData = getPrevData();
-    const updateRooms = [
-      newRoom,
-      ...(prevData?.myRooms.rooms ?? []),
-    ] as MyRoom[];
+  const appendMyRoom = (newRoom: FragmentType<typeof MY_ROOM_BASE>) => {
+    const rooms = getPrevData();
+    const newRoomData = getFragmentData(MY_ROOM_BASE, newRoom);
+    const updateRooms = [...rooms, newRoomData];
     updateFn(updateRooms);
   };
 
   const removeMyRoom = (id: string) => {
-    const prevData = getPrevData();
-    const updateRooms = (prevData?.myRooms.rooms?.filter(
-      ({room}) => room.id !== id,
-    ) ?? []) as MyRoom[];
+    const rooms = getPrevData();
+    const updateRooms = rooms?.filter(({room}) => room.id !== id) ?? [];
     updateFn(updateRooms);
   };
 
   const sortMyRooms = () => {
-    const prevData = getPrevData();
-    const updateRooms = [...(prevData?.myRooms.rooms ?? [])]
+    const rooms = getPrevData();
+    const updateRooms = [...(rooms ?? [])]
       .sort(
         (a, b) =>
           dateStringToNumber(b.room.updatedAt) -
@@ -145,7 +149,7 @@ export const useUpdateMyRooms = (input?: MyRoomsInput) => {
         if (b.pinnedAt && !a.pinnedAt) return 1;
         if (a.pinnedAt && !b.pinnedAt) return -1;
         return 0;
-      }) as MyRoom[];
+      });
     updateFn(updateRooms);
   };
 

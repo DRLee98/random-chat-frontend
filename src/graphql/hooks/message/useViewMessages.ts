@@ -1,5 +1,7 @@
-import {gql, useApolloClient, useQuery} from '@apollo/client';
-import {MESSAGE_BASE} from '../../fragments/message';
+import {useApolloClient, useQuery} from '@apollo/client';
+import {getFragmentData, graphql} from '@app/graphql/__generated__';
+
+import {MESSAGE_BASE} from '@app/graphql/fragments/message';
 
 import type {QueryHookOptions} from '@apollo/client';
 import type {
@@ -7,9 +9,10 @@ import type {
   QueryViewMessagesArgs,
   ViewMessagesInput,
   ViewMessagesQuery,
-} from '../../types/graphql';
+} from '@app/graphql/__generated__/graphql';
+import type {FragmentType} from '@app/graphql/__generated__';
 
-const VIEW_MESSAGES = gql`
+const VIEW_MESSAGES = graphql(`
   query viewMessages($input: ViewMessagesInput!) {
     viewMessages(input: $input) {
       ok
@@ -20,8 +23,7 @@ const VIEW_MESSAGES = gql`
       }
     }
   }
-  ${MESSAGE_BASE}
-`;
+`);
 
 const useViewMessages = (
   input: ViewMessagesInput,
@@ -30,7 +32,7 @@ const useViewMessages = (
     'variables'
   >,
 ) => {
-  const result = useQuery<ViewMessagesQuery, QueryViewMessagesArgs>(
+  const {data, ...result} = useQuery<ViewMessagesQuery, QueryViewMessagesArgs>(
     VIEW_MESSAGES,
     {
       ...options,
@@ -38,15 +40,18 @@ const useViewMessages = (
     },
   );
 
+  const messages =
+    getFragmentData(MESSAGE_BASE, data?.viewMessages.messages) ?? [];
+
   const fetchMore = async () => {
     if (result.networkStatus !== 7) return;
-    if (!result.data?.viewMessages.hasNext) return;
+    if (!data?.viewMessages.hasNext) return;
 
     await result.fetchMore({
       variables: {
         input: {
           ...input,
-          skip: result.data.viewMessages.messages?.length ?? 0,
+          skip: data.viewMessages.messages?.length ?? 0,
         },
       },
       updateQuery: (prev, {fetchMoreResult}) => {
@@ -65,17 +70,21 @@ const useViewMessages = (
     });
   };
 
-  return {...result, fetchMore};
+  return {...result, messages, fetchMore};
 };
 
 export const useUpdateViewMessages = (input: ViewMessagesInput) => {
   const client = useApolloClient();
 
   const getPrevData = () => {
-    return client.readQuery<ViewMessagesQuery, QueryViewMessagesArgs>({
+    const data = client.readQuery<ViewMessagesQuery, QueryViewMessagesArgs>({
       query: VIEW_MESSAGES,
       variables: {input},
     });
+
+    const messages =
+      getFragmentData(MESSAGE_BASE, data?.viewMessages.messages) ?? [];
+    return messages;
   };
 
   const updateFn = (messages: MessageBaseFragment[]) => {
@@ -92,21 +101,28 @@ export const useUpdateViewMessages = (input: ViewMessagesInput) => {
     );
   };
 
+  const updateFragmentFn = (
+    id: string,
+    updateMessage: Partial<MessageBaseFragment>,
+  ) => {
+    client.cache.updateFragment(
+      {
+        id: `MessageObjectType:${id}`,
+        fragment: MESSAGE_BASE,
+      },
+      prev =>
+        prev && {
+          ...prev,
+          ...updateMessage,
+        },
+    );
+  };
+
   const updateMessage = (
     id: string,
     newMessage: Partial<MessageBaseFragment>,
   ) => {
-    const prevData = getPrevData();
-    const messages = (prevData?.viewMessages.messages?.map(message => {
-      if (message.id === id) {
-        return {
-          ...message,
-          ...newMessage,
-        };
-      }
-      return message;
-    }) ?? []) as MessageBaseFragment[];
-    updateFn(messages);
+    updateFragmentFn(id, newMessage);
   };
 
   const updateMessages = (
@@ -115,28 +131,16 @@ export const useUpdateViewMessages = (input: ViewMessagesInput) => {
         Omit<Partial<MessageBaseFragment>, 'id' | '__typename'>
     >,
   ) => {
-    const prevData = getPrevData();
-    const messages = (prevData?.viewMessages.messages?.map(message => {
-      const findMessage = newMessages.find(nMsg => nMsg.id === message.id);
-      if (findMessage) {
-        return {
-          ...message,
-          ...findMessage,
-          __typename: 'MessageObjectType',
-        };
-      }
-      return message;
-    }) ?? []) as MessageBaseFragment[];
-    updateFn(messages);
+    newMessages.forEach(newMessage => {
+      updateFragmentFn(newMessage.id, newMessage);
+    });
   };
 
-  const appendMessage = (newMessage: MessageBaseFragment) => {
-    const prevData = getPrevData();
-    const messages = [
-      ...(prevData?.viewMessages.messages ?? []),
-      newMessage,
-    ] as MessageBaseFragment[];
-    updateFn(messages);
+  const appendMessage = (newMessage: FragmentType<typeof MESSAGE_BASE>) => {
+    const messages = getPrevData();
+    const newMessageData = getFragmentData(MESSAGE_BASE, newMessage);
+    const updateMessages = [...messages, newMessageData];
+    updateFn(updateMessages);
   };
 
   return {updateMessage, updateMessages, appendMessage};

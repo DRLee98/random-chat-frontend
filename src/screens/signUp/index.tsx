@@ -16,7 +16,7 @@ import {setSociald} from '@app/utils/encStorage';
 
 import type {StackScreenProps} from '@react-navigation/stack';
 import type {MainNavigatorParamList} from '@app/navigators';
-import type {CreateUserInput} from '@app/graphql/types/graphql';
+import type {CreateUserInput} from '@app/graphql/__generated__/graphql';
 import type {Asset} from 'react-native-image-picker';
 
 export interface SignUpScreenParams extends Omit<CreateUserInput, 'profile'> {

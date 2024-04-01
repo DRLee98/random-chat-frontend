@@ -8,7 +8,7 @@ import type {
   LoginInput,
   LoginQuery,
   QueryLoginArgs,
-} from '@app/graphql/types/graphql';
+} from '@app/graphql/__generated__/graphql';
 import type {LazyQueryHookOptions} from '@apollo/client';
 
 const useLoginAndSetToken = (

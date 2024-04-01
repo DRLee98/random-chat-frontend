@@ -1,10 +1,10 @@
-import {gql, useMutation} from '@apollo/client';
-import {MY_ROOM_BASE} from '../../fragments/room';
+import {useMutation} from '@apollo/client';
+import {graphql} from '@app/graphql/__generated__';
 
 import type {MutationHookOptions} from '@apollo/client';
-import type {CreateRandomRoomMutation} from '../../types/graphql';
+import type {CreateRandomRoomMutation} from '@app/graphql/__generated__/graphql';
 
-const CREATE_RANDOM_ROOM = gql`
+const CREATE_RANDOM_ROOM = graphql(`
   mutation createRandomRoom {
     createRandomRoom {
       ok
@@ -14,8 +14,7 @@ const CREATE_RANDOM_ROOM = gql`
       }
     }
   }
-  ${MY_ROOM_BASE}
-`;
+`);
 
 const useCreateRandomRoom = (
   options?: MutationHookOptions<CreateRandomRoomMutation>,

@@ -1,13 +1,13 @@
-import {gql, useMutation} from '@apollo/client';
-import {MESSAGE_BASE} from '../../fragments/message';
+import {useMutation} from '@apollo/client';
+import {graphql} from '@app/graphql/__generated__';
 
 import type {MutationHookOptions} from '@apollo/client';
 import type {
   MutationSendMessageArgs,
   SendMessageMutation,
-} from '../../types/graphql';
+} from '@app/graphql/__generated__/graphql';
 
-const SEND_MESSAGE = gql`
+const SEND_MESSAGE = graphql(`
   mutation sendMessage($input: SendMessageInput!) {
     sendMessage(input: $input) {
       ok
@@ -17,8 +17,7 @@ const SEND_MESSAGE = gql`
       }
     }
   }
-  ${MESSAGE_BASE}
-`;
+`);
 
 const useSendMessage = (
   options?: MutationHookOptions<SendMessageMutation, MutationSendMessageArgs>,

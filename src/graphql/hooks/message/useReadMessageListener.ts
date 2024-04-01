@@ -1,12 +1,13 @@
-import {gql, useSubscription} from '@apollo/client';
+import {useSubscription} from '@apollo/client';
+import {graphql} from '@app/graphql/__generated__';
 
 import type {
   ReadMessageSubscription,
   SubscriptionReadMessageArgs,
-} from '../../types/graphql';
+} from '@app/graphql/__generated__/graphql';
 import type {SubscriptionHookOptions} from '@apollo/client';
 
-const READ_MESSAGE = gql`
+const READ_MESSAGE = graphql(`
   subscription readMessage($input: ReadMessageInput!) {
     readMessage(input: $input) {
       messages {
@@ -15,7 +16,7 @@ const READ_MESSAGE = gql`
       }
     }
   }
-`;
+`);
 
 const useReadMessageListener = (
   options?: SubscriptionHookOptions<

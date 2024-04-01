@@ -1,6 +1,6 @@
-import {gql} from '@apollo/client';
+import {graphql} from '../__generated__';
 
-export const USER_ROOM_BASE = gql`
+export const USER_ROOM_BASE = graphql(`
   fragment UserRoomBase on UserRoomObjectType {
     id
     name
@@ -11,9 +11,9 @@ export const USER_ROOM_BASE = gql`
       id
     }
   }
-`;
+`);
 
-export const MY_ROOM_BASE = gql`
+export const MY_ROOM_BASE = graphql(`
   fragment MyRoomBase on MyRoom {
     id
     name
@@ -31,4 +31,4 @@ export const MY_ROOM_BASE = gql`
     }
     updatedAt
   }
-`;
+`);

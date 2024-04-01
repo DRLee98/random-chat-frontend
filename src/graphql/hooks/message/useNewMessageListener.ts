@@ -1,20 +1,19 @@
-import {gql, useSubscription} from '@apollo/client';
-import {MESSAGE_BASE} from '../../fragments/message';
+import {useSubscription} from '@apollo/client';
+import {graphql} from '@app/graphql/__generated__';
 
 import type {
   NewMessageSubscription,
   SubscriptionNewMessageArgs,
-} from '../../types/graphql';
+} from '@app/graphql/__generated__/graphql';
 import type {SubscriptionHookOptions} from '@apollo/client';
 
-const NEW_MESSAGE = gql`
+const NEW_MESSAGE = graphql(`
   subscription newMessage($input: NewMessageInput!) {
     newMessage(input: $input) {
       ...MessageBase
     }
   }
-  ${MESSAGE_BASE}
-`;
+`);
 
 const useNewMessageListener = (
   options?: SubscriptionHookOptions<

@@ -6,7 +6,11 @@ import {Alert, Button} from 'react-native';
 import {ME_DETAIL} from '@app/graphql/hooks/user/useMeDetail';
 import {ME} from '@app/graphql/hooks/user/useMe';
 
-import type {Me, MeDetailQuery, MeQuery} from '@app/graphql/types/graphql';
+import type {
+  Me,
+  MeDetailQuery,
+  MeQuery,
+} from '@app/graphql/__generated__/graphql';
 
 interface ToggleUserBlockButtonProps {
   me: Me;

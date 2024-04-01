@@ -1,17 +1,16 @@
-import {gql, useSubscription} from '@apollo/client';
-import {MY_ROOM_BASE} from '../../fragments/room';
+import {useSubscription} from '@apollo/client';
+import {graphql} from '@app/graphql/__generated__';
 
-import type {NewRoomSubscription} from '../../types/graphql';
+import type {NewRoomSubscription} from '@app/graphql/__generated__/graphql';
 import type {SubscriptionHookOptions} from '@apollo/client';
 
-const NEW_ROOM = gql`
+const NEW_ROOM = graphql(`
   subscription newRoom {
     newRoom {
       ...MyRoomBase
     }
   }
-  ${MY_ROOM_BASE}
-`;
+`);
 
 const useNewRoomListener = (
   options?: SubscriptionHookOptions<NewRoomSubscription>,

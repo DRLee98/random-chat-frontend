@@ -1,4 +1,4 @@
-import {LoginInput} from '@app/graphql/types/graphql';
+import {LoginInput} from '@app/graphql/__generated__/graphql';
 import EncryptedStorage from 'react-native-encrypted-storage';
 
 interface SetSocialIdProps extends LoginInput {}

@@ -1,12 +1,13 @@
-import {gql, useMutation} from '@apollo/client';
+import {useMutation} from '@apollo/client';
+import {graphql} from '@app/graphql/__generated__';
 
 import type {MutationHookOptions} from '@apollo/client';
 import type {
   ToggleBlockUserMutation,
   MutationToggleBlockUserArgs,
-} from '@app/graphql/types/graphql';
+} from '@app/graphql/__generated__/graphql';
 
-const TOGGLE_BLOCK_USER = gql`
+const TOGGLE_BLOCK_USER = graphql(`
   mutation toggleBlockUser($input: ToggleBlockUserInput!) {
     toggleBlockUser(input: $input) {
       ok
@@ -18,7 +19,7 @@ const TOGGLE_BLOCK_USER = gql`
       }
     }
   }
-`;
+`);
 
 const useToggleBlockUser = (
   options?: MutationHookOptions<

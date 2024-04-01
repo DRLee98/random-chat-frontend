@@ -2,7 +2,7 @@ import axios from 'axios';
 
 import Config from 'react-native-config';
 
-import type {LoginInput, LoginQuery} from '../types/graphql';
+import type {LoginInput, LoginQuery} from '@app/graphql/__generated__/graphql';
 import type {QueryResult} from '@apollo/client';
 
 const login = async (input: LoginInput) => {

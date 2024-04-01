@@ -1,13 +1,14 @@
-import {gql, useQuery} from '@apollo/client';
+import {useQuery} from '@apollo/client';
+import {graphql} from '@app/graphql/__generated__';
 
 import type {QueryHookOptions} from '@apollo/client';
 import type {
   QueryUserProfileArgs,
   UserProfileInput,
   UserProfileQuery,
-} from '@app/graphql/types/graphql';
+} from '@app/graphql/__generated__/graphql';
 
-const USER_PROFILE = gql`
+const USER_PROFILE = graphql(`
   query userProfile($input: UserProfileInput!) {
     userProfile(input: $input) {
       ok
@@ -20,7 +21,7 @@ const USER_PROFILE = gql`
       }
     }
   }
-`;
+`);
 
 const useUserProfile = (
   input: UserProfileInput,

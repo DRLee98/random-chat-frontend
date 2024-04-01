@@ -15,10 +15,10 @@ import {MainNavigatorScreens} from '@app/navigators';
 
 import type {NavigationProp} from '@react-navigation/native';
 import type {MainNavigatorParamList} from '@app/navigators';
-import type {MyRoom} from '@app/graphql/types/graphql';
+import type {MyRoomBaseFragment} from '@app/graphql/__generated__/graphql';
 
 interface RoomItemProps {
-  userRoom: MyRoom;
+  userRoom: MyRoomBaseFragment;
 }
 
 const RoomItem = ({userRoom}: RoomItemProps) => {

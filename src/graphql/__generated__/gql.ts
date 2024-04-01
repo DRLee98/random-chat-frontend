@@ -16,15 +16,15 @@ const documents = {
     "\n  fragment MessageBase on MessageObjectType {\n    id\n    contents\n    type\n    readUsersId\n    user {\n      id\n      nickname\n      profileUrl\n    }\n  }\n": types.MessageBaseFragmentDoc,
     "\n  fragment UserRoomBase on UserRoomObjectType {\n    id\n    name\n    noti\n    pinnedAt\n    newMessage\n    room {\n      id\n    }\n  }\n": types.UserRoomBaseFragmentDoc,
     "\n  fragment MyRoomBase on MyRoom {\n    id\n    name\n    noti\n    pinnedAt\n    newMessage\n    lastMessage\n    room {\n      id\n      updatedAt\n    }\n    users {\n      id\n      profileUrl\n    }\n    updatedAt\n  }\n": types.MyRoomBaseFragmentDoc,
-    "\n  subscription newMessage($input: NewMessageInput!) {\n    newMessage(input: $input) {\n      ...MessageBase\n    }\n  }\n  \n": types.NewMessageDocument,
+    "\n  subscription newMessage($input: NewMessageInput!) {\n    newMessage(input: $input) {\n      ...MessageBase\n    }\n  }\n": types.NewMessageDocument,
     "\n  subscription readMessage($input: ReadMessageInput!) {\n    readMessage(input: $input) {\n      messages {\n        id\n        readUsersId\n      }\n    }\n  }\n": types.ReadMessageDocument,
-    "\n  mutation sendMessage($input: SendMessageInput!) {\n    sendMessage(input: $input) {\n      ok\n      error\n      message {\n        ...MessageBase\n      }\n    }\n  }\n  \n": types.SendMessageDocument,
+    "\n  mutation sendMessage($input: SendMessageInput!) {\n    sendMessage(input: $input) {\n      ok\n      error\n      message {\n        ...MessageBase\n      }\n    }\n  }\n": types.SendMessageDocument,
     "\n  subscription updateNewMessageInUserRoom {\n    updateNewMessageInUserRoom {\n      id\n      newMessage\n      lastMessage\n      userId\n    }\n  }\n": types.UpdateNewMessageInUserRoomDocument,
-    "\n  query viewMessages($input: ViewMessagesInput!) {\n    viewMessages(input: $input) {\n      ok\n      error\n      hasNext\n      messages {\n        ...MessageBase\n      }\n    }\n  }\n  \n": types.ViewMessagesDocument,
-    "\n  mutation createRandomRoom {\n    createRandomRoom {\n      ok\n      error\n      room {\n        ...MyRoomBase\n      }\n    }\n  }\n  \n": types.CreateRandomRoomDocument,
+    "\n  query viewMessages($input: ViewMessagesInput!) {\n    viewMessages(input: $input) {\n      ok\n      error\n      hasNext\n      messages {\n        ...MessageBase\n      }\n    }\n  }\n": types.ViewMessagesDocument,
+    "\n  mutation createRandomRoom {\n    createRandomRoom {\n      ok\n      error\n      room {\n        ...MyRoomBase\n      }\n    }\n  }\n": types.CreateRandomRoomDocument,
     "\n  mutation deleteRoom($input: DeleteRoomInput!) {\n    deleteRoom(input: $input) {\n      ok\n      error\n    }\n  }\n": types.DeleteRoomDocument,
-    "\n  query myRooms($input: MyRoomsInput!) {\n    myRooms(input: $input) {\n      ok\n      error\n      hasNext\n      rooms {\n        ...MyRoomBase\n      }\n    }\n  }\n  \n": types.MyRoomsDocument,
-    "\n  subscription newRoom {\n    newRoom {\n      ...MyRoomBase\n    }\n  }\n  \n": types.NewRoomDocument,
+    "\n  query myRooms($input: MyRoomsInput!) {\n    myRooms(input: $input) {\n      ok\n      error\n      hasNext\n      rooms {\n        ...MyRoomBase\n      }\n    }\n  }\n": types.MyRoomsDocument,
+    "\n  subscription newRoom {\n    newRoom {\n      ...MyRoomBase\n    }\n  }\n": types.NewRoomDocument,
     "\n  query roomDetail($input: RoomDetailInput!) {\n    roomDetail(input: $input) {\n      ok\n      error\n      room {\n        userRoom {\n          id\n          name\n          noti\n          pinnedAt\n          newMessage\n        }\n        users {\n          id\n          nickname\n          profileUrl\n          bio\n          language\n        }\n      }\n    }\n  }\n": types.RoomDetailDocument,
     "\n  mutation updateRoom($input: UpdateRoomInput!) {\n    updateRoom(input: $input) {\n      ok\n      error\n    }\n  }\n": types.UpdateRoomDocument,
     "\n  mutation createUser($input: CreateUserInput!) {\n    createUser(input: $input) {\n      ok\n      error\n      user {\n        id\n      }\n    }\n  }\n": types.CreateUserDocument,
@@ -66,7 +66,7 @@ export function graphql(source: "\n  fragment MyRoomBase on MyRoom {\n    id\n  
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n  subscription newMessage($input: NewMessageInput!) {\n    newMessage(input: $input) {\n      ...MessageBase\n    }\n  }\n  \n"): (typeof documents)["\n  subscription newMessage($input: NewMessageInput!) {\n    newMessage(input: $input) {\n      ...MessageBase\n    }\n  }\n  \n"];
+export function graphql(source: "\n  subscription newMessage($input: NewMessageInput!) {\n    newMessage(input: $input) {\n      ...MessageBase\n    }\n  }\n"): (typeof documents)["\n  subscription newMessage($input: NewMessageInput!) {\n    newMessage(input: $input) {\n      ...MessageBase\n    }\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
@@ -74,7 +74,7 @@ export function graphql(source: "\n  subscription readMessage($input: ReadMessag
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n  mutation sendMessage($input: SendMessageInput!) {\n    sendMessage(input: $input) {\n      ok\n      error\n      message {\n        ...MessageBase\n      }\n    }\n  }\n  \n"): (typeof documents)["\n  mutation sendMessage($input: SendMessageInput!) {\n    sendMessage(input: $input) {\n      ok\n      error\n      message {\n        ...MessageBase\n      }\n    }\n  }\n  \n"];
+export function graphql(source: "\n  mutation sendMessage($input: SendMessageInput!) {\n    sendMessage(input: $input) {\n      ok\n      error\n      message {\n        ...MessageBase\n      }\n    }\n  }\n"): (typeof documents)["\n  mutation sendMessage($input: SendMessageInput!) {\n    sendMessage(input: $input) {\n      ok\n      error\n      message {\n        ...MessageBase\n      }\n    }\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
@@ -82,11 +82,11 @@ export function graphql(source: "\n  subscription updateNewMessageInUserRoom {\n
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n  query viewMessages($input: ViewMessagesInput!) {\n    viewMessages(input: $input) {\n      ok\n      error\n      hasNext\n      messages {\n        ...MessageBase\n      }\n    }\n  }\n  \n"): (typeof documents)["\n  query viewMessages($input: ViewMessagesInput!) {\n    viewMessages(input: $input) {\n      ok\n      error\n      hasNext\n      messages {\n        ...MessageBase\n      }\n    }\n  }\n  \n"];
+export function graphql(source: "\n  query viewMessages($input: ViewMessagesInput!) {\n    viewMessages(input: $input) {\n      ok\n      error\n      hasNext\n      messages {\n        ...MessageBase\n      }\n    }\n  }\n"): (typeof documents)["\n  query viewMessages($input: ViewMessagesInput!) {\n    viewMessages(input: $input) {\n      ok\n      error\n      hasNext\n      messages {\n        ...MessageBase\n      }\n    }\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n  mutation createRandomRoom {\n    createRandomRoom {\n      ok\n      error\n      room {\n        ...MyRoomBase\n      }\n    }\n  }\n  \n"): (typeof documents)["\n  mutation createRandomRoom {\n    createRandomRoom {\n      ok\n      error\n      room {\n        ...MyRoomBase\n      }\n    }\n  }\n  \n"];
+export function graphql(source: "\n  mutation createRandomRoom {\n    createRandomRoom {\n      ok\n      error\n      room {\n        ...MyRoomBase\n      }\n    }\n  }\n"): (typeof documents)["\n  mutation createRandomRoom {\n    createRandomRoom {\n      ok\n      error\n      room {\n        ...MyRoomBase\n      }\n    }\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
@@ -94,11 +94,11 @@ export function graphql(source: "\n  mutation deleteRoom($input: DeleteRoomInput
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n  query myRooms($input: MyRoomsInput!) {\n    myRooms(input: $input) {\n      ok\n      error\n      hasNext\n      rooms {\n        ...MyRoomBase\n      }\n    }\n  }\n  \n"): (typeof documents)["\n  query myRooms($input: MyRoomsInput!) {\n    myRooms(input: $input) {\n      ok\n      error\n      hasNext\n      rooms {\n        ...MyRoomBase\n      }\n    }\n  }\n  \n"];
+export function graphql(source: "\n  query myRooms($input: MyRoomsInput!) {\n    myRooms(input: $input) {\n      ok\n      error\n      hasNext\n      rooms {\n        ...MyRoomBase\n      }\n    }\n  }\n"): (typeof documents)["\n  query myRooms($input: MyRoomsInput!) {\n    myRooms(input: $input) {\n      ok\n      error\n      hasNext\n      rooms {\n        ...MyRoomBase\n      }\n    }\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n  subscription newRoom {\n    newRoom {\n      ...MyRoomBase\n    }\n  }\n  \n"): (typeof documents)["\n  subscription newRoom {\n    newRoom {\n      ...MyRoomBase\n    }\n  }\n  \n"];
+export function graphql(source: "\n  subscription newRoom {\n    newRoom {\n      ...MyRoomBase\n    }\n  }\n"): (typeof documents)["\n  subscription newRoom {\n    newRoom {\n      ...MyRoomBase\n    }\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

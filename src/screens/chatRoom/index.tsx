@@ -1,4 +1,4 @@
-import {useState} from 'react';
+import {useEffect, useState} from 'react';
 import {useUpdateMyRooms} from '@app/graphql/hooks/room/useMyRooms';
 import useRoomDetail from '@app/graphql/hooks/room/useRoomDetail';
 import useViewMessages, {
@@ -16,11 +16,15 @@ import PinnedButton from '@app/components/room/PinnedButton';
 import ExitButton from '@app/components/room/ExitButton';
 
 import {MainNavigatorScreens} from '@app/navigators';
-import {MessageType} from '@app/graphql/types/graphql';
+import {MessageType} from '@app/graphql/__generated__/graphql';
+
+import {MESSAGE_BASE} from '@app/graphql/fragments/message';
+import {getFragmentData} from '@app/graphql/__generated__';
 
 import type {StackScreenProps} from '@react-navigation/stack';
 import type {MainNavigatorParamList} from '@app/navigators';
-import type {MessageBaseFragment, Messages} from '@app/graphql/types/graphql';
+import type {Messages} from '@app/graphql/__generated__/graphql';
+import type {FragmentType} from '@app/graphql/__generated__';
 
 export interface ChatRoomScreenParams {
   roomId: string;
@@ -46,16 +50,17 @@ const ChatRoomScreen = ({route, navigation}: ChatRoomScreenProps) => {
 
   const {me} = useMe();
   const {data: room} = useRoomDetail({roomId});
-  const {data: message, fetchMore} = useViewMessages({
+  const {messages, fetchMore} = useViewMessages({
     roomId,
   });
 
-  const appendMessageFn = (newMessage: MessageBaseFragment) => {
-    if (!room?.roomDetail.room) return;
+  const appendMessageFn = (newMessage?: FragmentType<typeof MESSAGE_BASE>) => {
+    if (!room?.roomDetail.room || !newMessage) return;
     appendMessage(newMessage);
+    const messageData = getFragmentData(MESSAGE_BASE, newMessage);
     updateMyRoom(
       room.roomDetail.room.userRoom.id,
-      {lastMessage: newMessage.contents},
+      {lastMessage: messageData.contents},
       {updatedAt: new Date()},
     );
     sortMyRooms();
@@ -95,13 +100,18 @@ const ChatRoomScreen = ({route, navigation}: ChatRoomScreenProps) => {
 
   useNewMessageListener({
     variables: {input: {roomId}},
-    onData: ({data}) =>
-      data.data?.newMessage && appendMessageFn(data.data?.newMessage),
+    onData: ({data}) => appendMessageFn(data.data?.newMessage),
   });
   useReadMessageListener({
     variables: {input: {roomId}},
     onData: ({data}) => updateReadMessages(data.data?.readMessage.messages),
   });
+
+  useEffect(() => {
+    if (messages && room?.roomDetail.room) {
+      updateMyRoom(room.roomDetail.room.userRoom.id, {newMessage: 0});
+    }
+  }, [messages, room?.roomDetail.room]);
 
   return (
     <ScrollView>

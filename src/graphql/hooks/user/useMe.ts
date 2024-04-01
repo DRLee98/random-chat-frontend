@@ -1,9 +1,10 @@
-import {gql, useQuery} from '@apollo/client';
+import {useQuery} from '@apollo/client';
+import {graphql} from '@app/graphql/__generated__';
 
 import type {QueryHookOptions} from '@apollo/client';
-import type {MeQuery} from '../../types/graphql';
+import type {MeQuery} from '@app/graphql/__generated__/graphql';
 
-export const ME = gql`
+export const ME = graphql(`
   query me {
     me {
       ok
@@ -16,7 +17,7 @@ export const ME = gql`
       }
     }
   }
-`;
+`);
 
 const useMe = (options?: QueryHookOptions<MeQuery>) => {
   const {data, ...rest} = useQuery<MeQuery>(ME, options);
