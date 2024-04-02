@@ -4,15 +4,19 @@ import useNewRoomListener from '@app/graphql/hooks/room/useNewRoomListener';
 import useUpdateNewMessageListener from '@app/graphql/hooks/message/useUpdateNewMessageListener';
 import useLogout from '@app/hooks/useLogout';
 
+import styled from 'styled-components/native';
 import {Button} from 'react-native';
-import CustomScrollView from '@app/components/common/CustomScrollView';
 import RoomItem from '@app/components/room/RoomItem';
 
 import {MainNavigatorScreens} from '@app/navigators';
 
 import type {StackScreenProps} from '@react-navigation/stack';
 import type {MainNavigatorParamList} from '@app/navigators';
-import type {UpdateNewMessageInUserRoom} from '@app/graphql/__generated__/graphql';
+import type {FlatListProps} from 'react-native';
+import type {
+  MyRoomBaseFragment,
+  UpdateNewMessageInUserRoom,
+} from '@app/graphql/__generated__/graphql';
 interface HomeScreenProps
   extends StackScreenProps<MainNavigatorParamList, MainNavigatorScreens.Home> {}
 
@@ -52,15 +56,22 @@ const HomeScreen = ({navigation}: HomeScreenProps) => {
   });
 
   return (
-    <CustomScrollView fetchMore={fetchMore}>
-      {/* <Button title="logout" onPress={logout} /> */}
-      <Button title="채팅방 생성" onPress={createRandomRoomFn} />
-      {/* <Button title="새로고침" onPress={() => refetch()} /> */}
-      {rooms.map(userRoom => (
-        <RoomItem key={userRoom.id} userRoom={userRoom} />
-      ))}
-    </CustomScrollView>
+    <Container
+      data={rooms}
+      renderItem={({item}) => <RoomItem userRoom={item} />}
+      keyExtractor={item => item.id}
+      ListHeaderComponent={
+        <Button title="채팅방 생성" onPress={createRandomRoomFn} />
+      }
+      onEndReached={fetchMore}
+      onEndReachedThreshold={0.5}
+    />
   );
 };
+
+const Container = styled.FlatList<FlatListProps<MyRoomBaseFragment>>`
+  width: 100%;
+  background-color: ${({theme}) => theme.bgColor};
+`;
 
 export default HomeScreen;

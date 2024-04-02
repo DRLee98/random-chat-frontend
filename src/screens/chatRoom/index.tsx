@@ -220,6 +220,7 @@ const ChatRoomScreen = ({route, navigation}: ChatRoomScreenProps) => {
         ListHeaderComponent={<HeightBox />}
         ListFooterComponent={<HeightBox />}
         onEndReached={fetchMore}
+        onEndReachedThreshold={0.5}
       />
       <InputBox>
         <Input

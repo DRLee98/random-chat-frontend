@@ -125,7 +125,6 @@ const SwipeableListItem = ({
 
 const Container = styled.View`
   position: relative;
-  flex: 1;
 `;
 
 interface ActionsProps {
