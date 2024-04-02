@@ -1,4 +1,6 @@
-import {createStackNavigator} from '@react-navigation/stack';
+import styled, {useTheme} from 'styled-components/native';
+
+import {TransitionPresets, createStackNavigator} from '@react-navigation/stack';
 
 import SplashScreen from '@app/screens/splash';
 import LoginScreen from '@app/screens/login';
@@ -8,7 +10,8 @@ import ChatRoomScreen from '@app/screens/chatRoom';
 import MeScreen from '@app/screens/user/me';
 import UserScreen from '@app/screens/user';
 import {NavigationContainer} from '@react-navigation/native';
-import {Button, SafeAreaView, StyleSheet} from 'react-native';
+import {Button, TouchableOpacity} from 'react-native';
+import Icon from 'react-native-vector-icons/Ionicons';
 
 import type {SignUpScreenParams} from '@app/screens/signUp';
 import type {ChatRoomScreenParams} from '@app/screens/chatRoom';
@@ -37,56 +40,113 @@ export type MainNavigatorParamList = {
 const Stack = createStackNavigator<MainNavigatorParamList>();
 
 const MainNavigator = () => {
+  const theme = useTheme();
+
   return (
-    <SafeAreaView style={styles.container}>
-      <NavigationContainer>
-        <Stack.Navigator screenOptions={{headerTitleAlign: 'left'}}>
-          <Stack.Screen
-            name={MainNavigatorScreens.Splash}
-            component={SplashScreen}
-            options={{headerShown: false}}
-          />
-          <Stack.Screen
-            name={MainNavigatorScreens.Login}
-            component={LoginScreen}
-            options={{headerShown: false}}
-          />
-          <Stack.Screen
-            name={MainNavigatorScreens.SignUp}
-            component={SignUpScreen}
-          />
-          <Stack.Screen
-            name={MainNavigatorScreens.Home}
-            component={HomeScreen}
-            options={({navigation}) => ({
-              title: '홈',
-              headerRight: () => (
-                <Button
-                  title="Me"
-                  onPress={() => navigation.navigate(MainNavigatorScreens.Me)}
-                />
-              ),
-            })}
-          />
-          <Stack.Screen
-            name={MainNavigatorScreens.ChatRoom}
-            component={ChatRoomScreen}
-          />
-          <Stack.Screen name={MainNavigatorScreens.Me} component={MeScreen} />
-          <Stack.Screen
-            name={MainNavigatorScreens.User}
-            component={UserScreen}
-          />
-        </Stack.Navigator>
-      </NavigationContainer>
-    </SafeAreaView>
+    <NavigationContainer>
+      <Stack.Navigator
+        screenOptions={({navigation}) => ({
+          headerTitleAlign: 'left',
+          headerTintColor: theme.fontColor,
+          headerStyle: {
+            backgroundColor: theme.bgColor,
+          },
+          headerLeftContainerStyle: {
+            paddingLeft: 10,
+          },
+          headerRightContainerStyle: {
+            paddingRight: 10,
+          },
+          headerTitleStyle: {
+            color: theme.fontColor,
+            fontSize: 22,
+          },
+          headerBackImage: ({tintColor}) => (
+            <TouchableOpacity onPress={navigation.goBack}>
+              <Icon name="chevron-back" color={tintColor} size={24} />
+            </TouchableOpacity>
+          ),
+          headerShadowVisible: false,
+        })}
+        initialRouteName={MainNavigatorScreens.Splash}>
+        <Stack.Screen
+          name={MainNavigatorScreens.Splash}
+          component={SplashScreen}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name={MainNavigatorScreens.Login}
+          component={LoginScreen}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name={MainNavigatorScreens.SignUp}
+          component={SignUpScreen}
+        />
+        <Stack.Screen
+          name={MainNavigatorScreens.Home}
+          component={HomeScreen}
+          options={({navigation}) => ({
+            title: '홈',
+            headerRight: () => (
+              <FlexBox>
+                <TouchableOpacity
+                  onPress={() => navigation.navigate(MainNavigatorScreens.Me)}>
+                  <Icon
+                    name="person-circle-outline"
+                    color={theme.fontColor}
+                    size={26}
+                  />
+                </TouchableOpacity>
+                <TouchableOpacity onPress={() => {}}>
+                  <Icon
+                    name="settings-outline"
+                    color={theme.fontColor}
+                    size={26}
+                  />
+                </TouchableOpacity>
+              </FlexBox>
+            ),
+          })}
+        />
+        <Stack.Screen
+          name={MainNavigatorScreens.ChatRoom}
+          component={ChatRoomScreen}
+          options={{
+            headerBackTitleVisible: false,
+            headerTitle: '',
+            headerTitleAlign: 'center',
+            headerTitleStyle: {
+              color: theme.fontColor,
+              fontSize: 16,
+              fontWeight: '400',
+            },
+          }}
+        />
+        <Stack.Screen
+          name={MainNavigatorScreens.Me}
+          component={MeScreen}
+          options={{
+            headerShown: false,
+            ...TransitionPresets.ModalSlideFromBottomIOS,
+          }}
+        />
+        <Stack.Screen
+          name={MainNavigatorScreens.User}
+          component={UserScreen}
+          options={{
+            headerShown: false,
+            ...TransitionPresets.ModalSlideFromBottomIOS,
+          }}
+        />
+      </Stack.Navigator>
+    </NavigationContainer>
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-});
+const FlexBox = styled.View`
+  flex-direction: row;
+  gap: 15px;
+`;
 
 export default MainNavigator;

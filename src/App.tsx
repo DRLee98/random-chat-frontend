@@ -1,20 +1,22 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useLayoutEffect, useState} from 'react';
 import {RecoilRoot} from 'recoil';
 import {ApolloProvider} from '@apollo/client';
 import {client} from './apollo';
 
 import {ThemeProvider} from 'styled-components/native';
-import {lightTheme} from './styles/theme';
+import {lightTheme, darkTheme} from './styles/theme';
 
 import MainNavigator from './navigators';
 
-import {Alert} from 'react-native';
+import {Alert, Appearance, useColorScheme} from 'react-native';
 import messaging from '@react-native-firebase/messaging';
 import {requestUserPermission} from './utils/fcm';
 
 import type {FirebaseMessagingTypes} from '@react-native-firebase/messaging/lib';
 
 function App() {
+  const [theme, setTheme] = useState(lightTheme);
+
   useEffect(() => {
     requestUserPermission();
 
@@ -30,10 +32,18 @@ function App() {
     return unsubscribe;
   }, []);
 
+  useLayoutEffect(() => {
+    const initTheme = Appearance.getColorScheme();
+    setTheme(initTheme === 'dark' ? darkTheme : lightTheme);
+    Appearance.addChangeListener(({colorScheme}) => {
+      setTheme(colorScheme === 'dark' ? darkTheme : lightTheme);
+    });
+  }, []);
+
   return (
     <ApolloProvider client={client}>
       <RecoilRoot>
-        <ThemeProvider theme={lightTheme}>
+        <ThemeProvider theme={theme}>
           <MainNavigator />
         </ThemeProvider>
       </RecoilRoot>

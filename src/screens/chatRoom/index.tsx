@@ -1,4 +1,4 @@
-import {useEffect, useMemo, useState} from 'react';
+import {useEffect, useLayoutEffect, useMemo, useState} from 'react';
 import {useUpdateMyRooms} from '@app/graphql/hooks/room/useMyRooms';
 import useRoomDetail from '@app/graphql/hooks/room/useRoomDetail';
 import useViewMessages, {
@@ -11,7 +11,8 @@ import useMe from '@app/graphql/hooks/user/useMe';
 
 import styled from 'styled-components/native';
 
-import Message from '@app/components/chat/message';
+import {Platform} from 'react-native';
+import Message from '@app/components/chat/Message';
 import Input from '@app/components/common/Input';
 import ToggleUserBlockButton from '@app/components/user/ToggleUserBlockButton';
 import NotiButton from '@app/components/room/NotiButton';
@@ -25,7 +26,7 @@ import {MessageType} from '@app/graphql/__generated__/graphql';
 import {MESSAGE_BASE} from '@app/graphql/fragments/message';
 import {getFragmentData} from '@app/graphql/__generated__';
 
-import {dateStringToNumber} from '@app/utils/functions';
+import {dateStringToNumber, getStatusBarHeight} from '@app/utils/functions';
 
 import type {StackScreenProps} from '@react-navigation/stack';
 import type {MainNavigatorParamList} from '@app/navigators';
@@ -35,6 +36,7 @@ import type {
   Messages,
 } from '@app/graphql/__generated__/graphql';
 import type {FragmentType} from '@app/graphql/__generated__';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 export interface BundledMessage
   extends Pick<MessageBaseFragment, 'id' | 'user' | 'createdAt'> {
@@ -57,6 +59,8 @@ interface ChatRoomScreenProps
 
 const ChatRoomScreen = ({route, navigation}: ChatRoomScreenProps) => {
   const roomId = route.params.roomId;
+  const statusBarHeight = getStatusBarHeight();
+  const insets = useSafeAreaInsets();
 
   const [value, setValue] = useState('');
 
@@ -165,8 +169,16 @@ const ChatRoomScreen = ({route, navigation}: ChatRoomScreenProps) => {
     return bundled;
   }, [messages]);
 
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerTitle: room?.roomDetail.room?.userRoom.name,
+    });
+  }, [navigation, room]);
+
   return (
-    <Container>
+    <Container
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      keyboardVerticalOffset={statusBarHeight + insets.top - insets.bottom}>
       {/* <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
             <Text>
               Chat Room: {room?.roomDetail.room?.userRoom.name}, id:{' '}
@@ -222,10 +234,11 @@ const ChatRoomScreen = ({route, navigation}: ChatRoomScreenProps) => {
         onEndReached={fetchMore}
         onEndReachedThreshold={0.5}
       />
-      <InputBox>
+      <InputBox style={{paddingBottom: insets.bottom + 5}}>
         <Input
           value={value}
           onChange={e => setValue(e.nativeEvent.text)}
+          returnKeyType="send"
           right={
             <SendButton>
               <SendIcon name="send" size={16} onPress={sendMessageFn} />
@@ -237,13 +250,12 @@ const ChatRoomScreen = ({route, navigation}: ChatRoomScreenProps) => {
   );
 };
 
-const Container = styled.View`
+const Container = styled.KeyboardAvoidingView`
   flex: 1;
   background-color: ${({theme}) => theme.bgColor};
 `;
 
 const MessageBox = styled.FlatList<FlatListProps<BundledMessage>>`
-  flex: 1;
   padding: 0px 12px;
 `;
 
@@ -252,15 +264,15 @@ const HeightBox = styled.View`
 `;
 
 const InputBox = styled.View`
-  padding: 10px 12px;
+  padding: 5px 12px;
   border-top-width: 1px;
   border-style: solid;
-  border-color: ${({theme}) => theme.gray600.default};
+  border-color: ${({theme}) => theme.gray300.default};
 `;
 
 const SendButton = styled.TouchableOpacity`
   padding: 10px;
-  background-color: ${({theme}) => theme.blue.default};
+  background-color: ${({theme}) => theme.orange.default};
   border-radius: 999px;
 `;
 

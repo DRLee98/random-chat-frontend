@@ -1,17 +1,31 @@
 import {useMemo} from 'react';
+import {useNavigation} from '@react-navigation/native';
 
 import styled from 'styled-components/native';
 
 import {areColorsSimilar, shuffleList} from '@app/utils/functions';
 import {profileColors} from '@app/utils/constants';
 
+import {MainNavigatorScreens} from '@app/navigators';
+
+import type {NavigationProp} from '@react-navigation/native';
+import type {MainNavigatorParamList} from '@app/navigators';
+
 interface ProfileImgProps {
   id: string;
   url?: string | null;
   size?: number;
+  push?: boolean;
 }
 
-const ProfileImg = ({id, url, size = 60}: ProfileImgProps) => {
+const ProfileImg = ({id, url, size = 60, push = true}: ProfileImgProps) => {
+  const navigation = useNavigation<NavigationProp<MainNavigatorParamList>>();
+
+  const onPress = () => {
+    if (!push) return;
+    navigation.navigate(MainNavigatorScreens.User, {userId: id});
+  };
+
   const getColor = (num: number) => {
     const list = shuffleList(profileColors, num);
 
@@ -38,22 +52,41 @@ const ProfileImg = ({id, url, size = 60}: ProfileImgProps) => {
     return color;
   }, [profileColors, id]);
 
-  if (!url) {
+  if (!push)
     return (
-      <ColorBox size={size} color={bgColor}>
-        <Text size={size} color={textColor}>
-          ?
-        </Text>
-      </ColorBox>
+      <Image url={url} size={size} bgColor={bgColor} textColor={textColor} />
     );
-  }
+  return (
+    <Container onPress={onPress}>
+      <Image url={url} size={size} bgColor={bgColor} textColor={textColor} />
+    </Container>
+  );
+};
 
-  return <Image source={{uri: url}} size={size} />;
+interface ImageProps {
+  url?: string | null;
+  size: number;
+  bgColor: string;
+  textColor: string;
+}
+
+const Image = ({url, size, bgColor, textColor}: ImageProps) => {
+  return url ? (
+    <Img source={{uri: url}} size={size} />
+  ) : (
+    <ColorBox size={size} color={bgColor}>
+      <Text size={size} color={textColor}>
+        ?
+      </Text>
+    </ColorBox>
+  );
 };
 
 interface DefaultProfileProps extends Required<Pick<ProfileImgProps, 'size'>> {
   color?: string;
 }
+
+const Container = styled.TouchableOpacity``;
 
 const ColorBox = styled.View<DefaultProfileProps>`
   align-items: center;
@@ -70,7 +103,7 @@ const Text = styled.Text<DefaultProfileProps>`
   color: ${({color, theme}) => color ?? theme.fontColor};
 `;
 
-const Image = styled.Image<Required<Pick<ProfileImgProps, 'size'>>>`
+const Img = styled.Image<Required<Pick<ProfileImgProps, 'size'>>>`
   width: ${({size}) => size}px;
   height: ${({size}) => size}px;
   border-radius: ${({size}) => size / 2.4}px;

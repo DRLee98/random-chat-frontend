@@ -22,7 +22,8 @@ const Container = styled.View`
   align-items: center;
   padding: 5px;
 
-  border: 1px solid ${({theme}) => theme.gray500.default};
+  background-color: ${({theme}) => theme.gray700.default};
+  border: 1px solid ${({theme}) => theme.gray200.default};
   border-radius: 999px;
 `;
 

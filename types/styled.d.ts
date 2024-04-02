@@ -22,6 +22,7 @@ declare module 'styled-components/native' {
     gray400: Color;
     gray500: Color;
     gray600: Color;
+    gray700: Color;
   }
 }
 

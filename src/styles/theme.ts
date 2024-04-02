@@ -75,11 +75,15 @@ export const lightTheme: DefaultTheme = {
     default: 'rgb(242,242,247)',
     accessible: 'rgb(235,235,240)',
   },
+  gray700: {
+    default: 'rgb(250,250,255)',
+    accessible: 'rgb(243,243,248)',
+  },
 };
 
 export const darkTheme: DefaultTheme = {
-  bgColor: '#000',
-  fontColor: '#222',
+  bgColor: '#222',
+  fontColor: '#fff',
   red: {
     default: 'rgb(255,69,58)',
     accessible: 'rgb(255,105,97)',
@@ -151,5 +155,9 @@ export const darkTheme: DefaultTheme = {
   gray600: {
     default: 'rgb(28,28,30)',
     accessible: 'rgb(36,36,38)',
+  },
+  gray700: {
+    default: 'rgb(20,20,32)',
+    accessible: 'rgb(28,28,30)',
   },
 };

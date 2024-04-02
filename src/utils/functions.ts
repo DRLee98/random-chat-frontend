@@ -1,3 +1,6 @@
+import {Platform, StatusBar} from 'react-native';
+import {getStatusBarHeight as getHeight} from 'react-native-safearea-height';
+
 export const dateStringToNumber = (date?: string) => {
   return date ? new Date(date).getTime() : 0;
 };
@@ -108,4 +111,10 @@ export const areColorsSimilar = (
 
   // 거리가 임계값보다 작거나 같으면 비슷한 것으로 판단
   return distance <= threshold;
+};
+
+export const getStatusBarHeight = () => {
+  return Platform.OS === 'android'
+    ? StatusBar.currentHeight ?? 0
+    : getHeight(true);
 };

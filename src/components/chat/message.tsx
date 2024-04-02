@@ -56,7 +56,7 @@ const TextBubble = styled.View<Pick<MessageProps, 'myMessage'>>`
   padding: 12px;
 
   background-color: ${({myMessage, theme}) =>
-    myMessage ? theme.orange.default : theme.gray600.default};
+    myMessage ? theme.orange.default : theme.gray500.default};
   border-radius: 16px;
 `;
 

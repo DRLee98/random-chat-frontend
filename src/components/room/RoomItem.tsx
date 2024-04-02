@@ -70,6 +70,7 @@ const RoomItem = ({userRoom}: RoomItemProps) => {
           id={userRoom.users[0].id}
           url={userRoom.users[0].profileUrl}
           size={50}
+          push={false}
         />
         <ContentsBox>
           <SpaceBetween>
