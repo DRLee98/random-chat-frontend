@@ -11,5 +11,6 @@ export const MESSAGE_BASE = graphql(`
       nickname
       profileUrl
     }
+    createdAt
   }
 `);

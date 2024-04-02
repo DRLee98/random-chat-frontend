@@ -1,4 +1,4 @@
-import {useEffect, useState} from 'react';
+import {useEffect, useMemo, useState} from 'react';
 import {useUpdateMyRooms} from '@app/graphql/hooks/room/useMyRooms';
 import useRoomDetail from '@app/graphql/hooks/room/useRoomDetail';
 import useViewMessages, {
@@ -11,8 +11,6 @@ import useMe from '@app/graphql/hooks/user/useMe';
 
 import styled from 'styled-components/native';
 
-import {Button, Text, TextInput, View} from 'react-native';
-import CustomScrollView from '@app/components/common/CustomScrollView';
 import Message from '@app/components/chat/message';
 import Input from '@app/components/common/Input';
 import ToggleUserBlockButton from '@app/components/user/ToggleUserBlockButton';
@@ -27,10 +25,25 @@ import {MessageType} from '@app/graphql/__generated__/graphql';
 import {MESSAGE_BASE} from '@app/graphql/fragments/message';
 import {getFragmentData} from '@app/graphql/__generated__';
 
+import {dateStringToNumber} from '@app/utils/functions';
+
 import type {StackScreenProps} from '@react-navigation/stack';
 import type {MainNavigatorParamList} from '@app/navigators';
-import type {Messages} from '@app/graphql/__generated__/graphql';
+import type {FlatListProps} from 'react-native';
+import type {
+  MessageBaseFragment,
+  Messages,
+} from '@app/graphql/__generated__/graphql';
 import type {FragmentType} from '@app/graphql/__generated__';
+
+export interface BundledMessage
+  extends Pick<MessageBaseFragment, 'id' | 'user' | 'createdAt'> {
+  contents: Array<
+    Pick<MessageBaseFragment, 'type' | 'contents'> & {
+      unReadCount: number;
+    }
+  >;
+}
 
 export interface ChatRoomScreenParams {
   roomId: string;
@@ -122,82 +135,126 @@ const ChatRoomScreen = ({route, navigation}: ChatRoomScreenProps) => {
     }
   }, [messages, room?.roomDetail.room]);
 
+  const bundledMessages = useMemo(() => {
+    const bundled: BundledMessage[] = [];
+
+    messages.forEach((m, i, list) => {
+      const contents = {
+        contents: m.contents,
+        type: m.type,
+        unReadCount: formatReadCount(m.readUsersId),
+      };
+
+      if (i > 0) {
+        const prevCreatedTime = dateStringToNumber(list[i - 1].createdAt);
+        const createdTime = dateStringToNumber(m.createdAt);
+        if (createdTime - prevCreatedTime < 60000) {
+          bundled[bundled.length - 1].contents.push(contents);
+          return;
+        }
+      }
+
+      bundled.push({
+        id: m.id,
+        user: m.user,
+        createdAt: m.createdAt,
+        contents: [contents],
+      });
+    });
+
+    return bundled;
+  }, [messages]);
+
   return (
     <Container>
-      <CustomScrollView>
-        {/* <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-          <Text>
-            Chat Room: {room?.roomDetail.room?.userRoom.name}, id:{' '}
-            {route.params.roomId}
-          </Text>
-          {room?.roomDetail.room && (
-            <View style={{flexDirection: 'row', gap: 10}}>
-              <NotiButton
-                roomId={route.params.roomId}
-                userRoomId={room.roomDetail.room.userRoom.id}
-                noti={room.roomDetail.room.userRoom.noti}
-              />
-              <PinnedButton
-                roomId={route.params.roomId}
-                userRoomId={room.roomDetail.room.userRoom.id}
-                pinned={Boolean(room.roomDetail.room.userRoom.pinnedAt)}
-              />
-            </View>
-          )}
-        </View>
-        <View style={{marginVertical: 20}}>
-          {room?.roomDetail.room?.users?.map(user => (
-            <View
-              key={user.id}
-              style={{flexDirection: 'row', alignItems: 'center'}}>
-              <Text>
-                id: {user.id}, nick: {user.nickname}
-              </Text>
-              {me && user.id !== me.id && (
-                <ToggleUserBlockButton
-                  me={me}
-                  userId={user.id}
-                  nickname={user.nickname}
+      {/* <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+            <Text>
+              Chat Room: {room?.roomDetail.room?.userRoom.name}, id:{' '}
+              {route.params.roomId}
+            </Text>
+            {room?.roomDetail.room && (
+              <View style={{flexDirection: 'row', gap: 10}}>
+                <NotiButton
+                  roomId={route.params.roomId}
+                  userRoomId={room.roomDetail.room.userRoom.id}
+                  noti={room.roomDetail.room.userRoom.noti}
                 />
-              )}
-            </View>
-          ))}
-        </View> */}
-        <View>
-          {messages?.map(m => (
-            <Message
-              key={`message-${m.id}`}
-              unReadCount={formatReadCount(m.readUsersId)}
-              {...m}
-            />
-          ))}
-        </View>
-        {/* {message?.viewMessages.hasNext && (
-        <Button title="더 불러오기" onPress={fetchMore} />
-      )} */}
-        {/* <ExitButton
-        roomId={roomId}
-        type="icon"
-        onAfterDelete={deleteRoomAfterFn}
-      /> */}
-      </CustomScrollView>
-      <Input
-        value={value}
-        onChange={e => setValue(e.nativeEvent.text)}
-        right={
-          <SendButton>
-            <SendIcon name="send" size={16} />
-          </SendButton>
-        }
+                <PinnedButton
+                  roomId={route.params.roomId}
+                  userRoomId={room.roomDetail.room.userRoom.id}
+                  pinned={Boolean(room.roomDetail.room.userRoom.pinnedAt)}
+                />
+              </View>
+            )}
+          </View>
+          <View style={{marginVertical: 20}}>
+            {room?.roomDetail.room?.users?.map(user => (
+              <View
+                key={user.id}
+                style={{flexDirection: 'row', alignItems: 'center'}}>
+                <Text>
+                  id: {user.id}, nick: {user.nickname}
+                </Text>
+                {me && user.id !== me.id && (
+                  <ToggleUserBlockButton
+                    me={me}
+                    userId={user.id}
+                    nickname={user.nickname}
+                  />
+                )}
+              </View>
+            ))}
+          </View> */}
+      {/* <ExitButton
+          roomId={roomId}
+          type="icon"
+          onAfterDelete={deleteRoomAfterFn}
+        /> */}
+      <MessageBox
+        inverted
+        data={[...bundledMessages].reverse()}
+        renderItem={({item}) => (
+          <Message myMessage={item.user.id === me?.id} {...item} />
+        )}
+        keyExtractor={item => item.id}
+        ListHeaderComponent={<HeightBox />}
+        ListFooterComponent={<HeightBox />}
+        onEndReached={fetchMore}
       />
+      <InputBox>
+        <Input
+          value={value}
+          onChange={e => setValue(e.nativeEvent.text)}
+          right={
+            <SendButton>
+              <SendIcon name="send" size={16} onPress={sendMessageFn} />
+            </SendButton>
+          }
+        />
+      </InputBox>
     </Container>
   );
 };
 
 const Container = styled.View`
   flex: 1;
-  padding: 15px;
   background-color: ${({theme}) => theme.bgColor};
+`;
+
+const MessageBox = styled.FlatList<FlatListProps<BundledMessage>>`
+  flex: 1;
+  padding: 0px 12px;
+`;
+
+const HeightBox = styled.View`
+  height: 15px;
+`;
+
+const InputBox = styled.View`
+  padding: 10px 12px;
+  border-top-width: 1px;
+  border-style: solid;
+  border-color: ${({theme}) => theme.gray600.default};
 `;
 
 const SendButton = styled.TouchableOpacity`

@@ -6,7 +6,7 @@ const Divider = () => {
 };
 
 const DividerElement = styled.View`
-  border-bottom-color: rgb(174, 174, 178);
+  border-bottom-color: ${({theme}) => theme.gray300.default};
   border-bottom-width: ${StyleSheet.hairlineWidth};
 `;
 

@@ -9,7 +9,7 @@ import PinnedButton from '@app/components/room/PinnedButton';
 import NotiButton from '@app/components/room/NotiButton';
 import ExitButton from '@app/components/room/ExitButton';
 
-import {getTimestamp} from '@app/utils/functions';
+import {geDatestamp} from '@app/utils/functions';
 
 import {MainNavigatorScreens} from '@app/navigators';
 
@@ -88,7 +88,7 @@ const RoomItem = ({userRoom}: RoomItemProps) => {
                 />
               )}
             </TitleBox>
-            <DateText>{getTimestamp(userRoom.room.updatedAt)}</DateText>
+            <DateText>{geDatestamp(userRoom.room.updatedAt)}</DateText>
           </SpaceBetween>
           <SpaceBetween>
             <LastMessage ellipsizeMode="tail" numberOfLines={1}>

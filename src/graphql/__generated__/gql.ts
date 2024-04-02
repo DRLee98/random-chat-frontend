@@ -13,7 +13,7 @@ import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/
  * Therefore it is highly recommended to use the babel or swc plugin for production.
  */
 const documents = {
-    "\n  fragment MessageBase on MessageObjectType {\n    id\n    contents\n    type\n    readUsersId\n    user {\n      id\n      nickname\n      profileUrl\n    }\n  }\n": types.MessageBaseFragmentDoc,
+    "\n  fragment MessageBase on MessageObjectType {\n    id\n    contents\n    type\n    readUsersId\n    user {\n      id\n      nickname\n      profileUrl\n    }\n    createdAt\n  }\n": types.MessageBaseFragmentDoc,
     "\n  fragment UserRoomBase on UserRoomObjectType {\n    id\n    name\n    noti\n    pinnedAt\n    newMessage\n    room {\n      id\n    }\n  }\n": types.UserRoomBaseFragmentDoc,
     "\n  fragment MyRoomBase on MyRoom {\n    id\n    name\n    noti\n    pinnedAt\n    newMessage\n    lastMessage\n    room {\n      id\n      updatedAt\n    }\n    users {\n      id\n      profileUrl\n    }\n    updatedAt\n  }\n": types.MyRoomBaseFragmentDoc,
     "\n  subscription newMessage($input: NewMessageInput!) {\n    newMessage(input: $input) {\n      ...MessageBase\n    }\n  }\n": types.NewMessageDocument,
@@ -54,7 +54,7 @@ export function graphql(source: string): unknown;
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n  fragment MessageBase on MessageObjectType {\n    id\n    contents\n    type\n    readUsersId\n    user {\n      id\n      nickname\n      profileUrl\n    }\n  }\n"): (typeof documents)["\n  fragment MessageBase on MessageObjectType {\n    id\n    contents\n    type\n    readUsersId\n    user {\n      id\n      nickname\n      profileUrl\n    }\n  }\n"];
+export function graphql(source: "\n  fragment MessageBase on MessageObjectType {\n    id\n    contents\n    type\n    readUsersId\n    user {\n      id\n      nickname\n      profileUrl\n    }\n    createdAt\n  }\n"): (typeof documents)["\n  fragment MessageBase on MessageObjectType {\n    id\n    contents\n    type\n    readUsersId\n    user {\n      id\n      nickname\n      profileUrl\n    }\n    createdAt\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

@@ -1,6 +1,7 @@
-import {useRef} from 'react';
+import {forwardRef, useRef} from 'react';
 
 import styled from 'styled-components/native';
+import {ScrollView} from 'react-native';
 
 import type {
   NativeScrollEvent,
@@ -9,40 +10,68 @@ import type {
 } from 'react-native';
 
 interface CustomScrollViewProps
-  extends Omit<ScrollViewProps, 'onScroll' | 'scrollEventThrottle'> {
+  extends Omit<ScrollViewProps, 'onScrollEndDrag' | 'onScrollBeginDrag'> {
   fetchMore?: () => Promise<void>;
+  fetchMoreDirection?: 'up' | 'down';
+  fetchMoreThreshold?: number;
 }
 
-const CustomScrollView = ({
-  fetchMore,
-  children,
-  ...props
-}: CustomScrollViewProps) => {
-  const fetching = useRef(false);
-
-  const onScrollEndDrag = async (
-    e: NativeSyntheticEvent<NativeScrollEvent>,
+const CustomScrollView = forwardRef<ScrollView, CustomScrollViewProps>(
+  (
+    {
+      fetchMore,
+      fetchMoreDirection = 'down',
+      fetchMoreThreshold = 0.3,
+      children,
+      ...props
+    },
+    ref,
   ) => {
-    if (!fetchMore) return;
-    const {layoutMeasurement, contentSize, contentOffset} = e.nativeEvent;
-    if (
-      !fetching.current &&
-      layoutMeasurement.height + contentOffset.y >= contentSize.height - 200
-    ) {
+    const fetching = useRef(false);
+
+    const fetchMoreFn = async () => {
+      if (!fetchMore || fetching.current) return;
       fetching.current = true;
       await fetchMore();
       fetching.current = false;
-    }
-  };
+    };
 
-  return (
-    <Container {...props} onScrollEndDrag={onScrollEndDrag}>
-      {children}
-    </Container>
-  );
-};
+    const onScrollEndDrag = async (
+      e: NativeSyntheticEvent<NativeScrollEvent>,
+    ) => {
+      if (fetchMoreDirection !== 'down') return;
+      const {layoutMeasurement, contentSize, contentOffset} = e.nativeEvent;
+      if (
+        layoutMeasurement.height + contentOffset.y >=
+        contentSize.height - layoutMeasurement.height * fetchMoreThreshold
+      ) {
+        fetchMoreFn();
+      }
+    };
 
-const Container = styled.ScrollView`
+    const onScrollBeginDrag = async (
+      e: NativeSyntheticEvent<NativeScrollEvent>,
+    ) => {
+      if (fetchMoreDirection !== 'up') return;
+      const {layoutMeasurement, contentOffset} = e.nativeEvent;
+      if (contentOffset.y <= layoutMeasurement.height * fetchMoreThreshold) {
+        fetchMoreFn();
+      }
+    };
+
+    return (
+      <Container
+        {...props}
+        ref={ref}
+        onScrollEndDrag={onScrollEndDrag}
+        onScrollBeginDrag={onScrollBeginDrag}>
+        {children}
+      </Container>
+    );
+  },
+);
+
+const Container = styled(ScrollView)`
   width: 100%;
   background-color: ${({theme}) => theme.bgColor};
 `;

@@ -9,7 +9,7 @@ const getYMD = (date: Date) => {
   return {year, month, day};
 };
 
-export const getTimestamp = (date: string) => {
+export const geDatestamp = (date: string) => {
   const today = new Date().getTime();
   const target = new Date(date).getTime();
 
@@ -40,6 +40,15 @@ export const getTimestamp = (date: string) => {
     }
     return `${targetYMD.year}. ${targetYMD.month}. ${targetYMD.day}.`;
   }
+};
+
+export const getTimestamp = (date: string) => {
+  const newDate = new Date(date);
+
+  const hour = newDate.getHours();
+  const minute = newDate.getMinutes();
+
+  return `${hour >= 12 ? '오후' : '오전'} ${hour % 12}:${formatNumber(minute)}`;
 };
 
 export const formatNumber = (num: number) => (num < 10 ? `0${num}` : num);
