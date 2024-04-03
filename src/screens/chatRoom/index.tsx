@@ -11,7 +11,6 @@ import useMe from '@app/graphql/hooks/user/useMe';
 
 import styled from 'styled-components/native';
 
-import {Platform} from 'react-native';
 import Message from '@app/components/chat/Message';
 import Input from '@app/components/common/Input';
 import ToggleUserBlockButton from '@app/components/user/ToggleUserBlockButton';
@@ -26,7 +25,7 @@ import {MessageType} from '@app/graphql/__generated__/graphql';
 import {MESSAGE_BASE} from '@app/graphql/fragments/message';
 import {getFragmentData} from '@app/graphql/__generated__';
 
-import {dateStringToNumber, getStatusBarHeight} from '@app/utils/functions';
+import {dateStringToNumber} from '@app/utils/functions';
 
 import type {StackScreenProps} from '@react-navigation/stack';
 import type {MainNavigatorParamList} from '@app/navigators';
@@ -36,7 +35,6 @@ import type {
   Messages,
 } from '@app/graphql/__generated__/graphql';
 import type {FragmentType} from '@app/graphql/__generated__';
-import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 export interface BundledMessage
   extends Pick<MessageBaseFragment, 'id' | 'user' | 'createdAt'> {
@@ -59,8 +57,6 @@ interface ChatRoomScreenProps
 
 const ChatRoomScreen = ({route, navigation}: ChatRoomScreenProps) => {
   const roomId = route.params.roomId;
-  const statusBarHeight = getStatusBarHeight();
-  const insets = useSafeAreaInsets();
 
   const [value, setValue] = useState('');
 
@@ -176,9 +172,7 @@ const ChatRoomScreen = ({route, navigation}: ChatRoomScreenProps) => {
   }, [navigation, room]);
 
   return (
-    <Container
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-      keyboardVerticalOffset={statusBarHeight + insets.top - insets.bottom}>
+    <Container>
       {/* <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
             <Text>
               Chat Room: {room?.roomDetail.room?.userRoom.name}, id:{' '}
@@ -234,7 +228,7 @@ const ChatRoomScreen = ({route, navigation}: ChatRoomScreenProps) => {
         onEndReached={fetchMore}
         onEndReachedThreshold={0.5}
       />
-      <InputBox style={{paddingBottom: insets.bottom + 5}}>
+      <InputBox>
         <Input
           value={value}
           onChange={e => setValue(e.nativeEvent.text)}
@@ -250,7 +244,7 @@ const ChatRoomScreen = ({route, navigation}: ChatRoomScreenProps) => {
   );
 };
 
-const Container = styled.KeyboardAvoidingView`
+const Container = styled.SafeAreaView`
   flex: 1;
   background-color: ${({theme}) => theme.bgColor};
 `;

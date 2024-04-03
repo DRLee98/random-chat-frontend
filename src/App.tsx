@@ -3,12 +3,14 @@ import {RecoilRoot} from 'recoil';
 import {ApolloProvider} from '@apollo/client';
 import {client} from './apollo';
 
+import {SafeAreaProvider} from 'react-native-safe-area-context';
+
 import {ThemeProvider} from 'styled-components/native';
 import {lightTheme, darkTheme} from './styles/theme';
 
 import MainNavigator from './navigators';
 
-import {Alert, Appearance, useColorScheme} from 'react-native';
+import {Alert, Appearance} from 'react-native';
 import messaging from '@react-native-firebase/messaging';
 import {requestUserPermission} from './utils/fcm';
 
@@ -41,13 +43,15 @@ function App() {
   }, []);
 
   return (
-    <ApolloProvider client={client}>
-      <RecoilRoot>
-        <ThemeProvider theme={theme}>
-          <MainNavigator />
-        </ThemeProvider>
-      </RecoilRoot>
-    </ApolloProvider>
+    <SafeAreaProvider>
+      <ApolloProvider client={client}>
+        <RecoilRoot>
+          <ThemeProvider theme={theme}>
+            <MainNavigator />
+          </ThemeProvider>
+        </RecoilRoot>
+      </ApolloProvider>
+    </SafeAreaProvider>
   );
 }
 

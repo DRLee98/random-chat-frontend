@@ -13,7 +13,7 @@ const Message = ({myMessage, contents, createdAt, user}: MessageProps) => {
   return (
     <Row myMessage={myMessage}>
       {!myMessage && (
-        <ProfileImg size={32} id={user.id} url={user.profileUrl} />
+        <ProfileImg size={32} id={user.id} url={user.profileUrl} push={true} />
       )}
       <TextList>
         {contents.map((item, i, list) => (

@@ -18,7 +18,7 @@ interface ProfileImgProps {
   push?: boolean;
 }
 
-const ProfileImg = ({id, url, size = 60, push = true}: ProfileImgProps) => {
+const ProfileImg = ({id, url, size = 60, push = false}: ProfileImgProps) => {
   const navigation = useNavigation<NavigationProp<MainNavigatorParamList>>();
 
   const onPress = () => {
