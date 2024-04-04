@@ -12,11 +12,8 @@ import useMe from '@app/graphql/hooks/user/useMe';
 import styled from 'styled-components/native';
 
 import Message from '@app/components/chat/Message';
-import Input from '@app/components/common/Input';
-import ToggleUserBlockButton from '@app/components/user/ToggleUserBlockButton';
-import NotiButton from '@app/components/room/NotiButton';
-import PinnedButton from '@app/components/room/PinnedButton';
-import ExitButton from '@app/components/room/ExitButton';
+import Input from '@app/components/common/BorderInput';
+import ChatRoomTopModal from '@app/components/room/ChatRoomTopModal';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 import {MainNavigatorScreens} from '@app/navigators';
@@ -116,10 +113,6 @@ const ChatRoomScreen = ({route, navigation}: ChatRoomScreenProps) => {
     );
   };
 
-  const deleteRoomAfterFn = async () => {
-    navigation.reset({routes: [{name: MainNavigatorScreens.Home}]});
-  };
-
   useNewMessageListener({
     variables: {input: {roomId}},
     onData: ({data}) => appendMessageFn(data.data?.newMessage),
@@ -169,53 +162,15 @@ const ChatRoomScreen = ({route, navigation}: ChatRoomScreenProps) => {
     navigation.setOptions({
       headerTitle: room?.roomDetail.room?.userRoom.name,
     });
-  }, [navigation, room]);
+  }, [room]);
 
   return (
     <Container>
-      {/* <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-            <Text>
-              Chat Room: {room?.roomDetail.room?.userRoom.name}, id:{' '}
-              {route.params.roomId}
-            </Text>
-            {room?.roomDetail.room && (
-              <View style={{flexDirection: 'row', gap: 10}}>
-                <NotiButton
-                  roomId={route.params.roomId}
-                  userRoomId={room.roomDetail.room.userRoom.id}
-                  noti={room.roomDetail.room.userRoom.noti}
-                />
-                <PinnedButton
-                  roomId={route.params.roomId}
-                  userRoomId={room.roomDetail.room.userRoom.id}
-                  pinned={Boolean(room.roomDetail.room.userRoom.pinnedAt)}
-                />
-              </View>
-            )}
-          </View>
-          <View style={{marginVertical: 20}}>
-            {room?.roomDetail.room?.users?.map(user => (
-              <View
-                key={user.id}
-                style={{flexDirection: 'row', alignItems: 'center'}}>
-                <Text>
-                  id: {user.id}, nick: {user.nickname}
-                </Text>
-                {me && user.id !== me.id && (
-                  <ToggleUserBlockButton
-                    me={me}
-                    userId={user.id}
-                    nickname={user.nickname}
-                  />
-                )}
-              </View>
-            ))}
-          </View> */}
-      {/* <ExitButton
-          roomId={roomId}
-          type="icon"
-          onAfterDelete={deleteRoomAfterFn}
-        /> */}
+      <ChatRoomTopModal
+        roomId={roomId}
+        roomDetail={room?.roomDetail.room}
+        me={me}
+      />
       <MessageBox
         inverted
         data={[...bundledMessages].reverse()}

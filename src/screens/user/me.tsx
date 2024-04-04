@@ -1,7 +1,11 @@
 import useMeDetail from '@app/graphql/hooks/user/useMeDetail';
+import {useTheme} from 'styled-components/native';
 
-import {ScrollView, Text, TouchableOpacity, View} from 'react-native';
+import styled from 'styled-components/native';
+
 import ProfileImg from '@app/components/common/ProfileImg';
+import SocialPlatformLogo from '@app/components/common/SocialPlatformLogo';
+import Icon from 'react-native-vector-icons/Ionicons';
 
 import {MainNavigatorScreens} from '@app/navigators';
 
@@ -12,51 +16,77 @@ interface MeScreenProps
   extends StackScreenProps<MainNavigatorParamList, MainNavigatorScreens.Me> {}
 
 const MeScreen = ({navigation}: MeScreenProps) => {
-  const {me} = useMeDetail();
+  const theme = useTheme();
 
-  const goUserProfile = (userId: string) => {
-    navigation.navigate(MainNavigatorScreens.User, {userId});
-  };
+  const {me} = useMeDetail();
 
   if (!me) return null;
   return (
-    <View style={{paddingVertical: 20, alignItems: 'center'}}>
+    <Container>
       <ProfileImg id={me.id} size={120} url={me.profileUrl} />
-      <View style={{height: 20}} />
-      <View style={{flexDirection: 'row', gap: 10}}>
-        <Text>{me?.nickname ?? '-'}</Text>
-        <Text>{me?.socialPlatform ?? '-'}</Text>
-      </View>
-      <View style={{height: 10}} />
-      <Text>{me?.bio ?? '-'}</Text>
-      <View style={{height: 10}} />
-      <Text>초대 {me?.allowMessage ? '허용' : '거부'}</Text>
-      <View style={{height: 40}} />
-      <Text>차단한 유저들</Text>
-      <View style={{height: 10}} />
-      <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-        <View style={{flexDirection: 'row', gap: 15, paddingHorizontal: 10}}>
-          {me?.blockUsers.map(user => (
-            <TouchableOpacity
-              key={`block_user_${user.id}`}
-              onPress={() => goUserProfile(user.id)}
-              style={{
-                alignItems: 'center',
-                gap: 10,
-                borderColor: '#121212',
-                borderWidth: 1,
-                borderRadius: 10,
-                paddingVertical: 10,
-                paddingHorizontal: 5,
-              }}>
-              <ProfileImg id={user.id} size={60} url={user.profileUrl} />
-              <Text>{user.nickname}</Text>
-            </TouchableOpacity>
-          ))}
-        </View>
-      </ScrollView>
-    </View>
+      <NicknameBox>
+        <Nickname>{me.nickname}</Nickname>
+        <SocialPlatformLogo socialPlatform={me.socialPlatform} />
+      </NicknameBox>
+      <Bio>{me.bio}</Bio>
+      <EditButton>
+        <EditButtonText>프로필 편집</EditButtonText>
+      </EditButton>
+      <CloseButton onPress={navigation.goBack}>
+        <Icon name="close" size={25} color={theme.fontColor} />
+      </CloseButton>
+    </Container>
   );
 };
+
+const Container = styled.View`
+  position: relative;
+
+  flex: 1;
+  align-items: center;
+
+  padding: 0px 20px;
+  padding-top: 50%;
+  background-color: ${({theme}) => theme.bgColor};
+`;
+
+const NicknameBox = styled.View`
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+
+  margin-top: 15px;
+  margin-bottom: 10px;
+`;
+
+const Nickname = styled.Text`
+  font-weight: 600;
+  font-size: 16px;
+  color: ${({theme}) => theme.fontColor};
+`;
+
+const Bio = styled.Text`
+  color: ${({theme}) => theme.gray100.default};
+`;
+
+const EditButton = styled.TouchableOpacity`
+  position: absolute;
+  top: 20px;
+  right: 15px;
+
+  justify-content: center;
+
+  height: 25px;
+`;
+
+const EditButtonText = styled.Text`
+  color: ${({theme}) => theme.fontColor};
+`;
+
+const CloseButton = styled.TouchableOpacity`
+  position: absolute;
+  top: 20px;
+  left: 15px;
+`;
 
 export default MeScreen;

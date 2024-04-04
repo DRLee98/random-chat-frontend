@@ -33,7 +33,7 @@ export type CreateUserInput = {
   nickname: Scalars['String']['input'];
   profile?: InputMaybe<Scalars['Upload']['input']>;
   socialId: Scalars['String']['input'];
-  socialPlatform: Scalars['String']['input'];
+  socialPlatform: SocialPlatform;
 };
 
 export type CreateUserOutput = {
@@ -77,7 +77,7 @@ export enum Language {
 
 export type LoginInput = {
   socialId: Scalars['String']['input'];
-  socialPlatform: Scalars['String']['input'];
+  socialPlatform: SocialPlatform;
 };
 
 export type LoginOutput = {
@@ -107,7 +107,7 @@ export type MeDetail = {
   language: Language;
   nickname: Scalars['String']['output'];
   profileUrl?: Maybe<Scalars['String']['output']>;
-  socialPlatform: Scalars['String']['output'];
+  socialPlatform: SocialPlatform;
   updatedAt: Scalars['DateTime']['output'];
 };
 
@@ -333,6 +333,12 @@ export type SimpleUserRoom = {
   updatedAt: Scalars['DateTime']['output'];
 };
 
+export enum SocialPlatform {
+  Apple = 'APPLE',
+  Kakao = 'KAKAO',
+  Naver = 'NAVER'
+}
+
 export type Subscription = {
   __typename?: 'Subscription';
   newMessage: MessageObjectType;
@@ -423,7 +429,7 @@ export type UserObjectType = {
   profileUrl?: Maybe<Scalars['String']['output']>;
   rooms: Array<UserRoomObjectType>;
   socialId: Scalars['String']['output'];
-  socialPlatform: Scalars['String']['output'];
+  socialPlatform: SocialPlatform;
   updatedAt: Scalars['DateTime']['output'];
 };
 
@@ -582,7 +588,7 @@ export type MeQuery = { __typename?: 'Query', me: { __typename?: 'MeOutput', ok:
 export type MeDetailQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type MeDetailQuery = { __typename?: 'Query', meDetail: { __typename?: 'MeDetailOutput', ok: boolean, error?: string | null, me?: { __typename?: 'MeDetail', id: string, nickname: string, profileUrl?: string | null, bio?: string | null, socialPlatform: string, allowMessage: boolean, language: Language, autoTranslation: boolean, blockUsers: Array<{ __typename?: 'UserObjectType', id: string, nickname: string, profileUrl?: string | null }> } | null } };
+export type MeDetailQuery = { __typename?: 'Query', meDetail: { __typename?: 'MeDetailOutput', ok: boolean, error?: string | null, me?: { __typename?: 'MeDetail', id: string, nickname: string, profileUrl?: string | null, bio?: string | null, socialPlatform: SocialPlatform, allowMessage: boolean, language: Language, autoTranslation: boolean, blockUsers: Array<{ __typename?: 'UserObjectType', id: string, nickname: string, profileUrl?: string | null }> } | null } };
 
 export type RandomNicknameQueryVariables = Exact<{ [key: string]: never; }>;
 

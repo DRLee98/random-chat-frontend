@@ -59,6 +59,7 @@ const RoomItem = ({userRoom}: RoomItemProps) => {
         <ButtonBox color={theme.red.default}>
           <ExitButton
             roomId={userRoom.room.id}
+            roomName={userRoom.name}
             type="text"
             color="#fff"
             size={16}

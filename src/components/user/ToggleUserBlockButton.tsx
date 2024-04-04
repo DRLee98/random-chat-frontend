@@ -1,7 +1,9 @@
 import {useApolloClient} from '@apollo/client';
 import useToggleBlockUser from '@app/graphql/hooks/user/useToggleBlockUser';
 
-import {Alert, Button} from 'react-native';
+import styled from 'styled-components/native';
+
+import {Alert} from 'react-native';
 
 import {ME_DETAIL} from '@app/graphql/hooks/user/useMeDetail';
 import {ME} from '@app/graphql/hooks/user/useMe';
@@ -91,11 +93,34 @@ const ToggleUserBlockButton = ({
   };
 
   return (
-    <Button
-      title={me?.blockUserIds.includes(userId) ? '차단해제' : '차단'}
-      onPress={AlertFn}
-    />
+    <Container onPress={AlertFn} blocked={me?.blockUserIds.includes(userId)}>
+      <Text blocked={me?.blockUserIds.includes(userId)}>
+        {me?.blockUserIds.includes(userId) ? '차단해제' : '차단'}
+      </Text>
+    </Container>
   );
 };
+
+interface StyledProps {
+  blocked: boolean;
+}
+
+const Container = styled.TouchableOpacity<StyledProps>`
+  align-items: center;
+  justify-content: center;
+
+  width: 65px;
+  height: 30px;
+
+  border: 1px solid
+    ${({theme, blocked}) =>
+      blocked ? theme.red.default : theme.gray200.default};
+  border-radius: 8px;
+`;
+
+const Text = styled.Text<StyledProps>`
+  color: ${({theme, blocked}) =>
+    blocked ? theme.red.accessible : theme.gray100.default};
+`;
 
 export default ToggleUserBlockButton;

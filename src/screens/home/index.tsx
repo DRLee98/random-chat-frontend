@@ -2,11 +2,13 @@ import useMyRooms, {useUpdateMyRooms} from '@app/graphql/hooks/room/useMyRooms';
 import useCreateRandomRoom from '@app/graphql/hooks/room/useCreateRandomRoom';
 import useNewRoomListener from '@app/graphql/hooks/room/useNewRoomListener';
 import useUpdateNewMessageListener from '@app/graphql/hooks/message/useUpdateNewMessageListener';
-import useLogout from '@app/hooks/useLogout';
 
 import styled from 'styled-components/native';
 import {Button} from 'react-native';
 import RoomItem from '@app/components/room/RoomItem';
+
+import {getFragmentData} from '@app/graphql/__generated__';
+import {MY_ROOM_BASE} from '@app/graphql/fragments/room';
 
 import {MainNavigatorScreens} from '@app/navigators';
 
@@ -17,12 +19,11 @@ import type {
   MyRoomBaseFragment,
   UpdateNewMessageInUserRoom,
 } from '@app/graphql/__generated__/graphql';
+
 interface HomeScreenProps
   extends StackScreenProps<MainNavigatorParamList, MainNavigatorScreens.Home> {}
 
 const HomeScreen = ({navigation}: HomeScreenProps) => {
-  const logout = useLogout();
-
   const [createRandomRoom] = useCreateRandomRoom();
 
   const {rooms, fetchMore, refetch, loading} = useMyRooms();
@@ -38,7 +39,9 @@ const HomeScreen = ({navigation}: HomeScreenProps) => {
       const userRoom = data.createRandomRoom.room;
       appendMyRoom(userRoom);
       sortMyRooms();
-      // goChatRoom(userRoom.room.id);
+
+      const userRoomData = getFragmentData(MY_ROOM_BASE, userRoom);
+      goChatRoom(userRoomData.room.id);
     }
   };
 

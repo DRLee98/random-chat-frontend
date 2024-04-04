@@ -1,4 +1,4 @@
-import {LoginInput} from '@app/graphql/__generated__/graphql';
+import {LoginInput, SocialPlatform} from '@app/graphql/__generated__/graphql';
 import EncryptedStorage from 'react-native-encrypted-storage';
 
 interface SetSocialIdProps extends LoginInput {}
@@ -13,7 +13,9 @@ export const setSociald = async ({
 
 export const getSociald = async () => {
   const socialId = await EncryptedStorage.getItem('socialId');
-  const socialPlatform = await EncryptedStorage.getItem('socialPlatform');
+  const socialPlatform = (await EncryptedStorage.getItem(
+    'socialPlatform',
+  )) as SocialPlatform;
   if (!socialId || !socialPlatform) return null;
   return {socialId, socialPlatform};
 };

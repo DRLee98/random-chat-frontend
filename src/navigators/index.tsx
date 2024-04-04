@@ -1,6 +1,6 @@
 import styled, {useTheme} from 'styled-components/native';
 
-import {TransitionPresets, createStackNavigator} from '@react-navigation/stack';
+import {createStackNavigator} from '@react-navigation/stack';
 
 import SplashScreen from '@app/screens/splash';
 import LoginScreen from '@app/screens/login';
@@ -9,12 +9,14 @@ import HomeScreen from '@app/screens/home';
 import ChatRoomScreen from '@app/screens/chatRoom';
 import MeScreen from '@app/screens/user/me';
 import UserScreen from '@app/screens/user';
+import ChatRoomEditScreen from '@app/screens/chatRoom/edit';
 import {NavigationContainer} from '@react-navigation/native';
-import {Button, Platform, TouchableOpacity} from 'react-native';
+import {Platform, TouchableOpacity} from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 
 import type {SignUpScreenParams} from '@app/screens/signUp';
 import type {ChatRoomScreenParams} from '@app/screens/chatRoom';
+import type {ChatRoomEditScreenParams} from '@app/screens/chatRoom/edit';
 import type {UserScreenScreenParams} from '@app/screens/user';
 
 export enum MainNavigatorScreens {
@@ -23,6 +25,7 @@ export enum MainNavigatorScreens {
   SignUp = 'SignUp',
   Home = 'Home',
   ChatRoom = 'ChatRoom',
+  ChatRoomEdit = 'ChatRoomEdit',
   Me = 'Me',
   User = 'User',
 }
@@ -33,6 +36,7 @@ export type MainNavigatorParamList = {
   SignUp: SignUpScreenParams;
   Home: undefined;
   ChatRoom: ChatRoomScreenParams;
+  ChatRoomEdit: ChatRoomEditScreenParams;
   Me: undefined;
   User: UserScreenScreenParams;
 };
@@ -127,11 +131,26 @@ const MainNavigator = () => {
             }}
           />
           <Stack.Screen
+            name={MainNavigatorScreens.ChatRoomEdit}
+            component={ChatRoomEditScreen}
+            options={{
+              title: '채팅방 수정',
+              headerBackTitleVisible: false,
+              headerTitleAlign: 'center',
+              headerTitleStyle: {
+                color: theme.fontColor,
+                fontSize: 16,
+                fontWeight: '400',
+              },
+            }}
+          />
+          <Stack.Screen
             name={MainNavigatorScreens.Me}
             component={MeScreen}
             options={{
               headerShown: false,
-              ...TransitionPresets.ModalSlideFromBottomIOS,
+              presentation: 'modal',
+              // ...TransitionPresets.ModalSlideFromBottomIOS,
             }}
           />
           <Stack.Screen
@@ -139,7 +158,8 @@ const MainNavigator = () => {
             component={UserScreen}
             options={{
               headerShown: false,
-              ...TransitionPresets.ModalSlideFromBottomIOS,
+              presentation: 'modal',
+              // ...TransitionPresets.ModalSlideFromBottomIOS,
             }}
           />
         </Stack.Navigator>

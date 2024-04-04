@@ -13,6 +13,8 @@ import {MainNavigatorScreens} from '@app/navigators';
 
 import {setSociald} from '@app/utils/encStorage';
 
+import {SocialPlatform} from '@app/graphql/__generated__/graphql';
+
 import type {StackScreenProps} from '@react-navigation/stack';
 import type {MainNavigatorParamList} from '@app/navigators';
 import type {SignUpScreenParams} from '@app/screens/signUp';
@@ -31,7 +33,7 @@ const LoginScreen = ({navigation}: LoginScreenProps) => {
     if (!profile) return;
     loginFn({
       socialId: profile.id,
-      socialPlatform: 'NAVER',
+      socialPlatform: SocialPlatform.Naver,
       nickname: profile.nickname + '',
       profileUrl: profile.profile_image ?? undefined,
     });
@@ -42,7 +44,7 @@ const LoginScreen = ({navigation}: LoginScreenProps) => {
     if (!profile) return;
     loginFn({
       socialId: profile.id + '',
-      socialPlatform: 'KAKAO',
+      socialPlatform: SocialPlatform.Kakao,
       nickname: profile.nickname,
       profileUrl: profile.profileImageUrl,
     });
