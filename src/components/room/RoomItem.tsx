@@ -175,7 +175,7 @@ const DateText = styled.Text`
 
 const LastMessage = styled.Text`
   width: 85%;
-  font-size: 13px;
+  font-size: 12px;
   color: ${({theme}) => theme.gray200.default};
 `;
 

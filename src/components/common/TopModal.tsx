@@ -29,7 +29,7 @@ const TopModal = ({children, onCloseModal, ...props}: TopModalProps) => {
   const [childrenHegiht, setChildrenHeight] = useState(0);
 
   const insets = useSafeAreaInsets();
-  const offset = useSharedValue(0);
+  const offset = useSharedValue(-99999);
   const style = useAnimatedStyle(() => ({
     transform: [{translateY: offset.value}],
   }));

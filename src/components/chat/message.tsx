@@ -9,7 +9,23 @@ interface MessageProps extends BundledMessage {
   myMessage: boolean;
 }
 
-const Message = ({myMessage, contents, createdAt, user}: MessageProps) => {
+const Message = ({
+  myMessage,
+  contents,
+  createdAt,
+  user,
+  systemMessage,
+}: MessageProps) => {
+  if (systemMessage)
+    return (
+      <SystemMessageBox>
+        {contents.map((item, i) => (
+          <SystemMessage key={`system-message-${i}`}>
+            {item.contents}
+          </SystemMessage>
+        ))}
+      </SystemMessageBox>
+    );
   return (
     <Row myMessage={myMessage}>
       {!myMessage && (
@@ -74,6 +90,17 @@ const UnReadCount = styled.Text<Pick<MessageProps, 'myMessage'>>`
 const Time = styled.Text`
   color: ${({theme}) => theme.gray100.default};
   font-size: 11px;
+`;
+
+const SystemMessageBox = styled.View`
+  margin-top: 15px;
+
+  align-items: center;
+`;
+
+const SystemMessage = styled.Text`
+  font-size: 14px;
+  color: ${({theme}) => theme.gray100.default};
 `;
 
 export default Message;

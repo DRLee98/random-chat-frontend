@@ -40,6 +40,7 @@ export interface BundledMessage
       unReadCount: number;
     }
   >;
+  systemMessage: boolean;
 }
 
 export interface ChatRoomScreenParams {
@@ -138,7 +139,11 @@ const ChatRoomScreen = ({route, navigation}: ChatRoomScreenProps) => {
         unReadCount: formatReadCount(m.readUsersId),
       };
 
-      if (i > 0) {
+      if (
+        i > 0 &&
+        contents.type !== MessageType.System &&
+        list[i - 1].type !== MessageType.System
+      ) {
         const prevCreatedTime = dateStringToNumber(list[i - 1].createdAt);
         const createdTime = dateStringToNumber(m.createdAt);
         if (createdTime - prevCreatedTime < 60000) {
@@ -152,6 +157,7 @@ const ChatRoomScreen = ({route, navigation}: ChatRoomScreenProps) => {
         user: m.user,
         createdAt: m.createdAt,
         contents: [contents],
+        systemMessage: m.type === MessageType.System,
       });
     });
 
