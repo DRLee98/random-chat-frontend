@@ -11,6 +11,7 @@ const UPDATE_NEW_MESSAGE = graphql(`
       newMessage
       lastMessage
       userId
+      roomId
     }
   }
 `);

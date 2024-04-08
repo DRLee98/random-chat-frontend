@@ -2,6 +2,7 @@ import useMyRooms, {useUpdateMyRooms} from '@app/graphql/hooks/room/useMyRooms';
 import useCreateRandomRoom from '@app/graphql/hooks/room/useCreateRandomRoom';
 import useNewRoomListener from '@app/graphql/hooks/room/useNewRoomListener';
 import useUpdateNewMessageListener from '@app/graphql/hooks/message/useUpdateNewMessageListener';
+import {useRefetchMessages} from '@app/graphql/hooks/message/useViewMessages';
 
 import styled from 'styled-components/native';
 import {Button} from 'react-native';
@@ -28,6 +29,7 @@ const HomeScreen = ({navigation}: HomeScreenProps) => {
 
   const {rooms, fetchMore, refetch, loading} = useMyRooms();
   const {updateMyRoom, appendMyRoom, sortMyRooms} = useUpdateMyRooms();
+  const refetchMessages = useRefetchMessages();
 
   const goChatRoom = (roomId: string) => {
     navigation.navigate(MainNavigatorScreens.ChatRoom, {roomId});
@@ -47,8 +49,11 @@ const HomeScreen = ({navigation}: HomeScreenProps) => {
 
   const updateNewMessage = (data?: UpdateNewMessageInUserRoom) => {
     if (!data) return;
-    const {id, newMessage, lastMessage} = data;
+    const {id, newMessage, lastMessage, roomId} = data;
     updateMyRoom(id, {newMessage, lastMessage}, {updatedAt: new Date()});
+    sortMyRooms();
+
+    refetchMessages({roomId});
   };
 
   useNewRoomListener({
