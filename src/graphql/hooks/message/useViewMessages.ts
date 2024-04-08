@@ -107,7 +107,7 @@ export const useUpdateViewMessages = (input: ViewMessagesInput) => {
   ) => {
     client.cache.updateFragment(
       {
-        id: `MessageObjectType:${id}`,
+        id: client.cache.identify({__typename: 'MessageObjectType', id}),
         fragment: MESSAGE_BASE,
       },
       prev =>

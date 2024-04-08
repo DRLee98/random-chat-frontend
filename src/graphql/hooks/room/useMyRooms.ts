@@ -100,7 +100,7 @@ export const useUpdateMyRooms = (input?: MyRoomsInput) => {
   ) => {
     client.cache.updateFragment(
       {
-        id: `MyRoom:${id}`,
+        id: client.cache.identify({__typename: 'MyRoom', id}),
         fragment: MY_ROOM_BASE,
       },
       prev =>

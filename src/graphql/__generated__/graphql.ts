@@ -143,12 +143,6 @@ export enum MessageType {
   Text = 'TEXT'
 }
 
-export type Messages = {
-  __typename?: 'Messages';
-  id: Scalars['ID']['output'];
-  readUsersId: Array<Scalars['ID']['output']>;
-};
-
 export type Mutation = {
   __typename?: 'Mutation';
   createRandomRoom: CreateRandomRoomOutput;
@@ -268,7 +262,7 @@ export type RandomNicknameOutput = {
 
 export type ReadMessage = {
   __typename?: 'ReadMessage';
-  messages: Array<Messages>;
+  messages: Array<MessageObjectType>;
   roomId: Scalars['ID']['output'];
   userId: Scalars['ID']['output'];
 };
@@ -493,7 +487,7 @@ export type ReadMessageSubscriptionVariables = Exact<{
 }>;
 
 
-export type ReadMessageSubscription = { __typename?: 'Subscription', readMessage: { __typename?: 'ReadMessage', messages: Array<{ __typename?: 'Messages', id: string, readUsersId: Array<string> }> } };
+export type ReadMessageSubscription = { __typename?: 'Subscription', readMessage: { __typename?: 'ReadMessage', messages: Array<{ __typename?: 'MessageObjectType', id: string, readUsersId: Array<string> }> } };
 
 export type SendMessageMutationVariables = Exact<{
   input: SendMessageInput;

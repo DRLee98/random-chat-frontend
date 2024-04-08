@@ -27,10 +27,7 @@ import {dateStringToNumber} from '@app/utils/functions';
 import type {StackScreenProps} from '@react-navigation/stack';
 import type {MainNavigatorParamList} from '@app/navigators';
 import type {FlatListProps} from 'react-native';
-import type {
-  MessageBaseFragment,
-  Messages,
-} from '@app/graphql/__generated__/graphql';
+import type {MessageBaseFragment} from '@app/graphql/__generated__/graphql';
 import type {FragmentType} from '@app/graphql/__generated__';
 
 export interface BundledMessage
@@ -83,7 +80,9 @@ const ChatRoomScreen = ({route, navigation}: ChatRoomScreenProps) => {
     sortMyRooms();
   };
 
-  const updateReadMessages = (messages?: Messages[]) => {
+  const updateReadMessages = (
+    messages?: Pick<MessageBaseFragment, 'id' | '__typename' | 'readUsersId'>[],
+  ) => {
     if (!messages || messages.length === 0) return;
     updateMessages(messages);
   };
@@ -141,6 +140,7 @@ const ChatRoomScreen = ({route, navigation}: ChatRoomScreenProps) => {
 
       if (
         i > 0 &&
+        list[i - 1].user.id === m.user.id &&
         contents.type !== MessageType.System &&
         list[i - 1].type !== MessageType.System
       ) {
