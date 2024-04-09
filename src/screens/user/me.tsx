@@ -19,7 +19,10 @@ import {MainNavigatorScreens} from '@app/navigators';
 
 import type {StackScreenProps} from '@react-navigation/stack';
 import type {MainNavigatorParamList} from '@app/navigators';
-import type {UpdateUserInput} from '@app/graphql/__generated__/graphql';
+import type {
+  MeDetail,
+  UpdateUserInput,
+} from '@app/graphql/__generated__/graphql';
 import type {FilterNull} from 'types/utils';
 import type {ReactNativeFileType} from '@app/utils/file';
 
@@ -68,21 +71,27 @@ const MeScreen = ({navigation}: MeScreenProps) => {
   };
 
   const onSave = async () => {
+    const input: FormValues = {};
+    if (values?.nickname && values.nickname !== me?.nickname)
+      input.nickname = values.nickname;
+    if (values?.bio && values.bio !== me?.bio) input.bio = values.bio;
+    if (values?.profile) input.profile = values.profile;
+
     const {data} = await updateUser({
       variables: {
-        input: {
-          ...values,
-        },
+        input,
       },
     });
     if (data?.updateUser.ok) {
-      const updateValues = {
-        ...(values?.nickname && {nickname: values.nickname}),
-        ...(values?.bio && {bio: values.bio}),
-        ...(values?.profile && {profileUrl: values.profile.uri}),
+      const {profile, ...updateValues} = input;
+      const updateCacheValues: Partial<Omit<MeDetail, '__typename'>> = {
+        ...updateValues,
       };
-      updateMe(updateValues);
-      updateMeDetail(updateValues);
+
+      if (profile) updateCacheValues.profileUrl = profile.uri;
+
+      updateMe(updateCacheValues);
+      updateMeDetail(updateCacheValues);
       toggleEdit();
     }
   };

@@ -1,4 +1,4 @@
-import {useState} from 'react';
+import {useEffect, useState} from 'react';
 import {useTheme} from 'styled-components/native';
 
 import styled from 'styled-components/native';
@@ -17,6 +17,10 @@ const CustomInput = (props: CustomInputProps) => {
     setValue(text);
     props.onChangeText?.(text);
   };
+
+  useEffect(() => {
+    setValue(props.value);
+  }, [props.value]);
 
   return (
     <Container>
