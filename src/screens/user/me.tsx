@@ -1,16 +1,32 @@
-import useMeDetail from '@app/graphql/hooks/user/useMeDetail';
+import {useState} from 'react';
+import useMeDetail, {
+  useUpdateMeDetail,
+} from '@app/graphql/hooks/user/useMeDetail';
+import {useUpdateMe} from '@app/graphql/hooks/user/useMe';
 import {useTheme} from 'styled-components/native';
+import useForm from '@app/hooks/useForm';
+import useUpdateUser from '@app/graphql/hooks/user/useUpdateUser';
 
 import styled from 'styled-components/native';
 
 import ProfileImg from '@app/components/common/ProfileImg';
 import SocialPlatformLogo from '@app/components/common/SocialPlatformLogo';
+import UnderlineInput from '@app/components/common/input/UnderlineInput';
+import PictureSelectButton from '@app/components/common/PictureSelectButton';
 import Icon from 'react-native-vector-icons/Ionicons';
 
 import {MainNavigatorScreens} from '@app/navigators';
 
 import type {StackScreenProps} from '@react-navigation/stack';
 import type {MainNavigatorParamList} from '@app/navigators';
+import type {UpdateUserInput} from '@app/graphql/__generated__/graphql';
+import type {FilterNull} from 'types/utils';
+import type {ReactNativeFileType} from '@app/utils/file';
+
+interface FormValues
+  extends FilterNull<Pick<UpdateUserInput, 'nickname' | 'bio'>> {
+  profile?: ReactNativeFileType;
+}
 
 interface MeScreenProps
   extends StackScreenProps<MainNavigatorParamList, MainNavigatorScreens.Me> {}
@@ -19,22 +35,112 @@ const MeScreen = ({navigation}: MeScreenProps) => {
   const theme = useTheme();
 
   const {me} = useMeDetail();
+  const updateMe = useUpdateMe();
+  const updateMeDetail = useUpdateMeDetail();
+  const [updateUser] = useUpdateUser();
+
+  const [edit, setEdit] = useState(false);
+  const {getProps, setFieldValue, values} = useForm<FormValues>({
+    initialValues: {
+      nickname: me?.nickname ?? '',
+      bio: me?.bio ?? '',
+    },
+  });
+
+  const toggleEdit = () => setEdit(prev => !prev);
+
+  const onProfileChange = (file: ReactNativeFileType) => {
+    setFieldValue('profile', file);
+  };
+
+  const onRightButtonPress = () => {
+    if (edit) {
+      return onSave();
+    }
+    toggleEdit();
+  };
+
+  const onLeftButtonPress = () => {
+    if (edit) {
+      return toggleEdit();
+    }
+    navigation.goBack();
+  };
+
+  const onSave = async () => {
+    const {data} = await updateUser({
+      variables: {
+        input: {
+          ...values,
+        },
+      },
+    });
+    if (data?.updateUser.ok) {
+      const updateValues = {
+        ...(values?.nickname && {nickname: values.nickname}),
+        ...(values?.bio && {bio: values.bio}),
+        ...(values?.profile && {profileUrl: values.profile.uri}),
+      };
+      updateMe(updateValues);
+      updateMeDetail(updateValues);
+      toggleEdit();
+    }
+  };
 
   if (!me) return null;
   return (
     <Container>
-      <ProfileImg id={me.id} size={120} url={me.profileUrl} />
+      <ProfileImgBox>
+        <ProfileImg
+          id={me.id}
+          size={120}
+          url={values?.profile?.uri ?? me.profileUrl}
+        />
+        {edit && (
+          <ProfileEditButton>
+            <PictureSelectButton onChange={onProfileChange}>
+              <Icon name="camera" size={20} color={theme.gray100.default} />
+            </PictureSelectButton>
+          </ProfileEditButton>
+        )}
+      </ProfileImgBox>
       <NicknameBox>
-        <Nickname>{me.nickname}</Nickname>
-        <SocialPlatformLogo socialPlatform={me.socialPlatform} />
+        {edit ? (
+          <NicknameInput
+            textAlign="center"
+            placeholder="닉네임을 입력해 주세요."
+            returnKeyType="done"
+            {...getProps('nickname')}
+          />
+        ) : (
+          <>
+            <Nickname>{me.nickname}</Nickname>
+            <SocialPlatformLogo socialPlatform={me.socialPlatform} />
+          </>
+        )}
       </NicknameBox>
-      <Bio>{me.bio}</Bio>
-      <EditButton>
-        <EditButtonText>프로필 편집</EditButtonText>
-      </EditButton>
-      <CloseButton onPress={navigation.goBack}>
-        <Icon name="close" size={25} color={theme.fontColor} />
-      </CloseButton>
+      {edit ? (
+        <BioInput
+          textAlign="center"
+          placeholder="상태메시지를 입력해 주세요."
+          returnKeyType="done"
+          multiline
+          numberOfLines={3}
+          {...getProps('bio')}
+        />
+      ) : (
+        <Bio>{me.bio}</Bio>
+      )}
+      <RightButton onPress={onRightButtonPress}>
+        <ButtonText>{edit ? '저장' : '프로필 편집'}</ButtonText>
+      </RightButton>
+      <LeftButton onPress={onLeftButtonPress}>
+        {edit ? (
+          <ButtonText>취소</ButtonText>
+        ) : (
+          <Icon name="close" size={25} color={theme.fontColor} />
+        )}
+      </LeftButton>
     </Container>
   );
 };
@@ -48,6 +154,26 @@ const Container = styled.View`
   padding: 0px 20px;
   padding-top: 50%;
   background-color: ${({theme}) => theme.bgColor};
+`;
+
+const ProfileImgBox = styled.View`
+  position: relative;
+`;
+
+const ProfileEditButton = styled.View`
+  position: absolute;
+  right: 0px;
+  bottom: 0px;
+
+  width: 30px;
+  height: 30px;
+
+  align-items: center;
+  justify-content: center;
+
+  background-color: ${({theme}) => theme.bgColor};
+  border: 1px solid ${({theme}) => theme.gray200.default};
+  border-radius: 999px;
 `;
 
 const NicknameBox = styled.View`
@@ -66,27 +192,38 @@ const Nickname = styled.Text`
 `;
 
 const Bio = styled.Text`
+  font-size: 14px;
   color: ${({theme}) => theme.gray100.default};
 `;
 
-const EditButton = styled.TouchableOpacity`
+const ButtonBase = styled.TouchableOpacity`
   position: absolute;
   top: 20px;
-  right: 15px;
 
   justify-content: center;
 
   height: 25px;
 `;
 
-const EditButtonText = styled.Text`
+const RightButton = styled(ButtonBase)`
+  right: 15px;
+`;
+
+const LeftButton = styled(ButtonBase)`
+  left: 15px;
+`;
+
+const ButtonText = styled.Text`
   color: ${({theme}) => theme.fontColor};
 `;
 
-const CloseButton = styled.TouchableOpacity`
-  position: absolute;
-  top: 20px;
-  left: 15px;
+const NicknameInput = styled(UnderlineInput)`
+  font-weight: 600;
+  font-size: 16px;
+`;
+
+const BioInput = styled(UnderlineInput)`
+  font-size: 14px;
 `;
 
 export default MeScreen;

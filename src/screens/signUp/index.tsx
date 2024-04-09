@@ -7,29 +7,23 @@ import {Button, TextInput, View} from 'react-native';
 import ProfileImg from '@app/components/common/ProfileImg';
 import PictureSelectButton from '@app/components/common/PictureSelectButton';
 
-import {ReactNativeFile} from 'apollo-upload-client';
 import {ApolloError} from '@apollo/client';
 
 import {MainNavigatorScreens} from '@app/navigators';
 
 import {setSociald} from '@app/utils/encStorage';
+import {makeFile} from '@app/utils/file';
 
 import type {StackScreenProps} from '@react-navigation/stack';
 import type {MainNavigatorParamList} from '@app/navigators';
 import type {CreateUserInput} from '@app/graphql/__generated__/graphql';
-import type {Asset} from 'react-native-image-picker';
+import type {ReactNativeFileType} from '@app/utils/file';
 
 export interface SignUpScreenParams extends Omit<CreateUserInput, 'profile'> {
   profileUrl?: string;
 }
 
 interface Values extends Omit<CreateUserInput, 'profile'> {}
-
-interface ReactNativeFileType {
-  uri: string;
-  name: string;
-  type: string;
-}
 
 interface SignUpScreenProps
   extends StackScreenProps<
@@ -45,22 +39,11 @@ const SignUpScreen = ({route, navigation}: SignUpScreenProps) => {
   const [profile, setProfile] = useState<ReactNativeFileType>();
   const [values, setValues] = useState<Values>();
 
-  const setImage = (asset: Asset) => {
-    if (asset.uri && asset.type) {
-      const file = new ReactNativeFile({
-        uri: asset.uri,
-        name: asset.fileName,
-        type: asset.type,
-      });
-      setProfile(file);
-    }
-  };
-
   const setValuesFn = async (params: SignUpScreenParams) => {
     const {profileUrl, ...v} = params;
     if (profileUrl) {
-      const file = new ReactNativeFile({
-        uri: params.profileUrl,
+      const file = makeFile({
+        uri: profileUrl,
         name: `${params.socialPlatform}_profile.${profileUrl.split('.').pop()}`,
         type: 'image',
       });
@@ -122,7 +105,7 @@ const SignUpScreen = ({route, navigation}: SignUpScreenProps) => {
 
   return (
     <View style={{alignItems: 'center', justifyContent: 'center', flex: 1}}>
-      <PictureSelectButton onChange={setImage}>
+      <PictureSelectButton onChange={setProfile}>
         <ProfileImg url={profile?.uri} />
       </PictureSelectButton>
       <View style={{flexDirection: 'row', marginVertical: 20}}>

@@ -1,5 +1,6 @@
 import {useMemo} from 'react';
 import {useNavigation} from '@react-navigation/native';
+import {useTheme} from 'styled-components/native';
 
 import styled from 'styled-components/native';
 
@@ -12,39 +13,43 @@ import type {NavigationProp} from '@react-navigation/native';
 import type {MainNavigatorParamList} from '@app/navigators';
 
 interface ProfileImgProps {
-  id: string;
+  id?: string;
   url?: string | null;
   size?: number;
   push?: boolean;
 }
 
 const ProfileImg = ({id, url, size = 60, push = false}: ProfileImgProps) => {
+  const theme = useTheme();
   const navigation = useNavigation<NavigationProp<MainNavigatorParamList>>();
 
   const onPress = () => {
-    if (!push) return;
+    if (!id || !push) return;
     navigation.navigate(MainNavigatorScreens.User, {userId: id});
   };
 
-  const getColor = (num: number) => {
-    const list = shuffleList(profileColors, num);
+  const getColor = (shuffleNumId: number, shuffleNum: number) => {
+    const list = shuffleList(profileColors, shuffleNum);
 
-    return list[+id % list.length];
+    return list[+shuffleNumId % list.length];
   };
 
-  const bgColor = useMemo(
-    () => (url ? '' : getColor(+id % 10)),
-    [profileColors, id],
-  );
+  const bgColor = useMemo(() => {
+    if (url) return '';
+    if (!id) return theme.gray600.default;
+    return getColor(+id, +id % 10);
+  }, [profileColors, id]);
+
   const textColor = useMemo(() => {
     if (url) return '';
+    if (!id) return theme.fontColor;
     let num = 8;
-    let color = getColor(+id % num);
+    let color = getColor(+id, +id % num);
     while (true) {
       const similarColor = areColorsSimilar(color, bgColor);
       if (similarColor) {
         num++;
-        color = getColor(+id % num);
+        color = getColor(+id, +id % num);
       } else {
         break;
       }
@@ -72,7 +77,7 @@ interface ImageProps {
 
 const Image = ({url, size, bgColor, textColor}: ImageProps) => {
   return url ? (
-    <Img source={{uri: url}} size={size} />
+    <Img source={{uri: url}} size={size} resizeMode="cover" />
   ) : (
     <ColorBox size={size} color={bgColor}>
       <Text size={size} color={textColor}>
@@ -107,6 +112,7 @@ const Img = styled.Image<Required<Pick<ProfileImgProps, 'size'>>>`
   width: ${({size}) => size}px;
   height: ${({size}) => size}px;
   border-radius: ${({size}) => size / 2.4}px;
+  background-color: ${({theme}) => theme.gray500.default};
 `;
 
 export default ProfileImg;
