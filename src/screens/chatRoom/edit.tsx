@@ -6,7 +6,7 @@ import {useTheme} from 'styled-components/native';
 
 import styled from 'styled-components/native';
 
-import UnderlineInput from '@app/components/common/UnderlineInput';
+import UnderlineInput from '@app/components/common/input/UnderlineInput';
 
 import {MainNavigatorScreens} from '@app/navigators';
 

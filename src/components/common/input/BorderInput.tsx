@@ -2,6 +2,7 @@ import {useState} from 'react';
 import {useTheme} from 'styled-components/native';
 
 import styled from 'styled-components/native';
+import CustomInput from './CustomInput';
 
 import type {TextInputProps} from 'react-native';
 
@@ -28,12 +29,7 @@ const BorderInput = ({right, left, ...props}: BorderInputProps) => {
         borderColor: focused ? theme.orange.default : theme.gray200.default,
       }}>
       {left}
-      <TextInput
-        clearButtonMode="while-editing"
-        {...props}
-        onFocus={onFocus}
-        onBlur={onBlur}
-      />
+      <CustomInput {...props} onFocus={onFocus} onBlur={onBlur} />
       {right}
     </Container>
   );
@@ -47,14 +43,6 @@ const Container = styled.View`
   background-color: ${({theme}) => theme.gray700.default};
   border: 1px solid ${({theme}) => theme.gray200.default};
   border-radius: 999px;
-`;
-
-const TextInput = styled.TextInput`
-  flex: 1;
-  padding: 0 10px;
-
-  font-size: 16px;
-  color: ${({theme}) => theme.fontColor};
 `;
 
 export default BorderInput;

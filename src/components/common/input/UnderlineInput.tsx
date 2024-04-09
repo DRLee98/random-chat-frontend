@@ -2,6 +2,7 @@ import {useState} from 'react';
 import {useTheme} from 'styled-components/native';
 
 import styled from 'styled-components/native';
+import CustomInput from './CustomInput';
 
 import type {TextInputProps} from 'react-native';
 
@@ -24,12 +25,7 @@ const UnderlineInput = ({...props}: UnderlineInputProps) => {
       style={{
         borderColor: focused ? theme.orange.default : theme.gray200.default,
       }}>
-      <TextInput
-        clearButtonMode="while-editing"
-        {...props}
-        onFocus={onFocus}
-        onBlur={onBlur}
-      />
+      <CustomInput {...props} onFocus={onFocus} onBlur={onBlur} />
       {props.maxLength && (
         <Length>
           {props.value?.length ?? 0}/{props.maxLength}
@@ -48,13 +44,6 @@ const Container = styled.View`
 
   border-style: solid;
   border-bottom-width: 1px;
-`;
-
-const TextInput = styled.TextInput`
-  flex: 1;
-
-  font-size: 16px;
-  color: ${({theme}) => theme.fontColor};
 `;
 
 const Length = styled.Text`

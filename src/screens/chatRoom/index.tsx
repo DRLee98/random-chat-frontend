@@ -12,7 +12,7 @@ import useMe from '@app/graphql/hooks/user/useMe';
 import styled from 'styled-components/native';
 
 import Message from '@app/components/chat/Message';
-import Input from '@app/components/common/BorderInput';
+import Input from '@app/components/common/input/BorderInput';
 import ChatRoomTopModal from '@app/components/room/ChatRoomTopModal';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
