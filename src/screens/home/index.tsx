@@ -71,6 +71,7 @@ const HomeScreen = ({navigation}: HomeScreenProps) => {
       ListHeaderComponent={
         <Button title="채팅방 생성" onPress={createRandomRoomFn} />
       }
+      ListFooterComponent={Footer}
       onEndReached={fetchMore}
       onEndReachedThreshold={0.5}
     />
@@ -80,6 +81,10 @@ const HomeScreen = ({navigation}: HomeScreenProps) => {
 const Container = styled.FlatList<FlatListProps<MyRoomBaseFragment>>`
   width: 100%;
   background-color: ${({theme}) => theme.bgColor};
+`;
+
+const Footer = styled.View`
+  height: 30px;
 `;
 
 export default HomeScreen;

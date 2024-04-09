@@ -93,7 +93,7 @@ const Time = styled.Text`
 `;
 
 const SystemMessageBox = styled.View`
-  margin-top: 15px;
+  padding-top: 25px;
 
   align-items: center;
 `;
