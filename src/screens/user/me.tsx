@@ -1,4 +1,4 @@
-import {useState} from 'react';
+import {useEffect, useState} from 'react';
 import useMeDetail, {
   useUpdateMeDetail,
 } from '@app/graphql/hooks/user/useMeDetail';
@@ -43,12 +43,7 @@ const MeScreen = ({navigation}: MeScreenProps) => {
   const [updateUser] = useUpdateUser();
 
   const [edit, setEdit] = useState(false);
-  const {getProps, setFieldValue, values} = useForm<FormValues>({
-    initialValues: {
-      nickname: me?.nickname ?? '',
-      bio: me?.bio ?? '',
-    },
-  });
+  const {getProps, setFieldValue, values} = useForm<FormValues>();
 
   const toggleEdit = () => setEdit(prev => !prev);
 
@@ -96,6 +91,13 @@ const MeScreen = ({navigation}: MeScreenProps) => {
     }
   };
 
+  useEffect(() => {
+    if (me) {
+      setFieldValue('nickname', me.nickname);
+      me.bio && setFieldValue('bio', me.bio);
+    }
+  }, [me]);
+
   if (!me) return null;
   return (
     <Container>
@@ -106,11 +108,9 @@ const MeScreen = ({navigation}: MeScreenProps) => {
           url={values?.profile?.uri ?? me.profileUrl}
         />
         {edit && (
-          <ProfileEditButton>
-            <PictureSelectButton onChange={onProfileChange}>
-              <Icon name="camera" size={20} color={theme.gray100.default} />
-            </PictureSelectButton>
-          </ProfileEditButton>
+          <ProfileEditButtonBox>
+            <PictureSelectButton onChange={onProfileChange} />
+          </ProfileEditButtonBox>
         )}
       </ProfileImgBox>
       <NicknameBox>
@@ -169,20 +169,10 @@ const ProfileImgBox = styled.View`
   position: relative;
 `;
 
-const ProfileEditButton = styled.View`
+const ProfileEditButtonBox = styled.View`
   position: absolute;
   right: 0px;
   bottom: 0px;
-
-  width: 30px;
-  height: 30px;
-
-  align-items: center;
-  justify-content: center;
-
-  background-color: ${({theme}) => theme.bgColor};
-  border: 1px solid ${({theme}) => theme.gray200.default};
-  border-radius: 999px;
 `;
 
 const NicknameBox = styled.View`

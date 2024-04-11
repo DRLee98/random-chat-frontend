@@ -1,11 +1,16 @@
-import {useEffect, useState} from 'react';
+import {useEffect} from 'react';
 import useLoginAndSetToken from '@app/hooks/useLoginAndSetToken';
 import useCreateUser from '@app/graphql/hooks/user/useCreateUser';
 import useRandomNickname from '@app/graphql/hooks/user/useRandomNickname';
+import {useTheme} from 'styled-components/native';
+import useForm from '@app/hooks/useForm';
 
-import {Button, TextInput, View} from 'react-native';
+import styled from 'styled-components/native';
+
 import ProfileImg from '@app/components/common/ProfileImg';
 import PictureSelectButton from '@app/components/common/PictureSelectButton';
+import BorderInput from '@app/components/common/input/BorderInput';
+import Icon from 'react-native-vector-icons/Ionicons';
 
 import {ApolloError} from '@apollo/client';
 
@@ -23,7 +28,9 @@ export interface SignUpScreenParams extends Omit<CreateUserInput, 'profile'> {
   profileUrl?: string;
 }
 
-interface Values extends Omit<CreateUserInput, 'profile'> {}
+interface FormValues extends Omit<CreateUserInput, 'profile'> {
+  profile?: ReactNativeFileType;
+}
 
 interface SignUpScreenProps
   extends StackScreenProps<
@@ -32,37 +39,23 @@ interface SignUpScreenProps
   > {}
 
 const SignUpScreen = ({route, navigation}: SignUpScreenProps) => {
+  const theme = useTheme();
+
   const login = useLoginAndSetToken();
   const [createUser] = useCreateUser();
-  const [randomNickname, randomNicknameResult] = useRandomNickname();
+  const [randomNickname] = useRandomNickname();
 
-  const [profile, setProfile] = useState<ReactNativeFileType>();
-  const [values, setValues] = useState<Values>();
+  const {getProps, setFieldValue, values, setValues} = useForm<FormValues>();
 
-  const setValuesFn = async (params: SignUpScreenParams) => {
-    const {profileUrl, ...v} = params;
-    if (profileUrl) {
-      const file = makeFile({
-        uri: profileUrl,
-        name: `${params.socialPlatform}_profile.${profileUrl.split('.').pop()}`,
-        type: 'image',
-      });
-      setProfile(file);
-    }
-    setValues(v);
+  const onProfileChange = (file: ReactNativeFileType) => {
+    setFieldValue('profile', file);
   };
 
   const createRandomNickname = async () => {
     const data = await randomNickname();
 
-    if (data?.randomNickname.ok) {
-      setValues(
-        prev =>
-          prev && {
-            ...prev,
-            nickname: data?.randomNickname.nickname ?? prev.nickname,
-          },
-      );
+    if (data?.randomNickname.ok && data.randomNickname.nickname) {
+      setFieldValue('nickname', data.randomNickname.nickname);
     }
   };
 
@@ -71,7 +64,7 @@ const SignUpScreen = ({route, navigation}: SignUpScreenProps) => {
       if (values) {
         const {data} = await createUser({
           variables: {
-            input: {...values, ...(profile && {profile})},
+            input: {...values},
           },
         });
         if (data?.createUser.ok) {
@@ -100,25 +93,87 @@ const SignUpScreen = ({route, navigation}: SignUpScreenProps) => {
   };
 
   useEffect(() => {
-    setValuesFn(route.params);
+    const {profileUrl, ...v} = route.params;
+    const initValues: FormValues = {...v};
+    if (profileUrl) {
+      const file = makeFile({
+        uri: profileUrl,
+        name: `${initValues.socialPlatform}_profile.${profileUrl
+          .split('.')
+          .pop()}`,
+        type: 'image',
+      });
+      initValues.profile = file;
+    }
+    setValues(initValues);
   }, [route.params]);
 
   return (
-    <View style={{alignItems: 'center', justifyContent: 'center', flex: 1}}>
-      <PictureSelectButton onChange={setProfile}>
-        <ProfileImg url={profile?.uri} />
-      </PictureSelectButton>
-      <View style={{flexDirection: 'row', marginVertical: 20}}>
-        <TextInput placeholder="nickname" value={values?.nickname} />
-        <Button
-          disabled={randomNicknameResult.loading}
-          title="랜덤 닉네임 생성"
-          onPress={createRandomNickname}
-        />
-      </View>
-      <Button title="가입하기" onPress={regist} />
-    </View>
+    <Container>
+      <ProfileImgBox>
+        <ProfileImg url={values.profile?.uri} size={120} />
+        <PictureSelectButtonBox>
+          <PictureSelectButton onChange={onProfileChange} />
+        </PictureSelectButtonBox>
+      </ProfileImgBox>
+      <BorderInput
+        placeholder="닉네임을 입력해 주세요."
+        right={
+          <RandomNicknameButton onPress={createRandomNickname}>
+            <Icon name="dice" size={25} color={theme.bgColor} />
+          </RandomNicknameButton>
+        }
+        {...getProps('nickname')}
+      />
+
+      <RegistButton onPress={regist}>
+        <RegistText>*** 시작하기</RegistText>
+      </RegistButton>
+    </Container>
   );
 };
+
+const Container = styled.View`
+  flex: 1;
+  align-items: center;
+  gap: 10px;
+
+  padding: 0 30px;
+  padding-top: 35%;
+
+  background-color: ${({theme}) => theme.bgColor};
+`;
+
+const ProfileImgBox = styled.View`
+  position: relative;
+`;
+
+const PictureSelectButtonBox = styled.View`
+  position: absolute;
+  right: 0px;
+  bottom: 0px;
+`;
+
+const RandomNicknameButton = styled.TouchableOpacity`
+  padding: 6px;
+  background-color: ${({theme}) => theme.orange.default};
+  border-radius: 999px;
+`;
+
+const RegistButton = styled.TouchableOpacity`
+  align-items: center;
+  justify-content: center;
+
+  width: 100%;
+  padding: 12px;
+  background-color: ${({theme}) => theme.orange.default};
+  border-radius: 999px;
+`;
+
+const RegistText = styled.Text`
+  font-size: 18px;
+  font-weight: 700;
+  color: ${({theme}) => theme.bgColor};
+`;
 
 export default SignUpScreen;

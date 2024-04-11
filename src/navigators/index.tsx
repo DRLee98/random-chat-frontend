@@ -19,6 +19,7 @@ import type {SignUpScreenParams} from '@app/screens/signUp';
 import type {ChatRoomScreenParams} from '@app/screens/chatRoom';
 import type {ChatRoomEditScreenParams} from '@app/screens/chatRoom/edit';
 import type {UserScreenScreenParams} from '@app/screens/user';
+import type {TextStyle} from 'react-native';
 
 export enum MainNavigatorScreens {
   Splash = 'Splash',
@@ -49,6 +50,12 @@ const Stack = createStackNavigator<MainNavigatorParamList>();
 const MainNavigator = () => {
   const theme = useTheme();
 
+  const headerTitleStyles: TextStyle = {
+    color: theme.fontColor,
+    fontSize: 18,
+    fontWeight: '400',
+  };
+
   return (
     <NavigationContainer>
       <Container behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
@@ -65,11 +72,7 @@ const MainNavigator = () => {
             headerRightContainerStyle: {
               paddingRight: 10,
             },
-            headerTitleStyle: {
-              color: theme.fontColor,
-              fontSize: 18,
-              fontWeight: '400',
-            },
+            headerTitleStyle: {...headerTitleStyles},
             headerBackImage: ({tintColor}) => (
               <TouchableOpacity onPress={navigation.goBack}>
                 <Icon name="chevron-back" color={tintColor} size={24} />
@@ -91,6 +94,14 @@ const MainNavigator = () => {
           <Stack.Screen
             name={MainNavigatorScreens.SignUp}
             component={SignUpScreen}
+            options={{
+              headerTitle: '회원가입',
+              headerTitleAlign: 'center',
+              headerBackTitleVisible: false,
+              headerTitleStyle: {
+                ...headerTitleStyles,
+              },
+            }}
           />
           <Stack.Screen
             name={MainNavigatorScreens.Home}
@@ -127,13 +138,13 @@ const MainNavigator = () => {
             name={MainNavigatorScreens.ChatRoom}
             component={ChatRoomScreen}
             options={{
-              headerBackTitleVisible: false,
+              title: '',
               headerTitle: '',
               headerTitleAlign: 'center',
+              headerBackTitleVisible: false,
               headerTitleStyle: {
-                color: theme.fontColor,
+                ...headerTitleStyles,
                 fontSize: 16,
-                fontWeight: '400',
               },
             }}
           />
@@ -142,12 +153,11 @@ const MainNavigator = () => {
             component={ChatRoomEditScreen}
             options={{
               title: '채팅방 수정',
-              headerBackTitleVisible: false,
               headerTitleAlign: 'center',
+              headerBackTitleVisible: false,
               headerTitleStyle: {
-                color: theme.fontColor,
+                ...headerTitleStyles,
                 fontSize: 16,
-                fontWeight: '400',
               },
             }}
           />

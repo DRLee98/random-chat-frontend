@@ -14,7 +14,7 @@ interface Props<T> {
 }
 
 function useForm<T = undefined>(props?: Props<T>) {
-  const [values, setValues] = useState<T | undefined>(props?.initialValues);
+  const [values, setValues] = useState<T>((props?.initialValues ?? {}) as T);
   const [errors, setErrors] = useState<Errors<T>>({});
 
   const getProps = <K extends keyof T>(key: K) => ({

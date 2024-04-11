@@ -22,13 +22,13 @@ const SocialPlatformLogo = ({
     }
   };
 
-  return <Image size={size} source={getSource()} />;
+  return <Image size={size} source={getSource()} resizeMode="cover" />;
 };
 
 const Image = styled.Image<Required<Pick<SocialPlatformLogoProps, 'size'>>>`
   width: ${({size}) => size}px;
   height: ${({size}) => size}px;
-  border-radius: ${({size}) => size / 2}px;
+  border-radius: ${({size}) => size / 10}px;
 `;
 
 export default SocialPlatformLogo;
