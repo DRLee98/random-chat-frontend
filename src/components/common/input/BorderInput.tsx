@@ -26,7 +26,7 @@ const BorderInput = ({right, left, ...props}: BorderInputProps) => {
   return (
     <Container
       style={{
-        borderColor: focused ? theme.orange.default : theme.gray200.default,
+        borderColor: focused ? theme.primary.default : theme.gray200.default,
       }}>
       {left}
       <CustomInput {...props} onFocus={onFocus} onBlur={onBlur} />

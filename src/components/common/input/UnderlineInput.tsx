@@ -23,7 +23,7 @@ const UnderlineInput = ({...props}: UnderlineInputProps) => {
   return (
     <Container
       style={{
-        borderColor: focused ? theme.orange.default : theme.gray200.default,
+        borderColor: focused ? theme.primary.default : theme.gray200.default,
       }}>
       <CustomInput {...props} onFocus={onFocus} onBlur={onBlur} />
       {props.maxLength && (

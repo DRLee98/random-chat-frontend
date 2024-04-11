@@ -228,7 +228,7 @@ const InputBox = styled.View`
 
 const SendButton = styled.TouchableOpacity`
   padding: 10px;
-  background-color: ${({theme}) => theme.orange.default};
+  background-color: ${({theme}) => theme.primary.default};
   border-radius: 999px;
 `;
 

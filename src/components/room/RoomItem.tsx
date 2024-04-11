@@ -36,7 +36,7 @@ const RoomItem = ({userRoom}: RoomItemProps) => {
     <SwipeableListItem
       leftActions={
         <ButtonList>
-          <ButtonBox color={theme.orange.default}>
+          <ButtonBox color={theme.primary.default}>
             <PinnedButton
               roomId={userRoom.room.id}
               userRoomId={userRoom.id}

@@ -72,7 +72,7 @@ const TextBubble = styled.View<Pick<MessageProps, 'myMessage'>>`
   padding: 12px;
 
   background-color: ${({myMessage, theme}) =>
-    myMessage ? theme.orange.default : theme.gray500.default};
+    myMessage ? theme.primary.default : theme.gray500.default};
   border-radius: 16px;
 `;
 
@@ -82,7 +82,7 @@ const Text = styled.Text`
 
 const UnReadCount = styled.Text<Pick<MessageProps, 'myMessage'>>`
   align-self: ${({myMessage}) => (myMessage ? 'flex-end' : 'flex-start')};
-  color: ${({theme}) => theme.orange.default};
+  color: ${({theme}) => theme.primary.default};
   font-size: 12px;
   font-weight: 600;
 `;

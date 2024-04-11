@@ -3,6 +3,10 @@ import {DefaultTheme} from 'styled-components/native';
 export const lightTheme: DefaultTheme = {
   bgColor: '#fff',
   fontColor: '#222',
+  primary: {
+    default: '#fd7e45',
+    accessible: '#fd8643',
+  },
   red: {
     default: 'rgb(255,59,48)',
     accessible: 'rgb(215,0,21)',
@@ -84,6 +88,10 @@ export const lightTheme: DefaultTheme = {
 export const darkTheme: DefaultTheme = {
   bgColor: '#222',
   fontColor: '#fff',
+  primary: {
+    default: '#fe604d',
+    accessible: '#fe694b',
+  },
   red: {
     default: 'rgb(255,69,58)',
     accessible: 'rgb(255,105,97)',

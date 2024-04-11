@@ -4,6 +4,7 @@ declare module 'styled-components/native' {
   export interface DefaultTheme {
     bgColor: string;
     fontColor: string;
+    primary: Color;
     red: Color;
     orange: Color;
     yellow: Color;

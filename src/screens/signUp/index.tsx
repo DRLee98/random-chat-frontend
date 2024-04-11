@@ -156,7 +156,7 @@ const PictureSelectButtonBox = styled.View`
 
 const RandomNicknameButton = styled.TouchableOpacity`
   padding: 6px;
-  background-color: ${({theme}) => theme.orange.default};
+  background-color: ${({theme}) => theme.primary.default};
   border-radius: 999px;
 `;
 
@@ -166,7 +166,7 @@ const RegistButton = styled.TouchableOpacity`
 
   width: 100%;
   padding: 12px;
-  background-color: ${({theme}) => theme.orange.default};
+  background-color: ${({theme}) => theme.primary.default};
   border-radius: 999px;
 `;
 
