@@ -23,6 +23,7 @@ import {MESSAGE_BASE} from '@app/graphql/fragments/message';
 import {getFragmentData} from '@app/graphql/__generated__';
 
 import {dateStringToNumber} from '@app/utils/functions';
+import {getChatRoomName} from '@app/utils/userRoomName';
 
 import type {StackScreenProps} from '@react-navigation/stack';
 import type {MainNavigatorParamList} from '@app/navigators';
@@ -166,7 +167,7 @@ const ChatRoomScreen = ({route, navigation}: ChatRoomScreenProps) => {
 
   useLayoutEffect(() => {
     navigation.setOptions({
-      headerTitle: room?.roomDetail.room?.userRoom.name,
+      headerTitle: getChatRoomName(room?.roomDetail.room),
     });
   }, [room]);
 

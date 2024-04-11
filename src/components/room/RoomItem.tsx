@@ -10,6 +10,7 @@ import NotiButton from '@app/components/room/NotiButton';
 import ExitButton from '@app/components/room/ExitButton';
 
 import {geDatestamp} from '@app/utils/functions';
+import {getHomeChatRoomName} from '@app/utils/userRoomName';
 
 import {MainNavigatorScreens} from '@app/navigators';
 
@@ -59,7 +60,7 @@ const RoomItem = ({userRoom}: RoomItemProps) => {
         <ButtonBox color={theme.red.default}>
           <ExitButton
             roomId={userRoom.room.id}
-            roomName={userRoom.name}
+            roomName={getHomeChatRoomName(userRoom, true)}
             type="text"
             color="#fff"
             size={16}
@@ -76,7 +77,7 @@ const RoomItem = ({userRoom}: RoomItemProps) => {
           <SpaceBetween>
             <TitleBox>
               <Title ellipsizeMode="tail" numberOfLines={1}>
-                {userRoom.name}
+                {getHomeChatRoomName(userRoom)}
               </Title>
               {userRoom.pinnedAt && (
                 <Icon color={theme.gray200.default} size={14} name="pin" />

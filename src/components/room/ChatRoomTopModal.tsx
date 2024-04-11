@@ -11,6 +11,8 @@ import PinnedButton from '@app/components/room/PinnedButton';
 import ExitButton from '@app/components/room/ExitButton';
 import ProfileImg from '@app/components/common/ProfileImg';
 
+import {getChatRoomName} from '@app/utils/userRoomName';
+
 import {MainNavigatorScreens} from '@app/navigators';
 
 import type {MainNavigatorParamList} from '@app/navigators';
@@ -40,7 +42,7 @@ const ChatRoomTopModal = ({roomId, roomDetail, me}: ChatRoomTopModalProps) => {
     navigation.navigate(MainNavigatorScreens.ChatRoomEdit, {
       roomId,
       userRoomId: roomDetail.userRoom.id,
-      userRoomName: roomDetail.userRoom.name,
+      userRoomName: getChatRoomName(roomDetail),
     });
   };
 
@@ -71,7 +73,7 @@ const ChatRoomTopModal = ({roomId, roomDetail, me}: ChatRoomTopModalProps) => {
     <TopModal visible={modalVisible} onCloseModal={closeModal}>
       <Containder>
         <RoomNameBox>
-          <RoomName>{roomDetail.userRoom.name}</RoomName>
+          <RoomName>{getChatRoomName(roomDetail)}</RoomName>
           <EditButton onPress={onEditPress}>
             <Icon name="pencil" size={14} color={theme.fontColor} />
           </EditButton>
@@ -115,7 +117,7 @@ const ChatRoomTopModal = ({roomId, roomDetail, me}: ChatRoomTopModalProps) => {
             </ButtonList>
             <ExitButton
               roomId={roomId}
-              roomName={roomDetail.userRoom.name}
+              roomName={getChatRoomName(roomDetail)}
               type="icon"
               onAfterDelete={deleteRoomAfterFn}
               color={theme.fontColor}
