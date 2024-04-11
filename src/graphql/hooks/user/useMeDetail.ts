@@ -15,6 +15,7 @@ export const ME_DETAIL = graphql(`
         profileUrl
         bio
         socialPlatform
+        noti
         allowMessage
         language
         autoTranslation

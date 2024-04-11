@@ -1,7 +1,7 @@
 import {useEffect} from 'react';
 import useLoginAndSetToken from '@app/hooks/useLoginAndSetToken';
 
-import {Text, View} from 'react-native';
+import styled from 'styled-components/native';
 
 import {getSociald, removeSociald} from '@app/utils/encStorage';
 
@@ -36,10 +36,22 @@ const SplashScreen = ({navigation}: SplashScreenProps) => {
   }, []);
 
   return (
-    <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+    <Container>
       <Text>Random Chat</Text>
-    </View>
+    </Container>
   );
 };
+
+const Container = styled.View`
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+
+  background-color: ${({theme}) => theme.bgColor};
+`;
+
+const Text = styled.Text`
+  color: ${({theme}) => theme.fontColor};
+`;
 
 export default SplashScreen;

@@ -1,7 +1,12 @@
 import messaging from '@react-native-firebase/messaging';
 
-export async function requestUserPermission() {
-  const authStatus = await messaging().requestPermission();
+export function requestUserPermission() {
+  return messaging().requestPermission();
+}
+
+export async function messagingEnabled() {
+  const authStatus = await messaging().hasPermission();
+
   const enabled =
     authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
     authStatus === messaging.AuthorizationStatus.PROVISIONAL;
@@ -9,6 +14,8 @@ export async function requestUserPermission() {
   return enabled;
 }
 
-export function getFcmToken() {
+export async function getFcmToken() {
+  const enabled = await messagingEnabled();
+  if (!enabled) return undefined;
   return messaging().getToken();
 }

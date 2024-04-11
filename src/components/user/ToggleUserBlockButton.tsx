@@ -3,7 +3,7 @@ import useToggleBlockUser from '@app/graphql/hooks/user/useToggleBlockUser';
 
 import styled from 'styled-components/native';
 
-import {Alert} from 'react-native';
+import {AlertFn} from '@app/utils/app';
 
 import {ME_DETAIL} from '@app/graphql/hooks/user/useMeDetail';
 import {ME} from '@app/graphql/hooks/user/useMe';
@@ -75,25 +75,18 @@ const ToggleUserBlockButton = ({
     );
   };
 
-  const AlertFn = async () => {
-    Alert.alert(
-      '차단',
-      `${nickname}님을 차단${
+  const onPress = () => {
+    AlertFn({
+      title: '유저 차단',
+      message: `${nickname}님을 차단${
         me?.blockUserIds.includes(userId) ? '해제' : ''
       }하시겠습니까?`,
-      [
-        {text: '취소', style: 'cancel'},
-        {
-          text: '확인',
-          style: 'destructive',
-          onPress: toggleBlockUserFn,
-        },
-      ],
-    );
+      onConfirm: toggleBlockUserFn,
+    });
   };
 
   return (
-    <Container onPress={AlertFn} blocked={me?.blockUserIds.includes(userId)}>
+    <Container onPress={onPress} blocked={me?.blockUserIds.includes(userId)}>
       <Text blocked={me?.blockUserIds.includes(userId)}>
         {me?.blockUserIds.includes(userId) ? '차단해제' : '차단'}
       </Text>

@@ -10,6 +10,7 @@ import ChatRoomScreen from '@app/screens/chatRoom';
 import MeScreen from '@app/screens/user/me';
 import UserScreen from '@app/screens/user';
 import ChatRoomEditScreen from '@app/screens/chatRoom/edit';
+import SettingsScreen from '@app/screens/settings';
 import {NavigationContainer} from '@react-navigation/native';
 import {Platform, TouchableOpacity} from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -28,6 +29,7 @@ export enum MainNavigatorScreens {
   ChatRoomEdit = 'ChatRoomEdit',
   Me = 'Me',
   User = 'User',
+  Settings = 'Settings',
 }
 
 export type MainNavigatorParamList = {
@@ -39,6 +41,7 @@ export type MainNavigatorParamList = {
   ChatRoomEdit: ChatRoomEditScreenParams;
   Me: undefined;
   User: UserScreenScreenParams;
+  Settings: undefined;
 };
 
 const Stack = createStackNavigator<MainNavigatorParamList>();
@@ -64,7 +67,8 @@ const MainNavigator = () => {
             },
             headerTitleStyle: {
               color: theme.fontColor,
-              fontSize: 22,
+              fontSize: 18,
+              fontWeight: '400',
             },
             headerBackImage: ({tintColor}) => (
               <TouchableOpacity onPress={navigation.goBack}>
@@ -105,7 +109,10 @@ const MainNavigator = () => {
                       size={26}
                     />
                   </TouchableOpacity>
-                  <TouchableOpacity onPress={() => {}}>
+                  <TouchableOpacity
+                    onPress={() => {
+                      navigation.navigate(MainNavigatorScreens.Settings);
+                    }}>
                     <Icon
                       name="settings-outline"
                       color={theme.fontColor}
@@ -150,7 +157,6 @@ const MainNavigator = () => {
             options={{
               headerShown: false,
               presentation: 'modal',
-              // ...TransitionPresets.ModalSlideFromBottomIOS,
             }}
           />
           <Stack.Screen
@@ -159,7 +165,15 @@ const MainNavigator = () => {
             options={{
               headerShown: false,
               presentation: 'modal',
-              // ...TransitionPresets.ModalSlideFromBottomIOS,
+            }}
+          />
+          <Stack.Screen
+            name={MainNavigatorScreens.Settings}
+            component={SettingsScreen}
+            options={{
+              title: '설정',
+              headerBackTitleVisible: false,
+              headerTitleAlign: 'center',
             }}
           />
         </Stack.Navigator>
