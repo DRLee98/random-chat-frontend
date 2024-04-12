@@ -1,0 +1,39 @@
+import {useEffect, useState} from 'react';
+
+import styled from 'styled-components/native';
+
+import {geDatestamp, getTimestamp} from '@app/utils/functions';
+
+interface TimestampProps {
+  date: string;
+  type: 'date' | 'time';
+}
+
+const Timestamp = ({date, type}: TimestampProps) => {
+  const [timeStr, setTimeStr] = useState('');
+
+  const updateTimeStr = () => {
+    switch (type) {
+      case 'date':
+        setTimeStr(geDatestamp(date));
+        break;
+      default:
+        setTimeStr(getTimestamp(date));
+        break;
+    }
+  };
+
+  useEffect(() => {
+    updateTimeStr();
+    const timer = setInterval(updateTimeStr, 60000);
+    return () => clearInterval(timer);
+  }, []);
+  return <Text>{timeStr}</Text>;
+};
+
+const Text = styled.Text`
+  color: ${({theme}) => theme.gray100.default};
+  font-size: 11px;
+`;
+
+export default Timestamp;

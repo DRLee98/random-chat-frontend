@@ -1,7 +1,6 @@
 import styled from 'styled-components/native';
 import ProfileImg from '@app/components/common/ProfileImg';
-
-import {getTimestamp} from '@app/utils/functions';
+import Timestamp from '@app/components/common/Timestamp';
 
 import type {BundledMessage} from '@app/screens/chatRoom';
 
@@ -43,7 +42,9 @@ const Message = ({
                   {item.unReadCount}
                 </UnReadCount>
               )}
-              {i === list.length - 1 && <Time>{getTimestamp(createdAt)}</Time>}
+              {i === list.length - 1 && (
+                <Timestamp date={createdAt} type="time" />
+              )}
             </Column>
           </Row>
         ))}
@@ -87,15 +88,15 @@ const UnReadCount = styled.Text<Pick<MessageProps, 'myMessage'>>`
   font-weight: 600;
 `;
 
-const Time = styled.Text`
-  color: ${({theme}) => theme.gray100.default};
-  font-size: 11px;
-`;
-
 const SystemMessageBox = styled.View`
-  padding-top: 25px;
+  margin-top: 20px;
+  margin-bottom: 10px;
+  padding: 5px 0;
 
   align-items: center;
+
+  background-color: ${({theme}) => theme.gray700.default};
+  opacity: 0.8;
 `;
 
 const SystemMessage = styled.Text`

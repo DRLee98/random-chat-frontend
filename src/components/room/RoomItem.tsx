@@ -8,8 +8,8 @@ import ProfileImg from '@app/components/common/ProfileImg';
 import PinnedButton from '@app/components/room/PinnedButton';
 import NotiButton from '@app/components/room/NotiButton';
 import ExitButton from '@app/components/room/ExitButton';
+import Timestamp from '@app/components/common/Timestamp';
 
-import {geDatestamp} from '@app/utils/functions';
 import {getHomeChatRoomName} from '@app/utils/userRoomName';
 
 import {MainNavigatorScreens} from '@app/navigators';
@@ -90,7 +90,7 @@ const RoomItem = ({userRoom}: RoomItemProps) => {
                 />
               )}
             </TitleBox>
-            <DateText>{geDatestamp(userRoom.room.updatedAt)}</DateText>
+            <Timestamp date={userRoom.room.updatedAt} type="date" />
           </SpaceBetween>
           <SpaceBetween>
             <LastMessage ellipsizeMode="tail" numberOfLines={1}>
@@ -167,11 +167,6 @@ const Title = styled.Text`
   font-weight: 500;
   font-size: 14px;
   color: ${({theme}) => theme.fontColor};
-`;
-
-const DateText = styled.Text`
-  font-size: 12px;
-  color: ${({theme}) => theme.gray100.default};
 `;
 
 const LastMessage = styled.Text`
