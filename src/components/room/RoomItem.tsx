@@ -10,7 +10,7 @@ import NotiButton from '@app/components/room/NotiButton';
 import ExitButton from '@app/components/room/ExitButton';
 import Timestamp from '@app/components/common/Timestamp';
 
-import {getHomeChatRoomName} from '@app/utils/userRoomName';
+import {getHomeChatRoomName} from '@app/utils/name';
 
 import {MainNavigatorScreens} from '@app/navigators';
 

@@ -1,6 +1,7 @@
 import {useApolloClient, useQuery} from '@apollo/client';
 import {getFragmentData, graphql} from '@app/graphql/__generated__';
 
+import {MessageType} from '@app/graphql/__generated__/graphql';
 import {MESSAGE_BASE} from '@app/graphql/fragments/message';
 
 import type {QueryHookOptions} from '@apollo/client';
@@ -143,7 +144,26 @@ export const useUpdateViewMessages = (input: ViewMessagesInput) => {
     updateFn(updateMessages);
   };
 
-  return {updateMessage, updateMessages, appendMessage};
+  const appendSystemMessage = (contents: string) => {
+    const newMessage: MessageBaseFragment = {
+      __typename: 'MessageObjectType',
+      id: `system-${new Date().getTime()}`,
+      contents,
+      type: MessageType.System,
+      createdAt: new Date(),
+      readUsersId: [],
+      user: {
+        id: '',
+        nickname: '',
+        profileUrl: '',
+      },
+    };
+    const messages = getPrevData();
+    const updateMessages = [...messages, newMessage];
+    updateFn(updateMessages);
+  };
+
+  return {updateMessage, updateMessages, appendMessage, appendSystemMessage};
 };
 
 export const useRefetchMessages = () => {

@@ -12,7 +12,7 @@ import MainNavigator from './navigators';
 
 import {Alert, Appearance} from 'react-native';
 import messaging from '@react-native-firebase/messaging';
-import {requestUserPermission} from './utils/fcm';
+import {requestUserPermission} from '@app/utils/fcm';
 
 import type {FirebaseMessagingTypes} from '@react-native-firebase/messaging/lib';
 

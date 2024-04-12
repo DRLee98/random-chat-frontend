@@ -4,7 +4,8 @@ import {useTheme} from 'styled-components/native';
 
 import styled from 'styled-components/native';
 
-import {areColorsSimilar, shuffleList} from '@app/utils/functions';
+import {shuffleList} from '@app/utils/common';
+import {areColorsSimilar} from '@app/utils/color';
 import {profileColors} from '@app/utils/constants';
 
 import {MainNavigatorScreens} from '@app/navigators';

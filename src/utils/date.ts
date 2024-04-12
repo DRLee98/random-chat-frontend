@@ -1,8 +1,10 @@
+import {formatNumber} from './common';
+
 export const dateStringToNumber = (date?: string) => {
   return date ? new Date(date).getTime() : 0;
 };
 
-const getYMD = (date: Date) => {
+export const getYMD = (date: Date) => {
   const year = date.getFullYear();
   const month = date.getMonth() + 1;
   const day = date.getDate();
@@ -51,61 +53,36 @@ export const getTimestamp = (date: string) => {
   return `${hour >= 12 ? '오후' : '오전'} ${hour % 12}:${formatNumber(minute)}`;
 };
 
-export const formatNumber = (num: number) => (num < 10 ? `0${num}` : num);
+export const isToday = (date: string) => {
+  const target = new Date(date);
+  const today = new Date();
 
-export const shuffleList = (list: string[], num: number) => {
-  const newList: string[] = [];
-  list.forEach((color, i) => {
-    if (i % num === 0) return newList.push(color);
-    newList.unshift(color);
-  });
-
-  return newList;
+  return target.toLocaleDateString() === today.toLocaleDateString();
 };
 
-const hexToRgb = (hex: string) => {
-  if (!hex) return {r: 0, g: 0, b: 0};
-  // HEX에서 # 제거
-  let r = 0,
-    g = 0,
-    b = 0;
-  // 3자리 HEX 코드인 경우
-  if (hex.length === 4) {
-    r = parseInt(hex[1] + hex[1], 16);
-    g = parseInt(hex[2] + hex[2], 16);
-    b = parseInt(hex[3] + hex[3], 16);
+export const getDayStr = (dayNum: number): string => {
+  switch (dayNum) {
+    case 0:
+      return '일요일';
+    case 1:
+      return '월요일';
+    case 2:
+      return '화요일';
+    case 3:
+      return '수요일';
+    case 4:
+      return '목요일';
+    case 5:
+      return '금요일';
+    case 6:
+      return '토요일';
+    default:
+      return '';
   }
-  // 6자리 HEX 코드인 경우
-  else if (hex.length === 7) {
-    r = parseInt(hex[1] + hex[2], 16);
-    g = parseInt(hex[3] + hex[4], 16);
-    b = parseInt(hex[5] + hex[6], 16);
-  }
-  return {r, g, b};
 };
 
-const colorDistance = (hex1: string, hex2: string) => {
-  const rgb1 = hexToRgb(hex1);
-  const rgb2 = hexToRgb(hex2);
-
-  // RGB 공간에서 두 색상 간의 유클리디안 거리 계산
-  const distance = Math.sqrt(
-    Math.pow(rgb1.r - rgb2.r, 2) +
-      Math.pow(rgb1.g - rgb2.g, 2) +
-      Math.pow(rgb1.b - rgb2.b, 2),
-  );
-
-  return distance;
-};
-
-export const areColorsSimilar = (
-  hex1: string,
-  hex2: string,
-  threshold: number = 20,
-) => {
-  // 두 색상의 거리를 계산
-  const distance = colorDistance(hex1, hex2);
-
-  // 거리가 임계값보다 작거나 같으면 비슷한 것으로 판단
-  return distance <= threshold;
+export const getSystemDateStr = () => {
+  const newDate = new Date();
+  const {year, month, day} = getYMD(newDate);
+  return `${year}년 ${month}월 ${day}일 ${getDayStr(newDate.getDay())}`;
 };

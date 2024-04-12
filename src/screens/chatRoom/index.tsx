@@ -22,8 +22,8 @@ import {MessageType} from '@app/graphql/__generated__/graphql';
 import {MESSAGE_BASE} from '@app/graphql/fragments/message';
 import {getFragmentData} from '@app/graphql/__generated__';
 
-import {dateStringToNumber} from '@app/utils/functions';
-import {getChatRoomName} from '@app/utils/userRoomName';
+import {dateStringToNumber, getSystemDateStr, isToday} from '@app/utils/date';
+import {getChatRoomName} from '@app/utils/name';
 
 import type {StackScreenProps} from '@react-navigation/stack';
 import type {MainNavigatorParamList} from '@app/navigators';
@@ -59,9 +59,10 @@ const ChatRoomScreen = ({route, navigation}: ChatRoomScreenProps) => {
   const [sendMessage] = useSendMessage();
 
   const {updateMyRoom, sortMyRooms} = useUpdateMyRooms();
-  const {updateMessages, appendMessage} = useUpdateViewMessages({
-    roomId,
-  });
+  const {updateMessages, appendMessage, appendSystemMessage} =
+    useUpdateViewMessages({
+      roomId,
+    });
 
   const {me} = useMe();
   const {data: room} = useRoomDetail({roomId});
@@ -71,6 +72,13 @@ const ChatRoomScreen = ({route, navigation}: ChatRoomScreenProps) => {
 
   const appendMessageFn = (newMessage?: FragmentType<typeof MESSAGE_BASE>) => {
     if (!room?.roomDetail.room || !newMessage) return;
+
+    const lastMessage = messages[messages.length - 1];
+    if (!lastMessage || !isToday(lastMessage.createdAt)) {
+      const systemMessage = getSystemDateStr();
+      appendSystemMessage(systemMessage);
+    }
+
     appendMessage(newMessage);
     const messageData = getFragmentData(MESSAGE_BASE, newMessage);
     updateMyRoom(

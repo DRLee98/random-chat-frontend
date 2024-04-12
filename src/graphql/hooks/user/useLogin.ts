@@ -1,5 +1,5 @@
 import {graphql} from '@app/graphql/__generated__';
-import useCustomLazyQuery from '../../utils/useCustomLazyQuery';
+import useCustomLazyQuery from '@app/graphql/utils/useCustomLazyQuery';
 
 import type {LazyQueryHookOptions} from '@apollo/client';
 import type {

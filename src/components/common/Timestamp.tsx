@@ -2,7 +2,7 @@ import {useEffect, useState} from 'react';
 
 import styled from 'styled-components/native';
 
-import {geDatestamp, getTimestamp} from '@app/utils/functions';
+import {geDatestamp, getTimestamp} from '@app/utils/date';
 
 interface TimestampProps {
   date: string;

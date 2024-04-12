@@ -9,8 +9,6 @@ import {getFragmentData} from '@app/graphql/__generated__';
 
 import {BLOCK_USER} from '@app/graphql/fragments/user';
 
-import type {Me} from '@app/graphql/__generated__/graphql';
-
 interface ToggleUserBlockButtonProps {
   userId: string;
   nickname: string;

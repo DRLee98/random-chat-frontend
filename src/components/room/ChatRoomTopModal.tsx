@@ -11,7 +11,7 @@ import PinnedButton from '@app/components/room/PinnedButton';
 import ExitButton from '@app/components/room/ExitButton';
 import ProfileImg from '@app/components/common/ProfileImg';
 
-import {getChatRoomName} from '@app/utils/userRoomName';
+import {getChatRoomName} from '@app/utils/name';
 
 import {MainNavigatorScreens} from '@app/navigators';
 

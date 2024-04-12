@@ -3,7 +3,7 @@ import {getFragmentData, graphql} from '@app/graphql/__generated__';
 
 import {MY_ROOM_BASE} from '@app/graphql/fragments/room';
 
-import {dateStringToNumber} from '@app/utils/functions';
+import {dateStringToNumber} from '@app/utils/date';
 
 import type {QueryHookOptions} from '@apollo/client';
 import type {

@@ -11,9 +11,9 @@ import {WebSocketLink} from '@apollo/client/link/ws';
 import {createUploadLink} from 'apollo-upload-client';
 import {onError} from '@apollo/client/link/error';
 
-import login from './graphql/apis/login';
+import login from '@app/graphql/apis/login';
 
-import {getSociald, getToken, setToken} from './utils/encStorage';
+import {getSociald, getToken, setToken} from '@app/utils/encStorage';
 
 import Config from 'react-native-config';
 import {Platform} from 'react-native';
