@@ -1,6 +1,6 @@
 import styled, {useTheme} from 'styled-components/native';
 
-import {createStackNavigator} from '@react-navigation/stack';
+import {TransitionPresets, createStackNavigator} from '@react-navigation/stack';
 
 import SplashScreen from '@app/screens/splash';
 import LoginScreen from '@app/screens/login';
@@ -102,6 +102,7 @@ const MainNavigator = () => {
               </TouchableOpacity>
             ),
             headerShadowVisible: false,
+            ...TransitionPresets.SlideFromRightIOS,
           })}
           initialRouteName={MainNavigatorScreens.Splash}>
           <Stack.Screen

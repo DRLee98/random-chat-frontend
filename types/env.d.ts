@@ -1,6 +1,8 @@
 declare module 'react-native-config' {
   export const API_URL: string;
   export const WS_API_URL: string;
+  export const ANDROID_API_URL: string;
+  export const ANDROID_WS_API_URL: string;
 
   export const NAVER_APP_NAME: string;
   export const NAVER_CLIENT_ID: string;

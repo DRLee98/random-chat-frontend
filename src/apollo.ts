@@ -16,6 +16,7 @@ import login from './graphql/apis/login';
 import {getSociald, getToken, setToken} from './utils/encStorage';
 
 import Config from 'react-native-config';
+import {Platform} from 'react-native';
 
 let tokenExpired = false;
 
@@ -35,7 +36,7 @@ const loadToken = async () => {
 };
 
 const httpLink = createUploadLink({
-  uri: Config.API_URL,
+  uri: Platform.OS === 'ios' ? Config.API_URL : Config.ANDROID_API_URL,
 });
 
 const authLink = setContext(async (_, {headers}) => {
@@ -50,7 +51,7 @@ const authLink = setContext(async (_, {headers}) => {
 });
 
 const wsLink = new WebSocketLink({
-  uri: Config.WS_API_URL,
+  uri: Platform.OS === 'ios' ? Config.WS_API_URL : Config.ANDROID_WS_API_URL,
   options: {
     reconnect: true,
     connectionParams: async () => {
