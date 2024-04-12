@@ -1,31 +1,29 @@
-import {useApolloClient} from '@apollo/client';
 import useToggleBlockUser from '@app/graphql/hooks/user/useToggleBlockUser';
+import {useUpdateMeDetail} from '@app/graphql/hooks/user/useMeDetail';
+import useMe, {useUpdateMe} from '@app/graphql/hooks/user/useMe';
 
 import styled from 'styled-components/native';
 
 import {AlertFn} from '@app/utils/app';
+import {getFragmentData} from '@app/graphql/__generated__';
 
-import {ME_DETAIL} from '@app/graphql/hooks/user/useMeDetail';
-import {ME} from '@app/graphql/hooks/user/useMe';
+import {BLOCK_USER} from '@app/graphql/fragments/user';
 
-import type {
-  Me,
-  MeDetailQuery,
-  MeQuery,
-} from '@app/graphql/__generated__/graphql';
+import type {Me} from '@app/graphql/__generated__/graphql';
 
 interface ToggleUserBlockButtonProps {
-  me: Me;
   userId: string;
   nickname: string;
 }
 
 const ToggleUserBlockButton = ({
-  me,
   userId,
   nickname,
 }: ToggleUserBlockButtonProps) => {
-  const {cache} = useApolloClient();
+  const {me} = useMe();
+
+  const updateMe = useUpdateMe();
+  const updateMeDetail = useUpdateMeDetail();
 
   const [toggleBlockUser] = useToggleBlockUser();
 
@@ -37,42 +35,20 @@ const ToggleUserBlockButton = ({
         },
       },
     });
-    if (!data || !data.toggleBlockUser.ok) return;
-    cache.updateQuery<MeDetailQuery>(
-      {query: ME_DETAIL},
-      prev =>
-        prev?.meDetail.me && {
-          ...prev,
-          meDetail: {
-            ...prev.meDetail,
-            me: {
-              ...prev.meDetail.me,
-              blockUsers:
-                data?.toggleBlockUser.updateBlockUsers ??
-                prev.meDetail.me?.blockUsers,
-            },
-          },
-        },
+    if (
+      !data ||
+      !data.toggleBlockUser.ok ||
+      !data.toggleBlockUser.updateBlockUsers
+    )
+      return;
+    const updateBlockUsers = getFragmentData(
+      BLOCK_USER,
+      data.toggleBlockUser.updateBlockUsers,
     );
-    cache.updateQuery<MeQuery>(
-      {query: ME},
-      prev =>
-        prev && {
-          ...prev,
-          me: {
-            ...prev.me,
-            ...(prev.me.me && {
-              me: {
-                ...prev.me.me,
-                blockUserIds:
-                  data?.toggleBlockUser.updateBlockUsers?.map(
-                    user => user.id,
-                  ) ?? prev.me.me.blockUserIds,
-              },
-            }),
-          },
-        },
-    );
+    updateMe({
+      blockUserIds: updateBlockUsers.map(user => user.id),
+    });
+    updateMeDetail({blockUsers: data.toggleBlockUser.updateBlockUsers});
   };
 
   const onPress = () => {
@@ -85,6 +61,7 @@ const ToggleUserBlockButton = ({
     });
   };
 
+  if (!me) return null;
   return (
     <Container onPress={onPress} blocked={me?.blockUserIds.includes(userId)}>
       <Text blocked={me?.blockUserIds.includes(userId)}>

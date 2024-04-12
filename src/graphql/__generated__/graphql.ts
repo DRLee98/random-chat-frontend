@@ -1,23 +1,31 @@
 /* eslint-disable */
-import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/core';
+import {TypedDocumentNode as DocumentNode} from '@graphql-typed-document-node/core';
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
-export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
-export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> };
-export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
-export type MakeEmpty<T extends { [key: string]: unknown }, K extends keyof T> = { [_ in K]?: never };
-export type Incremental<T> = T | { [P in keyof T]?: P extends ' $fragmentName' | '__typename' ? T[P] : never };
+export type Exact<T extends {[key: string]: unknown}> = {[K in keyof T]: T[K]};
+export type MakeOptional<T, K extends keyof T> = Omit<T, K> & {
+  [SubKey in K]?: Maybe<T[SubKey]>;
+};
+export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & {
+  [SubKey in K]: Maybe<T[SubKey]>;
+};
+export type MakeEmpty<T extends {[key: string]: unknown}, K extends keyof T> = {
+  [_ in K]?: never;
+};
+export type Incremental<T> =
+  | T
+  | {[P in keyof T]?: P extends ' $fragmentName' | '__typename' ? T[P] : never};
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
-  ID: { input: string; output: string; }
-  String: { input: string; output: string; }
-  Boolean: { input: boolean; output: boolean; }
-  Int: { input: number; output: number; }
-  Float: { input: number; output: number; }
+  ID: {input: string; output: string};
+  String: {input: string; output: string};
+  Boolean: {input: boolean; output: boolean};
+  Int: {input: number; output: number};
+  Float: {input: number; output: number};
   /** A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format. */
-  DateTime: { input: any; output: any; }
+  DateTime: {input: any; output: any};
   /** The `Upload` scalar type represents a file upload. */
-  Upload: { input: any; output: any; }
+  Upload: {input: any; output: any};
 };
 
 export type CreateRandomRoomOutput = {
@@ -72,7 +80,7 @@ export enum Language {
   Th = 'th',
   Vi = 'vi',
   ZhCn = 'zhCN',
-  ZhTw = 'zhTW'
+  ZhTw = 'zhTW',
 }
 
 export type LoginInput = {
@@ -100,7 +108,7 @@ export type MeDetail = {
   allowMessage: Scalars['Boolean']['output'];
   autoTranslation: Scalars['Boolean']['output'];
   bio?: Maybe<Scalars['String']['output']>;
-  blockUsers: Array<UserObjectType>;
+  blockUsers: Array<BlockUserFragment>;
   createdAt: Scalars['DateTime']['output'];
   fcmToken?: Maybe<Scalars['String']['output']>;
   id: Scalars['ID']['output'];
@@ -141,7 +149,7 @@ export type MessageObjectType = {
 export enum MessageType {
   Image = 'IMAGE',
   System = 'SYSTEM',
-  Text = 'TEXT'
+  Text = 'TEXT',
 }
 
 export type Mutation = {
@@ -156,31 +164,25 @@ export type Mutation = {
   updateUser: UpdateUserOutput;
 };
 
-
 export type MutationCreateUserArgs = {
   input: CreateUserInput;
 };
-
 
 export type MutationDeleteRoomArgs = {
   input: DeleteRoomInput;
 };
 
-
 export type MutationSendMessageArgs = {
   input: SendMessageInput;
 };
-
 
 export type MutationToggleBlockUserArgs = {
   input: ToggleBlockUserInput;
 };
 
-
 export type MutationUpdateRoomArgs = {
   input: UpdateRoomInput;
 };
-
 
 export type MutationUpdateUserArgs = {
   input: UpdateUserInput;
@@ -229,26 +231,21 @@ export type Query = {
   viewMessages: ViewMessagesOutput;
 };
 
-
 export type QueryLoginArgs = {
   input: LoginInput;
 };
-
 
 export type QueryMyRoomsArgs = {
   input: MyRoomsInput;
 };
 
-
 export type QueryRoomDetailArgs = {
   input: RoomDetailInput;
 };
 
-
 export type QueryUserProfileArgs = {
   input: UserProfileInput;
 };
-
 
 export type QueryViewMessagesArgs = {
   input: ViewMessagesInput;
@@ -332,7 +329,7 @@ export type SimpleUserRoom = {
 export enum SocialPlatform {
   Apple = 'APPLE',
   Kakao = 'KAKAO',
-  Naver = 'NAVER'
+  Naver = 'NAVER',
 }
 
 export type Subscription = {
@@ -343,11 +340,9 @@ export type Subscription = {
   updateNewMessageInUserRoom: UpdateNewMessageInUserRoom;
 };
 
-
 export type SubscriptionNewMessageArgs = {
   input: NewMessageInput;
 };
-
 
 export type SubscriptionReadMessageArgs = {
   input: ReadMessageInput;
@@ -470,170 +465,1753 @@ export type ViewMessagesOutput = {
   ok: Scalars['Boolean']['output'];
 };
 
-export type MessageBaseFragment = { __typename?: 'MessageObjectType', id: string, contents: string, type: MessageType, readUsersId: Array<string>, createdAt: any, user: { __typename?: 'UserObjectType', id: string, nickname: string, profileUrl?: string | null } } & { ' $fragmentName'?: 'MessageBaseFragment' };
+export type MessageBaseFragment = {
+  __typename?: 'MessageObjectType';
+  id: string;
+  contents: string;
+  type: MessageType;
+  readUsersId: Array<string>;
+  createdAt: any;
+  user: {
+    __typename?: 'UserObjectType';
+    id: string;
+    nickname: string;
+    profileUrl?: string | null;
+  };
+} & {' $fragmentName'?: 'MessageBaseFragment'};
 
-export type UserRoomBaseFragment = { __typename?: 'UserRoomObjectType', id: string, name?: string | null, noti: boolean, pinnedAt?: any | null, newMessage: number, room: { __typename?: 'Room', id: string } } & { ' $fragmentName'?: 'UserRoomBaseFragment' };
+export type UserRoomBaseFragment = {
+  __typename?: 'UserRoomObjectType';
+  id: string;
+  name?: string | null;
+  noti: boolean;
+  pinnedAt?: any | null;
+  newMessage: number;
+  room: {__typename?: 'Room'; id: string};
+} & {' $fragmentName'?: 'UserRoomBaseFragment'};
 
-export type MyRoomBaseFragment = { __typename?: 'MyRoom', id: string, name?: string | null, noti: boolean, pinnedAt?: any | null, newMessage: number, lastMessage: string, updatedAt: any, room: { __typename?: 'Room', id: string, updatedAt: any }, users: Array<{ __typename?: 'SimpleUser', id: string, nickname: string, profileUrl?: string | null }> } & { ' $fragmentName'?: 'MyRoomBaseFragment' };
+export type MyRoomBaseFragment = {
+  __typename?: 'MyRoom';
+  id: string;
+  name?: string | null;
+  noti: boolean;
+  pinnedAt?: any | null;
+  newMessage: number;
+  lastMessage: string;
+  updatedAt: any;
+  room: {__typename?: 'Room'; id: string; updatedAt: any};
+  users: Array<{
+    __typename?: 'SimpleUser';
+    id: string;
+    nickname: string;
+    profileUrl?: string | null;
+  }>;
+} & {' $fragmentName'?: 'MyRoomBaseFragment'};
+
+export type BlockUserFragment = {
+  __typename?: 'UserObjectType';
+  id: string;
+  nickname: string;
+  profileUrl?: string | null;
+  bio?: string | null;
+} & {' $fragmentName'?: 'BlockUserFragment'};
 
 export type NewMessageSubscriptionVariables = Exact<{
   input: NewMessageInput;
 }>;
 
-
-export type NewMessageSubscription = { __typename?: 'Subscription', newMessage: (
-    { __typename?: 'MessageObjectType' }
-    & { ' $fragmentRefs'?: { 'MessageBaseFragment': MessageBaseFragment } }
-  ) };
+export type NewMessageSubscription = {
+  __typename?: 'Subscription';
+  newMessage: {__typename?: 'MessageObjectType'} & {
+    ' $fragmentRefs'?: {MessageBaseFragment: MessageBaseFragment};
+  };
+};
 
 export type ReadMessageSubscriptionVariables = Exact<{
   input: ReadMessageInput;
 }>;
 
-
-export type ReadMessageSubscription = { __typename?: 'Subscription', readMessage: { __typename?: 'ReadMessage', messages: Array<{ __typename?: 'MessageObjectType', id: string, readUsersId: Array<string> }> } };
+export type ReadMessageSubscription = {
+  __typename?: 'Subscription';
+  readMessage: {
+    __typename?: 'ReadMessage';
+    messages: Array<{
+      __typename?: 'MessageObjectType';
+      id: string;
+      readUsersId: Array<string>;
+    }>;
+  };
+};
 
 export type SendMessageMutationVariables = Exact<{
   input: SendMessageInput;
 }>;
 
+export type SendMessageMutation = {
+  __typename?: 'Mutation';
+  sendMessage: {
+    __typename?: 'SendMessageOutput';
+    ok: boolean;
+    error?: string | null;
+    message?:
+      | ({__typename?: 'MessageObjectType'} & {
+          ' $fragmentRefs'?: {MessageBaseFragment: MessageBaseFragment};
+        })
+      | null;
+  };
+};
 
-export type SendMessageMutation = { __typename?: 'Mutation', sendMessage: { __typename?: 'SendMessageOutput', ok: boolean, error?: string | null, message?: (
-      { __typename?: 'MessageObjectType' }
-      & { ' $fragmentRefs'?: { 'MessageBaseFragment': MessageBaseFragment } }
-    ) | null } };
+export type UpdateNewMessageInUserRoomSubscriptionVariables = Exact<{
+  [key: string]: never;
+}>;
 
-export type UpdateNewMessageInUserRoomSubscriptionVariables = Exact<{ [key: string]: never; }>;
-
-
-export type UpdateNewMessageInUserRoomSubscription = { __typename?: 'Subscription', updateNewMessageInUserRoom: { __typename?: 'UpdateNewMessageInUserRoom', id: string, newMessage: number, lastMessage: string, userId: string, roomId: string } };
+export type UpdateNewMessageInUserRoomSubscription = {
+  __typename?: 'Subscription';
+  updateNewMessageInUserRoom: {
+    __typename?: 'UpdateNewMessageInUserRoom';
+    id: string;
+    newMessage: number;
+    lastMessage: string;
+    userId: string;
+    roomId: string;
+  };
+};
 
 export type ViewMessagesQueryVariables = Exact<{
   input: ViewMessagesInput;
 }>;
 
+export type ViewMessagesQuery = {
+  __typename?: 'Query';
+  viewMessages: {
+    __typename?: 'ViewMessagesOutput';
+    ok: boolean;
+    error?: string | null;
+    hasNext?: boolean | null;
+    messages?: Array<
+      {__typename?: 'MessageObjectType'} & {
+        ' $fragmentRefs'?: {MessageBaseFragment: MessageBaseFragment};
+      }
+    > | null;
+  };
+};
 
-export type ViewMessagesQuery = { __typename?: 'Query', viewMessages: { __typename?: 'ViewMessagesOutput', ok: boolean, error?: string | null, hasNext?: boolean | null, messages?: Array<(
-      { __typename?: 'MessageObjectType' }
-      & { ' $fragmentRefs'?: { 'MessageBaseFragment': MessageBaseFragment } }
-    )> | null } };
+export type CreateRandomRoomMutationVariables = Exact<{[key: string]: never}>;
 
-export type CreateRandomRoomMutationVariables = Exact<{ [key: string]: never; }>;
-
-
-export type CreateRandomRoomMutation = { __typename?: 'Mutation', createRandomRoom: { __typename?: 'CreateRandomRoomOutput', ok: boolean, error?: string | null, room?: (
-      { __typename?: 'MyRoom' }
-      & { ' $fragmentRefs'?: { 'MyRoomBaseFragment': MyRoomBaseFragment } }
-    ) | null } };
+export type CreateRandomRoomMutation = {
+  __typename?: 'Mutation';
+  createRandomRoom: {
+    __typename?: 'CreateRandomRoomOutput';
+    ok: boolean;
+    error?: string | null;
+    room?:
+      | ({__typename?: 'MyRoom'} & {
+          ' $fragmentRefs'?: {MyRoomBaseFragment: MyRoomBaseFragment};
+        })
+      | null;
+  };
+};
 
 export type DeleteRoomMutationVariables = Exact<{
   input: DeleteRoomInput;
 }>;
 
-
-export type DeleteRoomMutation = { __typename?: 'Mutation', deleteRoom: { __typename?: 'DeleteRoomOutput', ok: boolean, error?: string | null } };
+export type DeleteRoomMutation = {
+  __typename?: 'Mutation';
+  deleteRoom: {
+    __typename?: 'DeleteRoomOutput';
+    ok: boolean;
+    error?: string | null;
+  };
+};
 
 export type MyRoomsQueryVariables = Exact<{
   input: MyRoomsInput;
 }>;
 
+export type MyRoomsQuery = {
+  __typename?: 'Query';
+  myRooms: {
+    __typename?: 'MyRoomsOutput';
+    ok: boolean;
+    error?: string | null;
+    hasNext?: boolean | null;
+    rooms?: Array<
+      {__typename?: 'MyRoom'} & {
+        ' $fragmentRefs'?: {MyRoomBaseFragment: MyRoomBaseFragment};
+      }
+    > | null;
+  };
+};
 
-export type MyRoomsQuery = { __typename?: 'Query', myRooms: { __typename?: 'MyRoomsOutput', ok: boolean, error?: string | null, hasNext?: boolean | null, rooms?: Array<(
-      { __typename?: 'MyRoom' }
-      & { ' $fragmentRefs'?: { 'MyRoomBaseFragment': MyRoomBaseFragment } }
-    )> | null } };
+export type NewRoomSubscriptionVariables = Exact<{[key: string]: never}>;
 
-export type NewRoomSubscriptionVariables = Exact<{ [key: string]: never; }>;
-
-
-export type NewRoomSubscription = { __typename?: 'Subscription', newRoom: (
-    { __typename?: 'MyRoom' }
-    & { ' $fragmentRefs'?: { 'MyRoomBaseFragment': MyRoomBaseFragment } }
-  ) };
+export type NewRoomSubscription = {
+  __typename?: 'Subscription';
+  newRoom: {__typename?: 'MyRoom'} & {
+    ' $fragmentRefs'?: {MyRoomBaseFragment: MyRoomBaseFragment};
+  };
+};
 
 export type RoomDetailQueryVariables = Exact<{
   input: RoomDetailInput;
 }>;
 
-
-export type RoomDetailQuery = { __typename?: 'Query', roomDetail: { __typename?: 'RoomDetailOutput', ok: boolean, error?: string | null, room?: { __typename?: 'RoomDetail', userRoom: { __typename?: 'SimpleUserRoom', id: string, name?: string | null, noti: boolean, pinnedAt?: any | null, newMessage: number }, users: Array<{ __typename?: 'UserObjectType', id: string, nickname: string, profileUrl?: string | null, bio?: string | null, language: Language }> } | null } };
+export type RoomDetailQuery = {
+  __typename?: 'Query';
+  roomDetail: {
+    __typename?: 'RoomDetailOutput';
+    ok: boolean;
+    error?: string | null;
+    room?: {
+      __typename?: 'RoomDetail';
+      userRoom: {
+        __typename?: 'SimpleUserRoom';
+        id: string;
+        name?: string | null;
+        noti: boolean;
+        pinnedAt?: any | null;
+        newMessage: number;
+      };
+      users: Array<{
+        __typename?: 'UserObjectType';
+        id: string;
+        nickname: string;
+        profileUrl?: string | null;
+        bio?: string | null;
+        language: Language;
+      }>;
+    } | null;
+  };
+};
 
 export type UpdateRoomMutationVariables = Exact<{
   input: UpdateRoomInput;
 }>;
 
-
-export type UpdateRoomMutation = { __typename?: 'Mutation', updateRoom: { __typename?: 'UpdateRoomOutput', ok: boolean, error?: string | null } };
+export type UpdateRoomMutation = {
+  __typename?: 'Mutation';
+  updateRoom: {
+    __typename?: 'UpdateRoomOutput';
+    ok: boolean;
+    error?: string | null;
+  };
+};
 
 export type CreateUserMutationVariables = Exact<{
   input: CreateUserInput;
 }>;
 
-
-export type CreateUserMutation = { __typename?: 'Mutation', createUser: { __typename?: 'CreateUserOutput', ok: boolean, error?: string | null, user?: { __typename?: 'UserObjectType', id: string } | null } };
+export type CreateUserMutation = {
+  __typename?: 'Mutation';
+  createUser: {
+    __typename?: 'CreateUserOutput';
+    ok: boolean;
+    error?: string | null;
+    user?: {__typename?: 'UserObjectType'; id: string} | null;
+  };
+};
 
 export type LoginQueryVariables = Exact<{
   input: LoginInput;
 }>;
 
+export type LoginQuery = {
+  __typename?: 'Query';
+  login: {
+    __typename?: 'LoginOutput';
+    ok: boolean;
+    error?: string | null;
+    token?: string | null;
+  };
+};
 
-export type LoginQuery = { __typename?: 'Query', login: { __typename?: 'LoginOutput', ok: boolean, error?: string | null, token?: string | null } };
+export type MeQueryVariables = Exact<{[key: string]: never}>;
 
-export type MeQueryVariables = Exact<{ [key: string]: never; }>;
+export type MeQuery = {
+  __typename?: 'Query';
+  me: {
+    __typename?: 'MeOutput';
+    ok: boolean;
+    error?: string | null;
+    me?: {
+      __typename?: 'Me';
+      id: string;
+      nickname: string;
+      profileUrl?: string | null;
+      blockUserIds: Array<string>;
+    } | null;
+  };
+};
 
+export type MeDetailQueryVariables = Exact<{[key: string]: never}>;
 
-export type MeQuery = { __typename?: 'Query', me: { __typename?: 'MeOutput', ok: boolean, error?: string | null, me?: { __typename?: 'Me', id: string, nickname: string, profileUrl?: string | null, blockUserIds: Array<string> } | null } };
+export type MeDetailQuery = {
+  __typename?: 'Query';
+  meDetail: {
+    __typename?: 'MeDetailOutput';
+    ok: boolean;
+    error?: string | null;
+    me?: {
+      __typename?: 'MeDetail';
+      id: string;
+      nickname: string;
+      profileUrl?: string | null;
+      bio?: string | null;
+      socialPlatform: SocialPlatform;
+      noti: boolean;
+      allowMessage: boolean;
+      language: Language;
+      autoTranslation: boolean;
+      blockUsers: Array<
+        {__typename?: 'UserObjectType'} & {
+          ' $fragmentRefs'?: {BlockUserFragment: BlockUserFragment};
+        }
+      >;
+    } | null;
+  };
+};
 
-export type MeDetailQueryVariables = Exact<{ [key: string]: never; }>;
+export type RandomNicknameQueryVariables = Exact<{[key: string]: never}>;
 
-
-export type MeDetailQuery = { __typename?: 'Query', meDetail: { __typename?: 'MeDetailOutput', ok: boolean, error?: string | null, me?: { __typename?: 'MeDetail', id: string, nickname: string, profileUrl?: string | null, bio?: string | null, socialPlatform: SocialPlatform, noti: boolean, allowMessage: boolean, language: Language, autoTranslation: boolean, blockUsers: Array<{ __typename?: 'UserObjectType', id: string, nickname: string, profileUrl?: string | null }> } | null } };
-
-export type RandomNicknameQueryVariables = Exact<{ [key: string]: never; }>;
-
-
-export type RandomNicknameQuery = { __typename?: 'Query', randomNickname: { __typename?: 'RandomNicknameOutput', ok: boolean, error?: string | null, nickname?: string | null } };
+export type RandomNicknameQuery = {
+  __typename?: 'Query';
+  randomNickname: {
+    __typename?: 'RandomNicknameOutput';
+    ok: boolean;
+    error?: string | null;
+    nickname?: string | null;
+  };
+};
 
 export type ToggleBlockUserMutationVariables = Exact<{
   input: ToggleBlockUserInput;
 }>;
 
-
-export type ToggleBlockUserMutation = { __typename?: 'Mutation', toggleBlockUser: { __typename?: 'ToggleBlockUserOutput', ok: boolean, error?: string | null, updateBlockUsers?: Array<{ __typename?: 'UserObjectType', id: string, nickname: string, profileUrl?: string | null }> | null } };
+export type ToggleBlockUserMutation = {
+  __typename?: 'Mutation';
+  toggleBlockUser: {
+    __typename?: 'ToggleBlockUserOutput';
+    ok: boolean;
+    error?: string | null;
+    updateBlockUsers?: Array<
+      {__typename?: 'UserObjectType'} & {
+        ' $fragmentRefs'?: {BlockUserFragment: BlockUserFragment};
+      }
+    > | null;
+  };
+};
 
 export type UpdateUserMutationVariables = Exact<{
   input: UpdateUserInput;
 }>;
 
-
-export type UpdateUserMutation = { __typename?: 'Mutation', updateUser: { __typename?: 'UpdateUserOutput', ok: boolean, error?: string | null } };
+export type UpdateUserMutation = {
+  __typename?: 'Mutation';
+  updateUser: {
+    __typename?: 'UpdateUserOutput';
+    ok: boolean;
+    error?: string | null;
+  };
+};
 
 export type UserProfileQueryVariables = Exact<{
   input: UserProfileInput;
 }>;
 
+export type UserProfileQuery = {
+  __typename?: 'Query';
+  userProfile: {
+    __typename?: 'UserProfileOutput';
+    ok: boolean;
+    error?: string | null;
+    user?: {
+      __typename?: 'User';
+      id: string;
+      nickname: string;
+      profileUrl?: string | null;
+      bio?: string | null;
+    } | null;
+  };
+};
 
-export type UserProfileQuery = { __typename?: 'Query', userProfile: { __typename?: 'UserProfileOutput', ok: boolean, error?: string | null, user?: { __typename?: 'User', id: string, nickname: string, profileUrl?: string | null, bio?: string | null } | null } };
-
-export const MessageBaseFragmentDoc = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"MessageBase"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"MessageObjectType"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"contents"}},{"kind":"Field","name":{"kind":"Name","value":"type"}},{"kind":"Field","name":{"kind":"Name","value":"readUsersId"}},{"kind":"Field","name":{"kind":"Name","value":"user"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"nickname"}},{"kind":"Field","name":{"kind":"Name","value":"profileUrl"}}]}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}}]}}]} as unknown as DocumentNode<MessageBaseFragment, unknown>;
-export const UserRoomBaseFragmentDoc = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"UserRoomBase"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"UserRoomObjectType"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"noti"}},{"kind":"Field","name":{"kind":"Name","value":"pinnedAt"}},{"kind":"Field","name":{"kind":"Name","value":"newMessage"}},{"kind":"Field","name":{"kind":"Name","value":"room"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}}]}}]} as unknown as DocumentNode<UserRoomBaseFragment, unknown>;
-export const MyRoomBaseFragmentDoc = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"MyRoomBase"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"MyRoom"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"noti"}},{"kind":"Field","name":{"kind":"Name","value":"pinnedAt"}},{"kind":"Field","name":{"kind":"Name","value":"newMessage"}},{"kind":"Field","name":{"kind":"Name","value":"lastMessage"}},{"kind":"Field","name":{"kind":"Name","value":"room"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"updatedAt"}}]}},{"kind":"Field","name":{"kind":"Name","value":"users"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"nickname"}},{"kind":"Field","name":{"kind":"Name","value":"profileUrl"}}]}},{"kind":"Field","name":{"kind":"Name","value":"updatedAt"}}]}}]} as unknown as DocumentNode<MyRoomBaseFragment, unknown>;
-export const NewMessageDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"subscription","name":{"kind":"Name","value":"newMessage"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"NewMessageInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"newMessage"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"MessageBase"}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"MessageBase"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"MessageObjectType"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"contents"}},{"kind":"Field","name":{"kind":"Name","value":"type"}},{"kind":"Field","name":{"kind":"Name","value":"readUsersId"}},{"kind":"Field","name":{"kind":"Name","value":"user"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"nickname"}},{"kind":"Field","name":{"kind":"Name","value":"profileUrl"}}]}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}}]}}]} as unknown as DocumentNode<NewMessageSubscription, NewMessageSubscriptionVariables>;
-export const ReadMessageDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"subscription","name":{"kind":"Name","value":"readMessage"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ReadMessageInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"readMessage"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"messages"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"readUsersId"}}]}}]}}]}}]} as unknown as DocumentNode<ReadMessageSubscription, ReadMessageSubscriptionVariables>;
-export const SendMessageDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"sendMessage"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"SendMessageInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"sendMessage"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"ok"}},{"kind":"Field","name":{"kind":"Name","value":"error"}},{"kind":"Field","name":{"kind":"Name","value":"message"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"MessageBase"}}]}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"MessageBase"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"MessageObjectType"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"contents"}},{"kind":"Field","name":{"kind":"Name","value":"type"}},{"kind":"Field","name":{"kind":"Name","value":"readUsersId"}},{"kind":"Field","name":{"kind":"Name","value":"user"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"nickname"}},{"kind":"Field","name":{"kind":"Name","value":"profileUrl"}}]}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}}]}}]} as unknown as DocumentNode<SendMessageMutation, SendMessageMutationVariables>;
-export const UpdateNewMessageInUserRoomDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"subscription","name":{"kind":"Name","value":"updateNewMessageInUserRoom"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"updateNewMessageInUserRoom"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"newMessage"}},{"kind":"Field","name":{"kind":"Name","value":"lastMessage"}},{"kind":"Field","name":{"kind":"Name","value":"userId"}},{"kind":"Field","name":{"kind":"Name","value":"roomId"}}]}}]}}]} as unknown as DocumentNode<UpdateNewMessageInUserRoomSubscription, UpdateNewMessageInUserRoomSubscriptionVariables>;
-export const ViewMessagesDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"viewMessages"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ViewMessagesInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"viewMessages"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"ok"}},{"kind":"Field","name":{"kind":"Name","value":"error"}},{"kind":"Field","name":{"kind":"Name","value":"hasNext"}},{"kind":"Field","name":{"kind":"Name","value":"messages"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"MessageBase"}}]}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"MessageBase"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"MessageObjectType"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"contents"}},{"kind":"Field","name":{"kind":"Name","value":"type"}},{"kind":"Field","name":{"kind":"Name","value":"readUsersId"}},{"kind":"Field","name":{"kind":"Name","value":"user"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"nickname"}},{"kind":"Field","name":{"kind":"Name","value":"profileUrl"}}]}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}}]}}]} as unknown as DocumentNode<ViewMessagesQuery, ViewMessagesQueryVariables>;
-export const CreateRandomRoomDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"createRandomRoom"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"createRandomRoom"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"ok"}},{"kind":"Field","name":{"kind":"Name","value":"error"}},{"kind":"Field","name":{"kind":"Name","value":"room"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"MyRoomBase"}}]}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"MyRoomBase"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"MyRoom"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"noti"}},{"kind":"Field","name":{"kind":"Name","value":"pinnedAt"}},{"kind":"Field","name":{"kind":"Name","value":"newMessage"}},{"kind":"Field","name":{"kind":"Name","value":"lastMessage"}},{"kind":"Field","name":{"kind":"Name","value":"room"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"updatedAt"}}]}},{"kind":"Field","name":{"kind":"Name","value":"users"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"nickname"}},{"kind":"Field","name":{"kind":"Name","value":"profileUrl"}}]}},{"kind":"Field","name":{"kind":"Name","value":"updatedAt"}}]}}]} as unknown as DocumentNode<CreateRandomRoomMutation, CreateRandomRoomMutationVariables>;
-export const DeleteRoomDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"deleteRoom"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"DeleteRoomInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"deleteRoom"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"ok"}},{"kind":"Field","name":{"kind":"Name","value":"error"}}]}}]}}]} as unknown as DocumentNode<DeleteRoomMutation, DeleteRoomMutationVariables>;
-export const MyRoomsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"myRooms"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"MyRoomsInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"myRooms"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"ok"}},{"kind":"Field","name":{"kind":"Name","value":"error"}},{"kind":"Field","name":{"kind":"Name","value":"hasNext"}},{"kind":"Field","name":{"kind":"Name","value":"rooms"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"MyRoomBase"}}]}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"MyRoomBase"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"MyRoom"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"noti"}},{"kind":"Field","name":{"kind":"Name","value":"pinnedAt"}},{"kind":"Field","name":{"kind":"Name","value":"newMessage"}},{"kind":"Field","name":{"kind":"Name","value":"lastMessage"}},{"kind":"Field","name":{"kind":"Name","value":"room"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"updatedAt"}}]}},{"kind":"Field","name":{"kind":"Name","value":"users"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"nickname"}},{"kind":"Field","name":{"kind":"Name","value":"profileUrl"}}]}},{"kind":"Field","name":{"kind":"Name","value":"updatedAt"}}]}}]} as unknown as DocumentNode<MyRoomsQuery, MyRoomsQueryVariables>;
-export const NewRoomDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"subscription","name":{"kind":"Name","value":"newRoom"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"newRoom"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"MyRoomBase"}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"MyRoomBase"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"MyRoom"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"noti"}},{"kind":"Field","name":{"kind":"Name","value":"pinnedAt"}},{"kind":"Field","name":{"kind":"Name","value":"newMessage"}},{"kind":"Field","name":{"kind":"Name","value":"lastMessage"}},{"kind":"Field","name":{"kind":"Name","value":"room"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"updatedAt"}}]}},{"kind":"Field","name":{"kind":"Name","value":"users"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"nickname"}},{"kind":"Field","name":{"kind":"Name","value":"profileUrl"}}]}},{"kind":"Field","name":{"kind":"Name","value":"updatedAt"}}]}}]} as unknown as DocumentNode<NewRoomSubscription, NewRoomSubscriptionVariables>;
-export const RoomDetailDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"roomDetail"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"RoomDetailInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"roomDetail"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"ok"}},{"kind":"Field","name":{"kind":"Name","value":"error"}},{"kind":"Field","name":{"kind":"Name","value":"room"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"userRoom"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"noti"}},{"kind":"Field","name":{"kind":"Name","value":"pinnedAt"}},{"kind":"Field","name":{"kind":"Name","value":"newMessage"}}]}},{"kind":"Field","name":{"kind":"Name","value":"users"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"nickname"}},{"kind":"Field","name":{"kind":"Name","value":"profileUrl"}},{"kind":"Field","name":{"kind":"Name","value":"bio"}},{"kind":"Field","name":{"kind":"Name","value":"language"}}]}}]}}]}}]}}]} as unknown as DocumentNode<RoomDetailQuery, RoomDetailQueryVariables>;
-export const UpdateRoomDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"updateRoom"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"UpdateRoomInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"updateRoom"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"ok"}},{"kind":"Field","name":{"kind":"Name","value":"error"}}]}}]}}]} as unknown as DocumentNode<UpdateRoomMutation, UpdateRoomMutationVariables>;
-export const CreateUserDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"createUser"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"CreateUserInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"createUser"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"ok"}},{"kind":"Field","name":{"kind":"Name","value":"error"}},{"kind":"Field","name":{"kind":"Name","value":"user"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}}]}}]}}]} as unknown as DocumentNode<CreateUserMutation, CreateUserMutationVariables>;
-export const LoginDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"login"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"LoginInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"login"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"ok"}},{"kind":"Field","name":{"kind":"Name","value":"error"}},{"kind":"Field","name":{"kind":"Name","value":"token"}}]}}]}}]} as unknown as DocumentNode<LoginQuery, LoginQueryVariables>;
-export const MeDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"me"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"me"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"ok"}},{"kind":"Field","name":{"kind":"Name","value":"error"}},{"kind":"Field","name":{"kind":"Name","value":"me"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"nickname"}},{"kind":"Field","name":{"kind":"Name","value":"profileUrl"}},{"kind":"Field","name":{"kind":"Name","value":"blockUserIds"}}]}}]}}]}}]} as unknown as DocumentNode<MeQuery, MeQueryVariables>;
-export const MeDetailDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"meDetail"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"meDetail"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"ok"}},{"kind":"Field","name":{"kind":"Name","value":"error"}},{"kind":"Field","name":{"kind":"Name","value":"me"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"nickname"}},{"kind":"Field","name":{"kind":"Name","value":"profileUrl"}},{"kind":"Field","name":{"kind":"Name","value":"bio"}},{"kind":"Field","name":{"kind":"Name","value":"socialPlatform"}},{"kind":"Field","name":{"kind":"Name","value":"noti"}},{"kind":"Field","name":{"kind":"Name","value":"allowMessage"}},{"kind":"Field","name":{"kind":"Name","value":"language"}},{"kind":"Field","name":{"kind":"Name","value":"autoTranslation"}},{"kind":"Field","name":{"kind":"Name","value":"blockUsers"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"nickname"}},{"kind":"Field","name":{"kind":"Name","value":"profileUrl"}}]}}]}}]}}]}}]} as unknown as DocumentNode<MeDetailQuery, MeDetailQueryVariables>;
-export const RandomNicknameDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"randomNickname"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"randomNickname"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"ok"}},{"kind":"Field","name":{"kind":"Name","value":"error"}},{"kind":"Field","name":{"kind":"Name","value":"nickname"}}]}}]}}]} as unknown as DocumentNode<RandomNicknameQuery, RandomNicknameQueryVariables>;
-export const ToggleBlockUserDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"toggleBlockUser"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ToggleBlockUserInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"toggleBlockUser"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"ok"}},{"kind":"Field","name":{"kind":"Name","value":"error"}},{"kind":"Field","name":{"kind":"Name","value":"updateBlockUsers"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"nickname"}},{"kind":"Field","name":{"kind":"Name","value":"profileUrl"}}]}}]}}]}}]} as unknown as DocumentNode<ToggleBlockUserMutation, ToggleBlockUserMutationVariables>;
-export const UpdateUserDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"updateUser"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"UpdateUserInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"updateUser"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"ok"}},{"kind":"Field","name":{"kind":"Name","value":"error"}}]}}]}}]} as unknown as DocumentNode<UpdateUserMutation, UpdateUserMutationVariables>;
-export const UserProfileDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"userProfile"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"UserProfileInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"userProfile"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"ok"}},{"kind":"Field","name":{"kind":"Name","value":"error"}},{"kind":"Field","name":{"kind":"Name","value":"user"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"nickname"}},{"kind":"Field","name":{"kind":"Name","value":"profileUrl"}},{"kind":"Field","name":{"kind":"Name","value":"bio"}}]}}]}}]}}]} as unknown as DocumentNode<UserProfileQuery, UserProfileQueryVariables>;
+export const MessageBaseFragmentDoc = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'FragmentDefinition',
+      name: {kind: 'Name', value: 'MessageBase'},
+      typeCondition: {
+        kind: 'NamedType',
+        name: {kind: 'Name', value: 'MessageObjectType'},
+      },
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {kind: 'Field', name: {kind: 'Name', value: 'id'}},
+          {kind: 'Field', name: {kind: 'Name', value: 'contents'}},
+          {kind: 'Field', name: {kind: 'Name', value: 'type'}},
+          {kind: 'Field', name: {kind: 'Name', value: 'readUsersId'}},
+          {
+            kind: 'Field',
+            name: {kind: 'Name', value: 'user'},
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                {kind: 'Field', name: {kind: 'Name', value: 'id'}},
+                {kind: 'Field', name: {kind: 'Name', value: 'nickname'}},
+                {kind: 'Field', name: {kind: 'Name', value: 'profileUrl'}},
+              ],
+            },
+          },
+          {kind: 'Field', name: {kind: 'Name', value: 'createdAt'}},
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<MessageBaseFragment, unknown>;
+export const UserRoomBaseFragmentDoc = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'FragmentDefinition',
+      name: {kind: 'Name', value: 'UserRoomBase'},
+      typeCondition: {
+        kind: 'NamedType',
+        name: {kind: 'Name', value: 'UserRoomObjectType'},
+      },
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {kind: 'Field', name: {kind: 'Name', value: 'id'}},
+          {kind: 'Field', name: {kind: 'Name', value: 'name'}},
+          {kind: 'Field', name: {kind: 'Name', value: 'noti'}},
+          {kind: 'Field', name: {kind: 'Name', value: 'pinnedAt'}},
+          {kind: 'Field', name: {kind: 'Name', value: 'newMessage'}},
+          {
+            kind: 'Field',
+            name: {kind: 'Name', value: 'room'},
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [{kind: 'Field', name: {kind: 'Name', value: 'id'}}],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<UserRoomBaseFragment, unknown>;
+export const MyRoomBaseFragmentDoc = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'FragmentDefinition',
+      name: {kind: 'Name', value: 'MyRoomBase'},
+      typeCondition: {kind: 'NamedType', name: {kind: 'Name', value: 'MyRoom'}},
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {kind: 'Field', name: {kind: 'Name', value: 'id'}},
+          {kind: 'Field', name: {kind: 'Name', value: 'name'}},
+          {kind: 'Field', name: {kind: 'Name', value: 'noti'}},
+          {kind: 'Field', name: {kind: 'Name', value: 'pinnedAt'}},
+          {kind: 'Field', name: {kind: 'Name', value: 'newMessage'}},
+          {kind: 'Field', name: {kind: 'Name', value: 'lastMessage'}},
+          {
+            kind: 'Field',
+            name: {kind: 'Name', value: 'room'},
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                {kind: 'Field', name: {kind: 'Name', value: 'id'}},
+                {kind: 'Field', name: {kind: 'Name', value: 'updatedAt'}},
+              ],
+            },
+          },
+          {
+            kind: 'Field',
+            name: {kind: 'Name', value: 'users'},
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                {kind: 'Field', name: {kind: 'Name', value: 'id'}},
+                {kind: 'Field', name: {kind: 'Name', value: 'nickname'}},
+                {kind: 'Field', name: {kind: 'Name', value: 'profileUrl'}},
+              ],
+            },
+          },
+          {kind: 'Field', name: {kind: 'Name', value: 'updatedAt'}},
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<MyRoomBaseFragment, unknown>;
+export const BlockUserFragmentDoc = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'FragmentDefinition',
+      name: {kind: 'Name', value: 'BlockUser'},
+      typeCondition: {
+        kind: 'NamedType',
+        name: {kind: 'Name', value: 'UserObjectType'},
+      },
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {kind: 'Field', name: {kind: 'Name', value: 'id'}},
+          {kind: 'Field', name: {kind: 'Name', value: 'nickname'}},
+          {kind: 'Field', name: {kind: 'Name', value: 'profileUrl'}},
+          {kind: 'Field', name: {kind: 'Name', value: 'bio'}},
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<BlockUserFragment, unknown>;
+export const NewMessageDocument = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'subscription',
+      name: {kind: 'Name', value: 'newMessage'},
+      variableDefinitions: [
+        {
+          kind: 'VariableDefinition',
+          variable: {kind: 'Variable', name: {kind: 'Name', value: 'input'}},
+          type: {
+            kind: 'NonNullType',
+            type: {
+              kind: 'NamedType',
+              name: {kind: 'Name', value: 'NewMessageInput'},
+            },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: {kind: 'Name', value: 'newMessage'},
+            arguments: [
+              {
+                kind: 'Argument',
+                name: {kind: 'Name', value: 'input'},
+                value: {kind: 'Variable', name: {kind: 'Name', value: 'input'}},
+              },
+            ],
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                {
+                  kind: 'FragmentSpread',
+                  name: {kind: 'Name', value: 'MessageBase'},
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+    {
+      kind: 'FragmentDefinition',
+      name: {kind: 'Name', value: 'MessageBase'},
+      typeCondition: {
+        kind: 'NamedType',
+        name: {kind: 'Name', value: 'MessageObjectType'},
+      },
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {kind: 'Field', name: {kind: 'Name', value: 'id'}},
+          {kind: 'Field', name: {kind: 'Name', value: 'contents'}},
+          {kind: 'Field', name: {kind: 'Name', value: 'type'}},
+          {kind: 'Field', name: {kind: 'Name', value: 'readUsersId'}},
+          {
+            kind: 'Field',
+            name: {kind: 'Name', value: 'user'},
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                {kind: 'Field', name: {kind: 'Name', value: 'id'}},
+                {kind: 'Field', name: {kind: 'Name', value: 'nickname'}},
+                {kind: 'Field', name: {kind: 'Name', value: 'profileUrl'}},
+              ],
+            },
+          },
+          {kind: 'Field', name: {kind: 'Name', value: 'createdAt'}},
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  NewMessageSubscription,
+  NewMessageSubscriptionVariables
+>;
+export const ReadMessageDocument = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'subscription',
+      name: {kind: 'Name', value: 'readMessage'},
+      variableDefinitions: [
+        {
+          kind: 'VariableDefinition',
+          variable: {kind: 'Variable', name: {kind: 'Name', value: 'input'}},
+          type: {
+            kind: 'NonNullType',
+            type: {
+              kind: 'NamedType',
+              name: {kind: 'Name', value: 'ReadMessageInput'},
+            },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: {kind: 'Name', value: 'readMessage'},
+            arguments: [
+              {
+                kind: 'Argument',
+                name: {kind: 'Name', value: 'input'},
+                value: {kind: 'Variable', name: {kind: 'Name', value: 'input'}},
+              },
+            ],
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                {
+                  kind: 'Field',
+                  name: {kind: 'Name', value: 'messages'},
+                  selectionSet: {
+                    kind: 'SelectionSet',
+                    selections: [
+                      {kind: 'Field', name: {kind: 'Name', value: 'id'}},
+                      {
+                        kind: 'Field',
+                        name: {kind: 'Name', value: 'readUsersId'},
+                      },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  ReadMessageSubscription,
+  ReadMessageSubscriptionVariables
+>;
+export const SendMessageDocument = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'mutation',
+      name: {kind: 'Name', value: 'sendMessage'},
+      variableDefinitions: [
+        {
+          kind: 'VariableDefinition',
+          variable: {kind: 'Variable', name: {kind: 'Name', value: 'input'}},
+          type: {
+            kind: 'NonNullType',
+            type: {
+              kind: 'NamedType',
+              name: {kind: 'Name', value: 'SendMessageInput'},
+            },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: {kind: 'Name', value: 'sendMessage'},
+            arguments: [
+              {
+                kind: 'Argument',
+                name: {kind: 'Name', value: 'input'},
+                value: {kind: 'Variable', name: {kind: 'Name', value: 'input'}},
+              },
+            ],
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                {kind: 'Field', name: {kind: 'Name', value: 'ok'}},
+                {kind: 'Field', name: {kind: 'Name', value: 'error'}},
+                {
+                  kind: 'Field',
+                  name: {kind: 'Name', value: 'message'},
+                  selectionSet: {
+                    kind: 'SelectionSet',
+                    selections: [
+                      {
+                        kind: 'FragmentSpread',
+                        name: {kind: 'Name', value: 'MessageBase'},
+                      },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+    {
+      kind: 'FragmentDefinition',
+      name: {kind: 'Name', value: 'MessageBase'},
+      typeCondition: {
+        kind: 'NamedType',
+        name: {kind: 'Name', value: 'MessageObjectType'},
+      },
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {kind: 'Field', name: {kind: 'Name', value: 'id'}},
+          {kind: 'Field', name: {kind: 'Name', value: 'contents'}},
+          {kind: 'Field', name: {kind: 'Name', value: 'type'}},
+          {kind: 'Field', name: {kind: 'Name', value: 'readUsersId'}},
+          {
+            kind: 'Field',
+            name: {kind: 'Name', value: 'user'},
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                {kind: 'Field', name: {kind: 'Name', value: 'id'}},
+                {kind: 'Field', name: {kind: 'Name', value: 'nickname'}},
+                {kind: 'Field', name: {kind: 'Name', value: 'profileUrl'}},
+              ],
+            },
+          },
+          {kind: 'Field', name: {kind: 'Name', value: 'createdAt'}},
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<SendMessageMutation, SendMessageMutationVariables>;
+export const UpdateNewMessageInUserRoomDocument = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'subscription',
+      name: {kind: 'Name', value: 'updateNewMessageInUserRoom'},
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: {kind: 'Name', value: 'updateNewMessageInUserRoom'},
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                {kind: 'Field', name: {kind: 'Name', value: 'id'}},
+                {kind: 'Field', name: {kind: 'Name', value: 'newMessage'}},
+                {kind: 'Field', name: {kind: 'Name', value: 'lastMessage'}},
+                {kind: 'Field', name: {kind: 'Name', value: 'userId'}},
+                {kind: 'Field', name: {kind: 'Name', value: 'roomId'}},
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  UpdateNewMessageInUserRoomSubscription,
+  UpdateNewMessageInUserRoomSubscriptionVariables
+>;
+export const ViewMessagesDocument = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'query',
+      name: {kind: 'Name', value: 'viewMessages'},
+      variableDefinitions: [
+        {
+          kind: 'VariableDefinition',
+          variable: {kind: 'Variable', name: {kind: 'Name', value: 'input'}},
+          type: {
+            kind: 'NonNullType',
+            type: {
+              kind: 'NamedType',
+              name: {kind: 'Name', value: 'ViewMessagesInput'},
+            },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: {kind: 'Name', value: 'viewMessages'},
+            arguments: [
+              {
+                kind: 'Argument',
+                name: {kind: 'Name', value: 'input'},
+                value: {kind: 'Variable', name: {kind: 'Name', value: 'input'}},
+              },
+            ],
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                {kind: 'Field', name: {kind: 'Name', value: 'ok'}},
+                {kind: 'Field', name: {kind: 'Name', value: 'error'}},
+                {kind: 'Field', name: {kind: 'Name', value: 'hasNext'}},
+                {
+                  kind: 'Field',
+                  name: {kind: 'Name', value: 'messages'},
+                  selectionSet: {
+                    kind: 'SelectionSet',
+                    selections: [
+                      {
+                        kind: 'FragmentSpread',
+                        name: {kind: 'Name', value: 'MessageBase'},
+                      },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+    {
+      kind: 'FragmentDefinition',
+      name: {kind: 'Name', value: 'MessageBase'},
+      typeCondition: {
+        kind: 'NamedType',
+        name: {kind: 'Name', value: 'MessageObjectType'},
+      },
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {kind: 'Field', name: {kind: 'Name', value: 'id'}},
+          {kind: 'Field', name: {kind: 'Name', value: 'contents'}},
+          {kind: 'Field', name: {kind: 'Name', value: 'type'}},
+          {kind: 'Field', name: {kind: 'Name', value: 'readUsersId'}},
+          {
+            kind: 'Field',
+            name: {kind: 'Name', value: 'user'},
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                {kind: 'Field', name: {kind: 'Name', value: 'id'}},
+                {kind: 'Field', name: {kind: 'Name', value: 'nickname'}},
+                {kind: 'Field', name: {kind: 'Name', value: 'profileUrl'}},
+              ],
+            },
+          },
+          {kind: 'Field', name: {kind: 'Name', value: 'createdAt'}},
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<ViewMessagesQuery, ViewMessagesQueryVariables>;
+export const CreateRandomRoomDocument = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'mutation',
+      name: {kind: 'Name', value: 'createRandomRoom'},
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: {kind: 'Name', value: 'createRandomRoom'},
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                {kind: 'Field', name: {kind: 'Name', value: 'ok'}},
+                {kind: 'Field', name: {kind: 'Name', value: 'error'}},
+                {
+                  kind: 'Field',
+                  name: {kind: 'Name', value: 'room'},
+                  selectionSet: {
+                    kind: 'SelectionSet',
+                    selections: [
+                      {
+                        kind: 'FragmentSpread',
+                        name: {kind: 'Name', value: 'MyRoomBase'},
+                      },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+    {
+      kind: 'FragmentDefinition',
+      name: {kind: 'Name', value: 'MyRoomBase'},
+      typeCondition: {kind: 'NamedType', name: {kind: 'Name', value: 'MyRoom'}},
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {kind: 'Field', name: {kind: 'Name', value: 'id'}},
+          {kind: 'Field', name: {kind: 'Name', value: 'name'}},
+          {kind: 'Field', name: {kind: 'Name', value: 'noti'}},
+          {kind: 'Field', name: {kind: 'Name', value: 'pinnedAt'}},
+          {kind: 'Field', name: {kind: 'Name', value: 'newMessage'}},
+          {kind: 'Field', name: {kind: 'Name', value: 'lastMessage'}},
+          {
+            kind: 'Field',
+            name: {kind: 'Name', value: 'room'},
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                {kind: 'Field', name: {kind: 'Name', value: 'id'}},
+                {kind: 'Field', name: {kind: 'Name', value: 'updatedAt'}},
+              ],
+            },
+          },
+          {
+            kind: 'Field',
+            name: {kind: 'Name', value: 'users'},
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                {kind: 'Field', name: {kind: 'Name', value: 'id'}},
+                {kind: 'Field', name: {kind: 'Name', value: 'nickname'}},
+                {kind: 'Field', name: {kind: 'Name', value: 'profileUrl'}},
+              ],
+            },
+          },
+          {kind: 'Field', name: {kind: 'Name', value: 'updatedAt'}},
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  CreateRandomRoomMutation,
+  CreateRandomRoomMutationVariables
+>;
+export const DeleteRoomDocument = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'mutation',
+      name: {kind: 'Name', value: 'deleteRoom'},
+      variableDefinitions: [
+        {
+          kind: 'VariableDefinition',
+          variable: {kind: 'Variable', name: {kind: 'Name', value: 'input'}},
+          type: {
+            kind: 'NonNullType',
+            type: {
+              kind: 'NamedType',
+              name: {kind: 'Name', value: 'DeleteRoomInput'},
+            },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: {kind: 'Name', value: 'deleteRoom'},
+            arguments: [
+              {
+                kind: 'Argument',
+                name: {kind: 'Name', value: 'input'},
+                value: {kind: 'Variable', name: {kind: 'Name', value: 'input'}},
+              },
+            ],
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                {kind: 'Field', name: {kind: 'Name', value: 'ok'}},
+                {kind: 'Field', name: {kind: 'Name', value: 'error'}},
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<DeleteRoomMutation, DeleteRoomMutationVariables>;
+export const MyRoomsDocument = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'query',
+      name: {kind: 'Name', value: 'myRooms'},
+      variableDefinitions: [
+        {
+          kind: 'VariableDefinition',
+          variable: {kind: 'Variable', name: {kind: 'Name', value: 'input'}},
+          type: {
+            kind: 'NonNullType',
+            type: {
+              kind: 'NamedType',
+              name: {kind: 'Name', value: 'MyRoomsInput'},
+            },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: {kind: 'Name', value: 'myRooms'},
+            arguments: [
+              {
+                kind: 'Argument',
+                name: {kind: 'Name', value: 'input'},
+                value: {kind: 'Variable', name: {kind: 'Name', value: 'input'}},
+              },
+            ],
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                {kind: 'Field', name: {kind: 'Name', value: 'ok'}},
+                {kind: 'Field', name: {kind: 'Name', value: 'error'}},
+                {kind: 'Field', name: {kind: 'Name', value: 'hasNext'}},
+                {
+                  kind: 'Field',
+                  name: {kind: 'Name', value: 'rooms'},
+                  selectionSet: {
+                    kind: 'SelectionSet',
+                    selections: [
+                      {
+                        kind: 'FragmentSpread',
+                        name: {kind: 'Name', value: 'MyRoomBase'},
+                      },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+    {
+      kind: 'FragmentDefinition',
+      name: {kind: 'Name', value: 'MyRoomBase'},
+      typeCondition: {kind: 'NamedType', name: {kind: 'Name', value: 'MyRoom'}},
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {kind: 'Field', name: {kind: 'Name', value: 'id'}},
+          {kind: 'Field', name: {kind: 'Name', value: 'name'}},
+          {kind: 'Field', name: {kind: 'Name', value: 'noti'}},
+          {kind: 'Field', name: {kind: 'Name', value: 'pinnedAt'}},
+          {kind: 'Field', name: {kind: 'Name', value: 'newMessage'}},
+          {kind: 'Field', name: {kind: 'Name', value: 'lastMessage'}},
+          {
+            kind: 'Field',
+            name: {kind: 'Name', value: 'room'},
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                {kind: 'Field', name: {kind: 'Name', value: 'id'}},
+                {kind: 'Field', name: {kind: 'Name', value: 'updatedAt'}},
+              ],
+            },
+          },
+          {
+            kind: 'Field',
+            name: {kind: 'Name', value: 'users'},
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                {kind: 'Field', name: {kind: 'Name', value: 'id'}},
+                {kind: 'Field', name: {kind: 'Name', value: 'nickname'}},
+                {kind: 'Field', name: {kind: 'Name', value: 'profileUrl'}},
+              ],
+            },
+          },
+          {kind: 'Field', name: {kind: 'Name', value: 'updatedAt'}},
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<MyRoomsQuery, MyRoomsQueryVariables>;
+export const NewRoomDocument = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'subscription',
+      name: {kind: 'Name', value: 'newRoom'},
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: {kind: 'Name', value: 'newRoom'},
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                {
+                  kind: 'FragmentSpread',
+                  name: {kind: 'Name', value: 'MyRoomBase'},
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+    {
+      kind: 'FragmentDefinition',
+      name: {kind: 'Name', value: 'MyRoomBase'},
+      typeCondition: {kind: 'NamedType', name: {kind: 'Name', value: 'MyRoom'}},
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {kind: 'Field', name: {kind: 'Name', value: 'id'}},
+          {kind: 'Field', name: {kind: 'Name', value: 'name'}},
+          {kind: 'Field', name: {kind: 'Name', value: 'noti'}},
+          {kind: 'Field', name: {kind: 'Name', value: 'pinnedAt'}},
+          {kind: 'Field', name: {kind: 'Name', value: 'newMessage'}},
+          {kind: 'Field', name: {kind: 'Name', value: 'lastMessage'}},
+          {
+            kind: 'Field',
+            name: {kind: 'Name', value: 'room'},
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                {kind: 'Field', name: {kind: 'Name', value: 'id'}},
+                {kind: 'Field', name: {kind: 'Name', value: 'updatedAt'}},
+              ],
+            },
+          },
+          {
+            kind: 'Field',
+            name: {kind: 'Name', value: 'users'},
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                {kind: 'Field', name: {kind: 'Name', value: 'id'}},
+                {kind: 'Field', name: {kind: 'Name', value: 'nickname'}},
+                {kind: 'Field', name: {kind: 'Name', value: 'profileUrl'}},
+              ],
+            },
+          },
+          {kind: 'Field', name: {kind: 'Name', value: 'updatedAt'}},
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<NewRoomSubscription, NewRoomSubscriptionVariables>;
+export const RoomDetailDocument = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'query',
+      name: {kind: 'Name', value: 'roomDetail'},
+      variableDefinitions: [
+        {
+          kind: 'VariableDefinition',
+          variable: {kind: 'Variable', name: {kind: 'Name', value: 'input'}},
+          type: {
+            kind: 'NonNullType',
+            type: {
+              kind: 'NamedType',
+              name: {kind: 'Name', value: 'RoomDetailInput'},
+            },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: {kind: 'Name', value: 'roomDetail'},
+            arguments: [
+              {
+                kind: 'Argument',
+                name: {kind: 'Name', value: 'input'},
+                value: {kind: 'Variable', name: {kind: 'Name', value: 'input'}},
+              },
+            ],
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                {kind: 'Field', name: {kind: 'Name', value: 'ok'}},
+                {kind: 'Field', name: {kind: 'Name', value: 'error'}},
+                {
+                  kind: 'Field',
+                  name: {kind: 'Name', value: 'room'},
+                  selectionSet: {
+                    kind: 'SelectionSet',
+                    selections: [
+                      {
+                        kind: 'Field',
+                        name: {kind: 'Name', value: 'userRoom'},
+                        selectionSet: {
+                          kind: 'SelectionSet',
+                          selections: [
+                            {kind: 'Field', name: {kind: 'Name', value: 'id'}},
+                            {
+                              kind: 'Field',
+                              name: {kind: 'Name', value: 'name'},
+                            },
+                            {
+                              kind: 'Field',
+                              name: {kind: 'Name', value: 'noti'},
+                            },
+                            {
+                              kind: 'Field',
+                              name: {kind: 'Name', value: 'pinnedAt'},
+                            },
+                            {
+                              kind: 'Field',
+                              name: {kind: 'Name', value: 'newMessage'},
+                            },
+                          ],
+                        },
+                      },
+                      {
+                        kind: 'Field',
+                        name: {kind: 'Name', value: 'users'},
+                        selectionSet: {
+                          kind: 'SelectionSet',
+                          selections: [
+                            {kind: 'Field', name: {kind: 'Name', value: 'id'}},
+                            {
+                              kind: 'Field',
+                              name: {kind: 'Name', value: 'nickname'},
+                            },
+                            {
+                              kind: 'Field',
+                              name: {kind: 'Name', value: 'profileUrl'},
+                            },
+                            {kind: 'Field', name: {kind: 'Name', value: 'bio'}},
+                            {
+                              kind: 'Field',
+                              name: {kind: 'Name', value: 'language'},
+                            },
+                          ],
+                        },
+                      },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<RoomDetailQuery, RoomDetailQueryVariables>;
+export const UpdateRoomDocument = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'mutation',
+      name: {kind: 'Name', value: 'updateRoom'},
+      variableDefinitions: [
+        {
+          kind: 'VariableDefinition',
+          variable: {kind: 'Variable', name: {kind: 'Name', value: 'input'}},
+          type: {
+            kind: 'NonNullType',
+            type: {
+              kind: 'NamedType',
+              name: {kind: 'Name', value: 'UpdateRoomInput'},
+            },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: {kind: 'Name', value: 'updateRoom'},
+            arguments: [
+              {
+                kind: 'Argument',
+                name: {kind: 'Name', value: 'input'},
+                value: {kind: 'Variable', name: {kind: 'Name', value: 'input'}},
+              },
+            ],
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                {kind: 'Field', name: {kind: 'Name', value: 'ok'}},
+                {kind: 'Field', name: {kind: 'Name', value: 'error'}},
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<UpdateRoomMutation, UpdateRoomMutationVariables>;
+export const CreateUserDocument = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'mutation',
+      name: {kind: 'Name', value: 'createUser'},
+      variableDefinitions: [
+        {
+          kind: 'VariableDefinition',
+          variable: {kind: 'Variable', name: {kind: 'Name', value: 'input'}},
+          type: {
+            kind: 'NonNullType',
+            type: {
+              kind: 'NamedType',
+              name: {kind: 'Name', value: 'CreateUserInput'},
+            },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: {kind: 'Name', value: 'createUser'},
+            arguments: [
+              {
+                kind: 'Argument',
+                name: {kind: 'Name', value: 'input'},
+                value: {kind: 'Variable', name: {kind: 'Name', value: 'input'}},
+              },
+            ],
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                {kind: 'Field', name: {kind: 'Name', value: 'ok'}},
+                {kind: 'Field', name: {kind: 'Name', value: 'error'}},
+                {
+                  kind: 'Field',
+                  name: {kind: 'Name', value: 'user'},
+                  selectionSet: {
+                    kind: 'SelectionSet',
+                    selections: [
+                      {kind: 'Field', name: {kind: 'Name', value: 'id'}},
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<CreateUserMutation, CreateUserMutationVariables>;
+export const LoginDocument = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'query',
+      name: {kind: 'Name', value: 'login'},
+      variableDefinitions: [
+        {
+          kind: 'VariableDefinition',
+          variable: {kind: 'Variable', name: {kind: 'Name', value: 'input'}},
+          type: {
+            kind: 'NonNullType',
+            type: {
+              kind: 'NamedType',
+              name: {kind: 'Name', value: 'LoginInput'},
+            },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: {kind: 'Name', value: 'login'},
+            arguments: [
+              {
+                kind: 'Argument',
+                name: {kind: 'Name', value: 'input'},
+                value: {kind: 'Variable', name: {kind: 'Name', value: 'input'}},
+              },
+            ],
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                {kind: 'Field', name: {kind: 'Name', value: 'ok'}},
+                {kind: 'Field', name: {kind: 'Name', value: 'error'}},
+                {kind: 'Field', name: {kind: 'Name', value: 'token'}},
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<LoginQuery, LoginQueryVariables>;
+export const MeDocument = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'query',
+      name: {kind: 'Name', value: 'me'},
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: {kind: 'Name', value: 'me'},
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                {kind: 'Field', name: {kind: 'Name', value: 'ok'}},
+                {kind: 'Field', name: {kind: 'Name', value: 'error'}},
+                {
+                  kind: 'Field',
+                  name: {kind: 'Name', value: 'me'},
+                  selectionSet: {
+                    kind: 'SelectionSet',
+                    selections: [
+                      {kind: 'Field', name: {kind: 'Name', value: 'id'}},
+                      {kind: 'Field', name: {kind: 'Name', value: 'nickname'}},
+                      {
+                        kind: 'Field',
+                        name: {kind: 'Name', value: 'profileUrl'},
+                      },
+                      {
+                        kind: 'Field',
+                        name: {kind: 'Name', value: 'blockUserIds'},
+                      },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<MeQuery, MeQueryVariables>;
+export const MeDetailDocument = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'query',
+      name: {kind: 'Name', value: 'meDetail'},
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: {kind: 'Name', value: 'meDetail'},
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                {kind: 'Field', name: {kind: 'Name', value: 'ok'}},
+                {kind: 'Field', name: {kind: 'Name', value: 'error'}},
+                {
+                  kind: 'Field',
+                  name: {kind: 'Name', value: 'me'},
+                  selectionSet: {
+                    kind: 'SelectionSet',
+                    selections: [
+                      {kind: 'Field', name: {kind: 'Name', value: 'id'}},
+                      {kind: 'Field', name: {kind: 'Name', value: 'nickname'}},
+                      {
+                        kind: 'Field',
+                        name: {kind: 'Name', value: 'profileUrl'},
+                      },
+                      {kind: 'Field', name: {kind: 'Name', value: 'bio'}},
+                      {
+                        kind: 'Field',
+                        name: {kind: 'Name', value: 'socialPlatform'},
+                      },
+                      {kind: 'Field', name: {kind: 'Name', value: 'noti'}},
+                      {
+                        kind: 'Field',
+                        name: {kind: 'Name', value: 'allowMessage'},
+                      },
+                      {kind: 'Field', name: {kind: 'Name', value: 'language'}},
+                      {
+                        kind: 'Field',
+                        name: {kind: 'Name', value: 'autoTranslation'},
+                      },
+                      {
+                        kind: 'Field',
+                        name: {kind: 'Name', value: 'blockUsers'},
+                        selectionSet: {
+                          kind: 'SelectionSet',
+                          selections: [
+                            {
+                              kind: 'FragmentSpread',
+                              name: {kind: 'Name', value: 'BlockUser'},
+                            },
+                          ],
+                        },
+                      },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+    {
+      kind: 'FragmentDefinition',
+      name: {kind: 'Name', value: 'BlockUser'},
+      typeCondition: {
+        kind: 'NamedType',
+        name: {kind: 'Name', value: 'UserObjectType'},
+      },
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {kind: 'Field', name: {kind: 'Name', value: 'id'}},
+          {kind: 'Field', name: {kind: 'Name', value: 'nickname'}},
+          {kind: 'Field', name: {kind: 'Name', value: 'profileUrl'}},
+          {kind: 'Field', name: {kind: 'Name', value: 'bio'}},
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<MeDetailQuery, MeDetailQueryVariables>;
+export const RandomNicknameDocument = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'query',
+      name: {kind: 'Name', value: 'randomNickname'},
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: {kind: 'Name', value: 'randomNickname'},
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                {kind: 'Field', name: {kind: 'Name', value: 'ok'}},
+                {kind: 'Field', name: {kind: 'Name', value: 'error'}},
+                {kind: 'Field', name: {kind: 'Name', value: 'nickname'}},
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<RandomNicknameQuery, RandomNicknameQueryVariables>;
+export const ToggleBlockUserDocument = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'mutation',
+      name: {kind: 'Name', value: 'toggleBlockUser'},
+      variableDefinitions: [
+        {
+          kind: 'VariableDefinition',
+          variable: {kind: 'Variable', name: {kind: 'Name', value: 'input'}},
+          type: {
+            kind: 'NonNullType',
+            type: {
+              kind: 'NamedType',
+              name: {kind: 'Name', value: 'ToggleBlockUserInput'},
+            },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: {kind: 'Name', value: 'toggleBlockUser'},
+            arguments: [
+              {
+                kind: 'Argument',
+                name: {kind: 'Name', value: 'input'},
+                value: {kind: 'Variable', name: {kind: 'Name', value: 'input'}},
+              },
+            ],
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                {kind: 'Field', name: {kind: 'Name', value: 'ok'}},
+                {kind: 'Field', name: {kind: 'Name', value: 'error'}},
+                {
+                  kind: 'Field',
+                  name: {kind: 'Name', value: 'updateBlockUsers'},
+                  selectionSet: {
+                    kind: 'SelectionSet',
+                    selections: [
+                      {
+                        kind: 'FragmentSpread',
+                        name: {kind: 'Name', value: 'BlockUser'},
+                      },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+    {
+      kind: 'FragmentDefinition',
+      name: {kind: 'Name', value: 'BlockUser'},
+      typeCondition: {
+        kind: 'NamedType',
+        name: {kind: 'Name', value: 'UserObjectType'},
+      },
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {kind: 'Field', name: {kind: 'Name', value: 'id'}},
+          {kind: 'Field', name: {kind: 'Name', value: 'nickname'}},
+          {kind: 'Field', name: {kind: 'Name', value: 'profileUrl'}},
+          {kind: 'Field', name: {kind: 'Name', value: 'bio'}},
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  ToggleBlockUserMutation,
+  ToggleBlockUserMutationVariables
+>;
+export const UpdateUserDocument = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'mutation',
+      name: {kind: 'Name', value: 'updateUser'},
+      variableDefinitions: [
+        {
+          kind: 'VariableDefinition',
+          variable: {kind: 'Variable', name: {kind: 'Name', value: 'input'}},
+          type: {
+            kind: 'NonNullType',
+            type: {
+              kind: 'NamedType',
+              name: {kind: 'Name', value: 'UpdateUserInput'},
+            },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: {kind: 'Name', value: 'updateUser'},
+            arguments: [
+              {
+                kind: 'Argument',
+                name: {kind: 'Name', value: 'input'},
+                value: {kind: 'Variable', name: {kind: 'Name', value: 'input'}},
+              },
+            ],
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                {kind: 'Field', name: {kind: 'Name', value: 'ok'}},
+                {kind: 'Field', name: {kind: 'Name', value: 'error'}},
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<UpdateUserMutation, UpdateUserMutationVariables>;
+export const UserProfileDocument = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'query',
+      name: {kind: 'Name', value: 'userProfile'},
+      variableDefinitions: [
+        {
+          kind: 'VariableDefinition',
+          variable: {kind: 'Variable', name: {kind: 'Name', value: 'input'}},
+          type: {
+            kind: 'NonNullType',
+            type: {
+              kind: 'NamedType',
+              name: {kind: 'Name', value: 'UserProfileInput'},
+            },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: {kind: 'Name', value: 'userProfile'},
+            arguments: [
+              {
+                kind: 'Argument',
+                name: {kind: 'Name', value: 'input'},
+                value: {kind: 'Variable', name: {kind: 'Name', value: 'input'}},
+              },
+            ],
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                {kind: 'Field', name: {kind: 'Name', value: 'ok'}},
+                {kind: 'Field', name: {kind: 'Name', value: 'error'}},
+                {
+                  kind: 'Field',
+                  name: {kind: 'Name', value: 'user'},
+                  selectionSet: {
+                    kind: 'SelectionSet',
+                    selections: [
+                      {kind: 'Field', name: {kind: 'Name', value: 'id'}},
+                      {kind: 'Field', name: {kind: 'Name', value: 'nickname'}},
+                      {
+                        kind: 'Field',
+                        name: {kind: 'Name', value: 'profileUrl'},
+                      },
+                      {kind: 'Field', name: {kind: 'Name', value: 'bio'}},
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<UserProfileQuery, UserProfileQueryVariables>;

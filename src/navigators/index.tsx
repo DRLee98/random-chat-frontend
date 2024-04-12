@@ -9,6 +9,7 @@ import HomeScreen from '@app/screens/home';
 import ChatRoomScreen from '@app/screens/chatRoom';
 import MeScreen from '@app/screens/user/me';
 import UserScreen from '@app/screens/user';
+import BlockUsersScreen from '@app/screens/user/blockUsers';
 import ChatRoomEditScreen from '@app/screens/chatRoom/edit';
 import SettingsScreen from '@app/screens/settings';
 import {NavigationContainer} from '@react-navigation/native';
@@ -20,6 +21,7 @@ import type {ChatRoomScreenParams} from '@app/screens/chatRoom';
 import type {ChatRoomEditScreenParams} from '@app/screens/chatRoom/edit';
 import type {UserScreenScreenParams} from '@app/screens/user';
 import type {TextStyle} from 'react-native';
+import type {StackNavigationOptions} from '@react-navigation/stack';
 
 export enum MainNavigatorScreens {
   Splash = 'Splash',
@@ -31,6 +33,7 @@ export enum MainNavigatorScreens {
   Me = 'Me',
   User = 'User',
   Settings = 'Settings',
+  BlockUsers = 'BlockUsers',
 }
 
 export type MainNavigatorParamList = {
@@ -43,6 +46,7 @@ export type MainNavigatorParamList = {
   Me: undefined;
   User: UserScreenScreenParams;
   Settings: undefined;
+  BlockUsers: undefined;
 };
 
 const Stack = createStackNavigator<MainNavigatorParamList>();
@@ -52,8 +56,27 @@ const MainNavigator = () => {
 
   const headerTitleStyles: TextStyle = {
     color: theme.fontColor,
-    fontSize: 18,
+    fontSize: 16,
     fontWeight: '400',
+  };
+
+  const bottomToTopScreen: StackNavigationOptions = {
+    headerShown: false,
+    presentation: 'modal',
+    cardStyleInterpolator: ({current, layouts}) => {
+      return {
+        cardStyle: {
+          transform: [
+            {
+              translateY: current.progress.interpolate({
+                inputRange: [0, 1],
+                outputRange: [layouts.screen.height, 0],
+              }),
+            },
+          ],
+        },
+      };
+    },
   };
 
   return (
@@ -98,9 +121,6 @@ const MainNavigator = () => {
               headerTitle: '회원가입',
               headerTitleAlign: 'center',
               headerBackTitleVisible: false,
-              headerTitleStyle: {
-                ...headerTitleStyles,
-              },
             }}
           />
           <Stack.Screen
@@ -132,6 +152,10 @@ const MainNavigator = () => {
                   </TouchableOpacity>
                 </FlexBox>
               ),
+              headerTitleStyle: {
+                ...headerTitleStyles,
+                fontSize: 18,
+              },
             })}
           />
           <Stack.Screen
@@ -142,10 +166,6 @@ const MainNavigator = () => {
               headerTitle: '',
               headerTitleAlign: 'center',
               headerBackTitleVisible: false,
-              headerTitleStyle: {
-                ...headerTitleStyles,
-                fontSize: 16,
-              },
             }}
           />
           <Stack.Screen
@@ -155,26 +175,6 @@ const MainNavigator = () => {
               title: '채팅방 수정',
               headerTitleAlign: 'center',
               headerBackTitleVisible: false,
-              headerTitleStyle: {
-                ...headerTitleStyles,
-                fontSize: 16,
-              },
-            }}
-          />
-          <Stack.Screen
-            name={MainNavigatorScreens.Me}
-            component={MeScreen}
-            options={{
-              headerShown: false,
-              presentation: 'modal',
-            }}
-          />
-          <Stack.Screen
-            name={MainNavigatorScreens.User}
-            component={UserScreen}
-            options={{
-              headerShown: false,
-              presentation: 'modal',
             }}
           />
           <Stack.Screen
@@ -184,6 +184,25 @@ const MainNavigator = () => {
               title: '설정',
               headerBackTitleVisible: false,
               headerTitleAlign: 'center',
+            }}
+          />
+          <Stack.Screen
+            name={MainNavigatorScreens.Me}
+            component={MeScreen}
+            options={bottomToTopScreen}
+          />
+          <Stack.Screen
+            name={MainNavigatorScreens.User}
+            component={UserScreen}
+            options={bottomToTopScreen}
+          />
+          <Stack.Screen
+            name={MainNavigatorScreens.BlockUsers}
+            component={BlockUsersScreen}
+            options={{
+              title: '차단유저 관리',
+              headerTitleAlign: 'center',
+              headerBackTitleVisible: false,
             }}
           />
         </Stack.Navigator>

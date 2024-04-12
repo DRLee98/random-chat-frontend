@@ -100,59 +100,67 @@ const MeScreen = ({navigation}: MeScreenProps) => {
 
   if (!me) return null;
   return (
-    <Container>
-      <ProfileImgBox>
-        <ProfileImg
-          id={me.id}
-          size={120}
-          url={values?.profile?.uri ?? me.profileUrl}
-        />
-        {edit && (
-          <ProfileEditButtonBox>
-            <PictureSelectButton onChange={onProfileChange} />
-          </ProfileEditButtonBox>
-        )}
-      </ProfileImgBox>
-      <NicknameBox>
+    <SafeAreaView>
+      <Container>
+        <ProfileImgBox>
+          <ProfileImg
+            id={me.id}
+            size={120}
+            url={values?.profile?.uri ?? me.profileUrl}
+          />
+          {edit && (
+            <ProfileEditButtonBox>
+              <PictureSelectButton onChange={onProfileChange} />
+            </ProfileEditButtonBox>
+          )}
+        </ProfileImgBox>
+        <NicknameBox>
+          {edit ? (
+            <NicknameInput
+              textAlign="center"
+              placeholder="닉네임을 입력해 주세요."
+              returnKeyType="done"
+              {...getProps('nickname')}
+            />
+          ) : (
+            <>
+              <Nickname>{me.nickname}</Nickname>
+              <SocialPlatformLogo socialPlatform={me.socialPlatform} />
+            </>
+          )}
+        </NicknameBox>
         {edit ? (
-          <NicknameInput
+          <BioInput
             textAlign="center"
-            placeholder="닉네임을 입력해 주세요."
+            placeholder="상태메시지를 입력해 주세요."
             returnKeyType="done"
-            {...getProps('nickname')}
+            multiline
+            numberOfLines={3}
+            {...getProps('bio')}
           />
         ) : (
-          <>
-            <Nickname>{me.nickname}</Nickname>
-            <SocialPlatformLogo socialPlatform={me.socialPlatform} />
-          </>
+          <Bio>{me.bio}</Bio>
         )}
-      </NicknameBox>
-      {edit ? (
-        <BioInput
-          textAlign="center"
-          placeholder="상태메시지를 입력해 주세요."
-          returnKeyType="done"
-          multiline
-          numberOfLines={3}
-          {...getProps('bio')}
-        />
-      ) : (
-        <Bio>{me.bio}</Bio>
-      )}
-      <RightButton onPress={onRightButtonPress}>
-        <ButtonText>{edit ? '저장' : '프로필 편집'}</ButtonText>
-      </RightButton>
-      <LeftButton onPress={onLeftButtonPress}>
-        {edit ? (
-          <ButtonText>취소</ButtonText>
-        ) : (
-          <Icon name="close" size={25} color={theme.fontColor} />
-        )}
-      </LeftButton>
-    </Container>
+        <RightButton onPress={onRightButtonPress}>
+          <ButtonText>{edit ? '저장' : '프로필 편집'}</ButtonText>
+        </RightButton>
+        <LeftButton onPress={onLeftButtonPress}>
+          {edit ? (
+            <ButtonText>취소</ButtonText>
+          ) : (
+            <Icon name="close" size={25} color={theme.fontColor} />
+          )}
+        </LeftButton>
+      </Container>
+    </SafeAreaView>
   );
 };
+
+const SafeAreaView = styled.SafeAreaView`
+  flex: 1;
+
+  background-color: ${({theme}) => theme.bgColor};
+`;
 
 const Container = styled.View`
   position: relative;
@@ -162,7 +170,6 @@ const Container = styled.View`
 
   padding: 0px 20px;
   padding-top: 50%;
-  background-color: ${({theme}) => theme.bgColor};
 `;
 
 const ProfileImgBox = styled.View`

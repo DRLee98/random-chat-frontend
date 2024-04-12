@@ -23,38 +23,44 @@ interface UserScreenProps
 const UserScreen = ({route, navigation}: UserScreenProps) => {
   const theme = useTheme();
 
-  const {me} = useMe();
   const {data} = useUserProfile({
     id: route.params.userId,
   });
 
   if (!data?.userProfile.user) return null;
   return (
-    <Container>
-      <ProfileImg
-        id={data.userProfile.user.id}
-        size={120}
-        url={data.userProfile.user.profileUrl}
-      />
-      <NicknameBox>
-        <Nickname>{data.userProfile.user.nickname}</Nickname>
-      </NicknameBox>
-      <Bio>{data.userProfile.user.bio}</Bio>
-      {me && data.userProfile.user && (
-        <BlockButtonBox>
-          <ToggleUserBlockButton
-            me={me}
-            userId={data.userProfile.user.id}
-            nickname={data.userProfile.user.nickname}
-          />
-        </BlockButtonBox>
-      )}
-      <CloseButton onPress={navigation.goBack}>
-        <Icon name="close" size={25} color={theme.fontColor} />
-      </CloseButton>
-    </Container>
+    <SafeAreaView>
+      <Container>
+        <ProfileImg
+          id={data.userProfile.user.id}
+          size={120}
+          url={data.userProfile.user.profileUrl}
+        />
+        <NicknameBox>
+          <Nickname>{data.userProfile.user.nickname}</Nickname>
+        </NicknameBox>
+        <Bio>{data.userProfile.user.bio}</Bio>
+        {data.userProfile.user && (
+          <BlockButtonBox>
+            <ToggleUserBlockButton
+              userId={data.userProfile.user.id}
+              nickname={data.userProfile.user.nickname}
+            />
+          </BlockButtonBox>
+        )}
+        <CloseButton onPress={navigation.goBack}>
+          <Icon name="close" size={25} color={theme.fontColor} />
+        </CloseButton>
+      </Container>
+    </SafeAreaView>
   );
 };
+
+const SafeAreaView = styled.SafeAreaView`
+  flex: 1;
+
+  background-color: ${({theme}) => theme.bgColor};
+`;
 
 const Container = styled.View`
   position: relative;
@@ -65,7 +71,6 @@ const Container = styled.View`
 
   padding: 0px 20px;
   padding-top: 50%;
-  background-color: ${({theme}) => theme.bgColor};
 `;
 
 const NicknameBox = styled.View`

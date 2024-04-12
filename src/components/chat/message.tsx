@@ -34,7 +34,7 @@ const Message = ({
         {contents.map((item, i, list) => (
           <Row key={`contents-${i}`} myMessage={myMessage}>
             <TextBubble myMessage={myMessage}>
-              <Text>{item.contents}</Text>
+              <Text myMessage={myMessage}>{item.contents}</Text>
             </TextBubble>
             <Column>
               {item.unReadCount > 0 && (
@@ -77,8 +77,9 @@ const TextBubble = styled.View<Pick<MessageProps, 'myMessage'>>`
   border-radius: 16px;
 `;
 
-const Text = styled.Text`
-  color: ${({theme}) => theme.fontColor};
+const Text = styled.Text<Pick<MessageProps, 'myMessage'>>`
+  color: ${({myMessage, theme}) =>
+    myMessage ? theme.bgColor : theme.fontColor};
 `;
 
 const UnReadCount = styled.Text<Pick<MessageProps, 'myMessage'>>`

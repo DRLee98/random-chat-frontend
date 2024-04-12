@@ -13,9 +13,7 @@ const TOGGLE_BLOCK_USER = graphql(`
       ok
       error
       updateBlockUsers {
-        id
-        nickname
-        profileUrl
+        ...BlockUser
       }
     }
   }

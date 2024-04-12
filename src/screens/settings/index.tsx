@@ -24,7 +24,7 @@ interface SettingsScreenProps
     MainNavigatorScreens.Settings
   > {}
 
-const SettingsScreen = ({}: SettingsScreenProps) => {
+const SettingsScreen = ({navigation}: SettingsScreenProps) => {
   const logout = useLogout();
 
   const {me} = useMeDetail();
@@ -32,6 +32,10 @@ const SettingsScreen = ({}: SettingsScreenProps) => {
   const [updateUser] = useUpdateUser();
 
   const [notiEnabled, setNotiEnabled] = useState(false);
+
+  const goBlockUsersScreen = () => {
+    navigation.navigate(MainNavigatorScreens.BlockUsers);
+  };
 
   const setNotiInitState = async () => {
     const enabled = await messagingEnabled();
@@ -102,6 +106,11 @@ const SettingsScreen = ({}: SettingsScreenProps) => {
       <ListItem>
         <ListText>초대 허용</ListText>
         <Switch value={me?.allowMessage} onValueChange={onChangeAllowMessage} />
+      </ListItem>
+      <ListItem>
+        <Button onPress={goBlockUsersScreen}>
+          <ListText>차단유저 관리</ListText>
+        </Button>
       </ListItem>
       <ListItem>
         <Button onPress={onLogout}>

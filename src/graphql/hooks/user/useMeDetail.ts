@@ -2,7 +2,7 @@ import {useApolloClient, useQuery} from '@apollo/client';
 import {graphql} from '@app/graphql/__generated__';
 
 import type {QueryHookOptions} from '@apollo/client';
-import type {MeDetail, MeDetailQuery} from '@app/graphql/__generated__/graphql';
+import type {MeDetailQuery} from '@app/graphql/__generated__/graphql';
 
 export const ME_DETAIL = graphql(`
   query meDetail {
@@ -20,9 +20,7 @@ export const ME_DETAIL = graphql(`
         language
         autoTranslation
         blockUsers {
-          id
-          nickname
-          profileUrl
+          ...BlockUser
         }
       }
     }
@@ -38,7 +36,7 @@ const useMeDetail = (options?: QueryHookOptions<MeDetailQuery>) => {
 export const useUpdateMeDetail = () => {
   const client = useApolloClient();
 
-  const updateFn = (data: Partial<MeDetail>) => {
+  const updateFn = (data: Partial<MeDetailQuery['meDetail']['me']>) => {
     client.cache.updateQuery<MeDetailQuery>(
       {
         query: ME_DETAIL,
