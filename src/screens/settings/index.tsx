@@ -4,6 +4,7 @@ import useMeDetail, {
   useUpdateMeDetail,
 } from '@app/graphql/hooks/user/useMeDetail';
 import useUpdateUser from '@app/graphql/hooks/user/useUpdateUser';
+import useDeleteUser from '@app/graphql/hooks/user/useDeleteUser';
 
 import styled from 'styled-components/native';
 
@@ -30,6 +31,7 @@ const SettingsScreen = ({navigation}: SettingsScreenProps) => {
   const {me} = useMeDetail();
   const updateMeDetail = useUpdateMeDetail();
   const [updateUser] = useUpdateUser();
+  const [deleteUser] = useDeleteUser();
 
   const [notiEnabled, setNotiEnabled] = useState(false);
 
@@ -41,6 +43,13 @@ const SettingsScreen = ({navigation}: SettingsScreenProps) => {
     const enabled = await messagingEnabled();
     const userNoti = me?.noti;
     setNotiEnabled(Boolean(enabled && userNoti));
+  };
+
+  const deleteUserFn = async () => {
+    const {data} = await deleteUser();
+    if (data?.deleteUser.ok) {
+      logout();
+    }
   };
 
   const onChangeNotification = async (value: boolean) => {
@@ -89,6 +98,14 @@ const SettingsScreen = ({navigation}: SettingsScreenProps) => {
     });
   };
 
+  const onDeleteUser = () => {
+    AlertFn({
+      title: '회원탈퇴',
+      message: '정말 탈퇴하시겠습니까?',
+      onConfirm: deleteUserFn,
+    });
+  };
+
   useEffect(() => {
     setNotiInitState();
     const unsubscribe = AppState.addEventListener('change', setNotiInitState);
@@ -118,7 +135,7 @@ const SettingsScreen = ({navigation}: SettingsScreenProps) => {
         </Button>
       </ListItem>
       <ListItem>
-        <Button>
+        <Button onPress={onDeleteUser}>
           <ListText>회원 탈퇴</ListText>
         </Button>
       </ListItem>

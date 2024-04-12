@@ -29,6 +29,7 @@ const documents = {
     "\n  query roomDetail($input: RoomDetailInput!) {\n    roomDetail(input: $input) {\n      ok\n      error\n      room {\n        userRoom {\n          id\n          name\n          noti\n          pinnedAt\n          newMessage\n        }\n        users {\n          id\n          nickname\n          profileUrl\n          bio\n          language\n        }\n      }\n    }\n  }\n": types.RoomDetailDocument,
     "\n  mutation updateRoom($input: UpdateRoomInput!) {\n    updateRoom(input: $input) {\n      ok\n      error\n    }\n  }\n": types.UpdateRoomDocument,
     "\n  mutation createUser($input: CreateUserInput!) {\n    createUser(input: $input) {\n      ok\n      error\n      user {\n        id\n      }\n    }\n  }\n": types.CreateUserDocument,
+    "\n  mutation deleteUser {\n    deleteUser {\n      ok\n      error\n    }\n  }\n": types.DeleteUserDocument,
     "\n  query login($input: LoginInput!) {\n    login(input: $input) {\n      ok\n      error\n      token\n    }\n  }\n": types.LoginDocument,
     "\n  query me {\n    me {\n      ok\n      error\n      me {\n        id\n        nickname\n        profileUrl\n        blockUserIds\n      }\n    }\n  }\n": types.MeDocument,
     "\n  query meDetail {\n    meDetail {\n      ok\n      error\n      me {\n        id\n        nickname\n        profileUrl\n        bio\n        socialPlatform\n        noti\n        allowMessage\n        language\n        autoTranslation\n        blockUsers {\n          ...BlockUser\n        }\n      }\n    }\n  }\n": types.MeDetailDocument,
@@ -116,6 +117,10 @@ export function graphql(source: "\n  mutation updateRoom($input: UpdateRoomInput
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(source: "\n  mutation createUser($input: CreateUserInput!) {\n    createUser(input: $input) {\n      ok\n      error\n      user {\n        id\n      }\n    }\n  }\n"): (typeof documents)["\n  mutation createUser($input: CreateUserInput!) {\n    createUser(input: $input) {\n      ok\n      error\n      user {\n        id\n      }\n    }\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  mutation deleteUser {\n    deleteUser {\n      ok\n      error\n    }\n  }\n"): (typeof documents)["\n  mutation deleteUser {\n    deleteUser {\n      ok\n      error\n    }\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
