@@ -8,7 +8,7 @@ import useDeleteUser from '@app/graphql/hooks/user/useDeleteUser';
 
 import styled from 'styled-components/native';
 
-import {Switch} from 'react-native-gesture-handler';
+import Switch from '@app/components/common/Switch';
 
 import {AppState} from 'react-native';
 import {AlertFn, openAppSettings} from '@app/utils/app';
