@@ -210,7 +210,7 @@ const MyProfile = styled.TouchableOpacity`
   align-items: center;
   gap: 20px;
 
-  margin: 15px 0;
+  margin: 20px 0;
   padding: 10px;
   background-color: ${({theme}) => theme.bgColor};
   border-radius: 15px;
@@ -227,13 +227,13 @@ const NicknameBox = styled.View`
 `;
 
 const Nickname = styled.Text`
-  font-size: 18px;
+  font-size: 14px;
   font-weight: 600;
   color: ${({theme}) => theme.fontColor};
 `;
 
 const Bio = styled.Text`
-  font-size: 14px;
+  font-size: 12px;
   color: ${({theme}) => theme.gray100.default};
 `;
 
