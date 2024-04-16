@@ -60,8 +60,8 @@ const Switch = ({value, onValueChange}: SwitchProps) => {
 const Button = styled.TouchableOpacity``;
 
 const Container = styled(Animated.View)`
-  width: 55px;
-  height: 35px;
+  height: 32px;
+  aspect-ratio: 2/1.2;
 
   padding: 4px;
 

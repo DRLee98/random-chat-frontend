@@ -131,14 +131,11 @@ const MainNavigator = () => {
               title: '홈',
               headerRight: () => (
                 <FlexBox>
-                  <TouchableOpacity
-                    onPress={() =>
-                      navigation.navigate(MainNavigatorScreens.Me)
-                    }>
+                  <TouchableOpacity onPress={() => {}}>
                     <Icon
-                      name="person-circle-outline"
-                      color={theme.fontColor}
-                      size={26}
+                      name="notifications"
+                      color={theme.primary.default}
+                      size={24}
                     />
                   </TouchableOpacity>
                   <TouchableOpacity
@@ -148,7 +145,7 @@ const MainNavigator = () => {
                     <Icon
                       name="settings-outline"
                       color={theme.fontColor}
-                      size={26}
+                      size={24}
                     />
                   </TouchableOpacity>
                 </FlexBox>
@@ -218,7 +215,8 @@ const Container = styled.KeyboardAvoidingView`
 
 const FlexBox = styled.View`
   flex-direction: row;
-  gap: 15px;
+  align-items: center;
+  gap: 18px;
 `;
 
 export default MainNavigator;

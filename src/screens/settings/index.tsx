@@ -8,7 +8,10 @@ import useDeleteUser from '@app/graphql/hooks/user/useDeleteUser';
 
 import styled from 'styled-components/native';
 
+import ProfileImg from '@app/components/common/ProfileImg';
+import SocialPlatformLogo from '@app/components/common/SocialPlatformLogo';
 import Switch from '@app/components/common/Switch';
+import Divider from '@app/components/common/Divider';
 
 import {AppState} from 'react-native';
 import {AlertFn, openAppSettings} from '@app/utils/app';
@@ -34,6 +37,10 @@ const SettingsScreen = ({navigation}: SettingsScreenProps) => {
   const [deleteUser] = useDeleteUser();
 
   const [notiEnabled, setNotiEnabled] = useState(false);
+
+  const goMyProfileScreen = () => {
+    navigation.navigate(MainNavigatorScreens.Me);
+  };
 
   const goBlockUsersScreen = () => {
     navigation.navigate(MainNavigatorScreens.BlockUsers);
@@ -116,39 +123,126 @@ const SettingsScreen = ({navigation}: SettingsScreenProps) => {
 
   return (
     <Container>
-      <ListItem>
-        <ListText>알림 설정</ListText>
-        <Switch value={notiEnabled} onValueChange={onChangeNotification} />
-      </ListItem>
-      <ListItem>
-        <ListText>초대 허용</ListText>
-        <Switch value={me?.allowMessage} onValueChange={onChangeAllowMessage} />
-      </ListItem>
-      <ListItem>
-        <Button onPress={goBlockUsersScreen}>
-          <ListText>차단유저 관리</ListText>
-        </Button>
-      </ListItem>
-      <ListItem>
-        <Button onPress={onLogout}>
-          <ListText>로그아웃</ListText>
-        </Button>
-      </ListItem>
-      <ListItem>
-        <Button onPress={onDeleteUser}>
-          <ListText>회원 탈퇴</ListText>
-        </Button>
-      </ListItem>
+      {me && (
+        <MyProfile onPress={goMyProfileScreen}>
+          <ProfileImg id={me.id} url={me?.profileUrl} size={80} />
+          <MyProfileInfo>
+            <NicknameBox>
+              <Nickname ellipsizeMode="tail" numberOfLines={1}>
+                {me.nickname}
+              </Nickname>
+              <SocialPlatformLogo socialPlatform={me.socialPlatform} />
+            </NicknameBox>
+            <Bio ellipsizeMode="tail" numberOfLines={1}>
+              {me.bio}
+            </Bio>
+          </MyProfileInfo>
+        </MyProfile>
+      )}
+      <Bundle>
+        <ListItem>
+          <ListText>알림 설정</ListText>
+          <Switch value={notiEnabled} onValueChange={onChangeNotification} />
+        </ListItem>
+        <Divider />
+        <ListItem>
+          <ListText>초대 허용</ListText>
+          <Switch
+            value={me?.allowMessage}
+            onValueChange={onChangeAllowMessage}
+          />
+        </ListItem>
+        <Divider />
+        <ListItem>
+          <Button onPress={goBlockUsersScreen}>
+            <ListText>차단유저 관리</ListText>
+          </Button>
+        </ListItem>
+      </Bundle>
+
+      <Bundle>
+        <ListItem>
+          <Button>
+            <ListText>공지사항</ListText>
+          </Button>
+        </ListItem>
+        <Divider />
+        <ListItem>
+          <Button>
+            <ListText>의견 보내기</ListText>
+          </Button>
+        </ListItem>
+        <Divider />
+        <ListItem>
+          <Button>
+            <ListText>내가 작성한 의견</ListText>
+          </Button>
+        </ListItem>
+      </Bundle>
+
+      <Bundle>
+        <ListItem>
+          <Button onPress={onLogout}>
+            <RedListText>로그아웃</RedListText>
+          </Button>
+        </ListItem>
+        <Divider />
+        <ListItem>
+          <Button onPress={onDeleteUser}>
+            <RedListText>회원 탈퇴</RedListText>
+          </Button>
+        </ListItem>
+      </Bundle>
     </Container>
   );
 };
 
-const Container = styled.View`
+const Container = styled.ScrollView`
   flex: 1;
 
   padding: 0 20px;
 
+  background-color: ${({theme}) => theme.gray600.default};
+`;
+
+const MyProfile = styled.TouchableOpacity`
+  flex-direction: row;
+  align-items: center;
+  gap: 20px;
+
+  margin: 15px 0;
+  padding: 10px;
   background-color: ${({theme}) => theme.bgColor};
+  border-radius: 15px;
+`;
+
+const MyProfileInfo = styled.View`
+  gap: 8px;
+`;
+
+const NicknameBox = styled.View`
+  flex-direction: row;
+  align-items: center;
+  gap: 6px;
+`;
+
+const Nickname = styled.Text`
+  font-size: 18px;
+  font-weight: 600;
+  color: ${({theme}) => theme.fontColor};
+`;
+
+const Bio = styled.Text`
+  font-size: 14px;
+  color: ${({theme}) => theme.gray100.default};
+`;
+
+const Bundle = styled.View`
+  margin-bottom: 20px;
+  padding: 0 10px;
+
+  background-color: ${({theme}) => theme.bgColor};
+  border-radius: 15px;
 `;
 
 const ListItem = styled.View`
@@ -158,16 +252,17 @@ const ListItem = styled.View`
 
   height: 60px;
 
-  padding: 0 5px;
-
-  border-bottom-width: 1px;
-  border-bottom-style: solid;
-  border-bottom-color: ${({theme}) => theme.gray300.default};
+  padding: 0 10px;
 `;
 
 const ListText = styled.Text`
-  font-size: 16px;
+  font-size: 15px;
   color: ${({theme}) => theme.fontColor};
+`;
+
+const RedListText = styled.Text`
+  font-size: 15px;
+  color: ${({theme}) => theme.red.default};
 `;
 
 const Button = styled.TouchableOpacity`
