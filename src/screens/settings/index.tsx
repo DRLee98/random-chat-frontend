@@ -17,15 +17,15 @@ import {AppState} from 'react-native';
 import {AlertFn, openAppSettings} from '@app/utils/app';
 import {messagingEnabled} from '@app/utils/fcm';
 
-import {MainNavigatorScreens} from '@app/navigators';
+import {SettingsNavigatorScreens} from '@app/navigators/settings';
 
 import type {StackScreenProps} from '@react-navigation/stack';
-import type {MainNavigatorParamList} from '@app/navigators';
+import type {SettingsNavigatorParamList} from '@app/navigators/settings';
 
 interface SettingsScreenProps
   extends StackScreenProps<
-    MainNavigatorParamList,
-    MainNavigatorScreens.Settings
+    SettingsNavigatorParamList,
+    SettingsNavigatorScreens.Settings
   > {}
 
 const SettingsScreen = ({navigation}: SettingsScreenProps) => {
@@ -37,14 +37,6 @@ const SettingsScreen = ({navigation}: SettingsScreenProps) => {
   const [deleteUser] = useDeleteUser();
 
   const [notiEnabled, setNotiEnabled] = useState(false);
-
-  const goMyProfileScreen = () => {
-    navigation.navigate(MainNavigatorScreens.Me);
-  };
-
-  const goBlockUsersScreen = () => {
-    navigation.navigate(MainNavigatorScreens.BlockUsers);
-  };
 
   const setNotiInitState = async () => {
     const enabled = await messagingEnabled();
@@ -124,8 +116,8 @@ const SettingsScreen = ({navigation}: SettingsScreenProps) => {
   return (
     <Container>
       {me && (
-        <MyProfile onPress={goMyProfileScreen}>
-          <ProfileImg id={me.id} url={me?.profileUrl} size={80} />
+        <MyProfile>
+          <ProfileImg id={me.id} url={me?.profileUrl} size={80} push />
           <MyProfileInfo>
             <NicknameBox>
               <Nickname ellipsizeMode="tail" numberOfLines={1}>
@@ -154,7 +146,10 @@ const SettingsScreen = ({navigation}: SettingsScreenProps) => {
         </ListItem>
         <Divider />
         <ListItem>
-          <Button onPress={goBlockUsersScreen}>
+          <Button
+            onPress={() =>
+              navigation.navigate(SettingsNavigatorScreens.BlockUsers)
+            }>
             <ListText>차단유저 관리</ListText>
           </Button>
         </ListItem>
@@ -162,19 +157,28 @@ const SettingsScreen = ({navigation}: SettingsScreenProps) => {
 
       <Bundle>
         <ListItem>
-          <Button>
+          <Button
+            onPress={() =>
+              navigation.navigate(SettingsNavigatorScreens.Notice)
+            }>
             <ListText>공지사항</ListText>
           </Button>
         </ListItem>
         <Divider />
         <ListItem>
-          <Button>
+          <Button
+            onPress={() =>
+              navigation.navigate(SettingsNavigatorScreens.Opinion)
+            }>
             <ListText>의견 보내기</ListText>
           </Button>
         </ListItem>
         <Divider />
         <ListItem>
-          <Button>
+          <Button
+            onPress={() =>
+              navigation.navigate(SettingsNavigatorScreens.MyOpinion)
+            }>
             <ListText>내가 작성한 의견</ListText>
           </Button>
         </ListItem>
@@ -205,7 +209,7 @@ const Container = styled.ScrollView`
   background-color: ${({theme}) => theme.gray600.default};
 `;
 
-const MyProfile = styled.TouchableOpacity`
+const MyProfile = styled.View`
   flex-direction: row;
   align-items: center;
   gap: 20px;

@@ -42,7 +42,7 @@ const Container = styled.View`
 
   background-color: ${({theme}) => theme.gray700.default};
   border: 1px solid ${({theme}) => theme.gray200.default};
-  border-radius: 999px;
+  border-radius: 25px;
 `;
 
 export default BorderInput;

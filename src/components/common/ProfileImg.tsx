@@ -1,5 +1,6 @@
 import {useMemo} from 'react';
 import {useNavigation} from '@react-navigation/native';
+import useMe from '@app/graphql/hooks/user/useMe';
 import {useTheme} from 'styled-components/native';
 
 import styled from 'styled-components/native';
@@ -24,8 +25,11 @@ const ProfileImg = ({id, url, size = 60, push = false}: ProfileImgProps) => {
   const theme = useTheme();
   const navigation = useNavigation<NavigationProp<MainNavigatorParamList>>();
 
+  const {me} = useMe();
+
   const onPress = () => {
     if (!id || !push) return;
+    if (me?.id === id) return navigation.navigate(MainNavigatorScreens.Me);
     navigation.navigate(MainNavigatorScreens.User, {userId: id});
   };
 

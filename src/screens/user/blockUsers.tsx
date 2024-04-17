@@ -1,7 +1,5 @@
 import {useEffect, useState} from 'react';
-import useMeDetail, {
-  useUpdateMeDetail,
-} from '@app/graphql/hooks/user/useMeDetail';
+import useMeDetail from '@app/graphql/hooks/user/useMeDetail';
 
 import styled from 'styled-components/native';
 
@@ -12,23 +10,22 @@ import {getFragmentData} from '@app/graphql/__generated__';
 
 import {BLOCK_USER} from '@app/graphql/fragments/user';
 
-import {MainNavigatorScreens} from '@app/navigators';
+import {SettingsNavigatorScreens} from '@app/navigators/settings';
 
 import type {StackScreenProps} from '@react-navigation/stack';
-import type {MainNavigatorParamList} from '@app/navigators';
+import type {SettingsNavigatorParamList} from '@app/navigators/settings';
 import type {BlockUserFragment} from '@app/graphql/__generated__/graphql';
 
 interface BlockUsersScreenProps
   extends StackScreenProps<
-    MainNavigatorParamList,
-    MainNavigatorScreens.BlockUsers
+    SettingsNavigatorParamList,
+    SettingsNavigatorScreens.BlockUsers
   > {}
 
 const BlockUsersScreen = ({}: BlockUsersScreenProps) => {
   const [blockUsers, setBlockUsers] = useState<BlockUserFragment[]>([]);
 
   const {me} = useMeDetail();
-  const updateMeDetail = useUpdateMeDetail();
 
   useEffect(() => {
     if (me && blockUsers.length === 0) {

@@ -1,7 +1,9 @@
 import styled, {useTheme} from 'styled-components/native';
 
-import {TransitionPresets, createStackNavigator} from '@react-navigation/stack';
+import {createStackNavigator} from '@react-navigation/stack';
 
+import {NavigationContainer} from '@react-navigation/native';
+import {Platform, TouchableOpacity} from 'react-native';
 import SplashScreen from '@app/screens/splash';
 import LoginScreen from '@app/screens/login';
 import SignUpScreen from '@app/screens/signUp';
@@ -9,19 +11,17 @@ import HomeScreen from '@app/screens/home';
 import ChatRoomScreen from '@app/screens/chatRoom';
 import MeScreen from '@app/screens/user/me';
 import UserScreen from '@app/screens/user';
-import BlockUsersScreen from '@app/screens/user/blockUsers';
 import ChatRoomEditScreen from '@app/screens/chatRoom/edit';
-import SettingsScreen from '@app/screens/settings';
-import {NavigationContainer} from '@react-navigation/native';
-import {Platform, TouchableOpacity} from 'react-native';
+import SettingsNavigator from './settings';
 import Icon from 'react-native-vector-icons/Ionicons';
+import HeaderBackIcon from '@app/components/common/HeaderBackIcon';
+
+import {bottomToTopScreen, getDefaultScreenOptions} from './utils';
 
 import type {SignUpScreenParams} from '@app/screens/signUp';
 import type {ChatRoomScreenParams} from '@app/screens/chatRoom';
 import type {ChatRoomEditScreenParams} from '@app/screens/chatRoom/edit';
 import type {UserScreenScreenParams} from '@app/screens/user';
-import type {TextStyle} from 'react-native';
-import type {StackNavigationOptions} from '@react-navigation/stack';
 
 export enum MainNavigatorScreens {
   Splash = 'Splash',
@@ -32,8 +32,7 @@ export enum MainNavigatorScreens {
   ChatRoomEdit = 'ChatRoomEdit',
   Me = 'Me',
   User = 'User',
-  Settings = 'Settings',
-  BlockUsers = 'BlockUsers',
+  SettingsStack = 'SettingsStack',
 }
 
 export type MainNavigatorParamList = {
@@ -45,8 +44,7 @@ export type MainNavigatorParamList = {
   ChatRoomEdit: ChatRoomEditScreenParams;
   Me: undefined;
   User: UserScreenScreenParams;
-  Settings: undefined;
-  BlockUsers: undefined;
+  SettingsStack: undefined;
 };
 
 const Stack = createStackNavigator<MainNavigatorParamList>();
@@ -54,56 +52,16 @@ const Stack = createStackNavigator<MainNavigatorParamList>();
 const MainNavigator = () => {
   const theme = useTheme();
 
-  const headerTitleStyles: TextStyle = {
-    color: theme.fontColor,
-    fontSize: 16,
-    fontWeight: '400',
-  };
-
-  const bottomToTopScreen: StackNavigationOptions = {
-    headerShown: false,
-    presentation: 'modal',
-    cardStyleInterpolator: ({current, layouts}) => {
-      return {
-        cardStyle: {
-          transform: [
-            {
-              translateY: current.progress.interpolate({
-                inputRange: [0, 1],
-                outputRange: [layouts.screen.height, 0],
-              }),
-            },
-          ],
-        },
-      };
-    },
-  };
+  const defaultScreenOptions = getDefaultScreenOptions({theme});
 
   return (
     <NavigationContainer>
       <Container behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
         <Stack.Navigator
-          screenOptions={({navigation}) => ({
-            headerTitleAlign: 'left',
-            headerTintColor: theme.fontColor,
-            headerStyle: {
-              backgroundColor: theme.bgColor,
-            },
-            headerLeftContainerStyle: {
-              paddingLeft: 10,
-            },
-            headerRightContainerStyle: {
-              paddingRight: 10,
-            },
-            headerTitleStyle: {...headerTitleStyles},
-            headerBackImage: ({tintColor}) => (
-              <TouchableOpacity onPress={navigation.goBack}>
-                <Icon name="chevron-back" color={tintColor} size={24} />
-              </TouchableOpacity>
-            ),
-            headerShadowVisible: false,
-            ...TransitionPresets.SlideFromRightIOS,
-          })}
+          screenOptions={{
+            ...defaultScreenOptions,
+            headerBackImage: () => <HeaderBackIcon<MainNavigatorParamList> />,
+          }}
           initialRouteName={MainNavigatorScreens.Splash}>
           <Stack.Screen
             name={MainNavigatorScreens.Splash}
@@ -120,8 +78,6 @@ const MainNavigator = () => {
             component={SignUpScreen}
             options={{
               headerTitle: '회원가입',
-              headerTitleAlign: 'center',
-              headerBackTitleVisible: false,
             }}
           />
           <Stack.Screen
@@ -140,7 +96,7 @@ const MainNavigator = () => {
                   </TouchableOpacity>
                   <TouchableOpacity
                     onPress={() => {
-                      navigation.navigate(MainNavigatorScreens.Settings);
+                      navigation.navigate(MainNavigatorScreens.SettingsStack);
                     }}>
                     <Icon
                       name="settings-outline"
@@ -151,9 +107,12 @@ const MainNavigator = () => {
                 </FlexBox>
               ),
               headerTitleStyle: {
-                ...headerTitleStyles,
+                ...(typeof defaultScreenOptions.headerTitleStyle === 'object'
+                  ? defaultScreenOptions.headerTitleStyle
+                  : {}),
                 fontSize: 18,
               },
+              headerTitleAlign: 'left',
             })}
           />
           <Stack.Screen
@@ -161,9 +120,6 @@ const MainNavigator = () => {
             component={ChatRoomScreen}
             options={{
               title: '',
-              headerTitle: '',
-              headerTitleAlign: 'center',
-              headerBackTitleVisible: false,
             }}
           />
           <Stack.Screen
@@ -171,17 +127,6 @@ const MainNavigator = () => {
             component={ChatRoomEditScreen}
             options={{
               title: '채팅방 수정',
-              headerTitleAlign: 'center',
-              headerBackTitleVisible: false,
-            }}
-          />
-          <Stack.Screen
-            name={MainNavigatorScreens.Settings}
-            component={SettingsScreen}
-            options={{
-              title: '설정',
-              headerBackTitleVisible: false,
-              headerTitleAlign: 'center',
             }}
           />
           <Stack.Screen
@@ -195,12 +140,10 @@ const MainNavigator = () => {
             options={bottomToTopScreen}
           />
           <Stack.Screen
-            name={MainNavigatorScreens.BlockUsers}
-            component={BlockUsersScreen}
+            name={MainNavigatorScreens.SettingsStack}
+            component={SettingsNavigator}
             options={{
-              title: '차단유저 관리',
-              headerTitleAlign: 'center',
-              headerBackTitleVisible: false,
+              headerShown: false,
             }}
           />
         </Stack.Navigator>
