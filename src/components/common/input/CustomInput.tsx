@@ -24,7 +24,12 @@ const CustomInput = (props: CustomInputProps) => {
 
   return (
     <Container>
-      <TextInput {...props} value={value} onChangeText={onChangeText} />
+      <TextInput
+        {...props}
+        value={value}
+        onChangeText={onChangeText}
+        placeholderTextColor={theme.gray300.default}
+      />
       {value && (
         <ClearButton onPress={() => setValue('')}>
           <Icon name="close-circle" size={16} color={theme.gray300.default} />
@@ -46,6 +51,8 @@ const Container = styled.View`
 
 const TextInput = styled.TextInput<CustomInputProps>`
   flex: 1;
+
+  padding: 0 5px;
 
   font-size: 16px;
   color: ${({theme}) => theme.fontColor};

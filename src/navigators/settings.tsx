@@ -7,14 +7,18 @@ import SettingsScreen from '@app/screens/settings';
 import MyOpinionScreen from '@app/screens/opinion/myOpinion';
 import OpinionScreen from '@app/screens/opinion';
 import NoticeScreen from '@app/screens/notice';
+import NoticeDetailScreen from '@app/screens/notice/detail';
 import HeaderBackIcon from '@app/components/common/HeaderBackIcon';
 
 import {getDefaultScreenOptions} from './utils';
+
+import type {NoticeDetailScreenParams} from '@app/screens/notice/detail';
 
 export enum SettingsNavigatorScreens {
   Settings = 'Settings',
   BlockUsers = 'BlockUsers',
   Notice = 'Notice',
+  NoticeDetail = 'NoticeDetail',
   Opinion = 'Opinion',
   MyOpinion = 'MyOpinion',
 }
@@ -23,6 +27,7 @@ export type SettingsNavigatorParamList = {
   Settings: undefined;
   BlockUsers: undefined;
   Notice: undefined;
+  NoticeDetail: NoticeDetailScreenParams;
   Opinion: undefined;
   MyOpinion: undefined;
 };
@@ -58,6 +63,13 @@ const SettingsNavigator = () => {
       <SettingsStack.Screen
         name={SettingsNavigatorScreens.Notice}
         component={NoticeScreen}
+        options={{
+          title: '공지사항',
+        }}
+      />
+      <SettingsStack.Screen
+        name={SettingsNavigatorScreens.NoticeDetail}
+        component={NoticeDetailScreen}
         options={{
           title: '공지사항',
         }}

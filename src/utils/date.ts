@@ -11,7 +11,14 @@ export const getYMD = (date: Date) => {
   return {year, month, day};
 };
 
-export const geDatestamp = (date: string) => {
+export const getDateString = (date: string) => {
+  const newDate = new Date(date);
+  const {year, month, day} = getYMD(newDate);
+
+  return `${year}.${formatNumber(month)}.${formatNumber(day)}`;
+};
+
+export const getDatestamp = (date: string) => {
   const today = new Date().getTime();
   const target = new Date(date).getTime();
 

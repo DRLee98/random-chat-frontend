@@ -2,7 +2,7 @@ import {useEffect, useState} from 'react';
 
 import styled from 'styled-components/native';
 
-import {geDatestamp, getTimestamp} from '@app/utils/date';
+import {getDatestamp, getTimestamp} from '@app/utils/date';
 
 interface TimestampProps {
   date: string;
@@ -15,7 +15,7 @@ const Timestamp = ({date, type}: TimestampProps) => {
   const updateTimeStr = () => {
     switch (type) {
       case 'date':
-        setTimeStr(geDatestamp(date));
+        setTimeStr(getDatestamp(date));
         break;
       default:
         setTimeStr(getTimestamp(date));
