@@ -7,7 +7,7 @@ import useForm from '@app/hooks/useForm';
 
 import styled from 'styled-components/native';
 
-import ProfileImg from '@app/components/common/ProfileImg';
+import ProfileImg from '@app/components/user/ProfileImg';
 import PictureSelectButton from '@app/components/common/PictureSelectButton';
 import BorderInput from '@app/components/common/input/BorderInput';
 import Icon from 'react-native-vector-icons/Ionicons';

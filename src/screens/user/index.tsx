@@ -4,7 +4,7 @@ import {useTheme} from 'styled-components/native';
 
 import styled from 'styled-components/native';
 
-import ProfileImg from '@app/components/common/ProfileImg';
+import ProfileImg from '@app/components/user/ProfileImg';
 import ToggleUserBlockButton from '@app/components/user/ToggleUserBlockButton';
 import Icon from 'react-native-vector-icons/Ionicons';
 

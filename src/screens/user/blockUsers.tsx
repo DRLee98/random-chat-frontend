@@ -3,7 +3,7 @@ import useMeDetail from '@app/graphql/hooks/user/useMeDetail';
 
 import styled from 'styled-components/native';
 
-import ProfileImg from '@app/components/common/ProfileImg';
+import ProfileImg from '@app/components/user/ProfileImg';
 import ToggleUserBlockButton from '@app/components/user/ToggleUserBlockButton';
 
 import {getFragmentData} from '@app/graphql/__generated__';

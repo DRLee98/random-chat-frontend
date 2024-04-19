@@ -9,7 +9,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import NotiButton from '@app/components/room/NotiButton';
 import PinnedButton from '@app/components/room/PinnedButton';
 import ExitButton from '@app/components/room/ExitButton';
-import ProfileImg from '@app/components/common/ProfileImg';
+import ProfileImg from '@app/components/user/ProfileImg';
 
 import {getChatRoomName} from '@app/utils/name';
 

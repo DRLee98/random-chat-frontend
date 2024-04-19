@@ -9,7 +9,7 @@ import useUpdateUser from '@app/graphql/hooks/user/useUpdateUser';
 
 import styled from 'styled-components/native';
 
-import ProfileImg from '@app/components/common/ProfileImg';
+import ProfileImg from '@app/components/user/ProfileImg';
 import SocialPlatformLogo from '@app/components/common/SocialPlatformLogo';
 import UnderlineInput from '@app/components/common/input/UnderlineInput';
 import PictureSelectButton from '@app/components/common/PictureSelectButton';

@@ -4,7 +4,7 @@ import styled, {useTheme} from 'styled-components/native';
 
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import SwipeableListItem from '@app/components/common/SwipeableListItem';
-import ProfileImg from '@app/components/common/ProfileImg';
+import ProfileImg from '@app/components/user/ProfileImg';
 import PinnedButton from '@app/components/room/PinnedButton';
 import NotiButton from '@app/components/room/NotiButton';
 import ExitButton from '@app/components/room/ExitButton';

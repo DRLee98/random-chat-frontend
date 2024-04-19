@@ -8,7 +8,7 @@ import useDeleteUser from '@app/graphql/hooks/user/useDeleteUser';
 
 import styled from 'styled-components/native';
 
-import ProfileImg from '@app/components/common/ProfileImg';
+import ProfileImg from '@app/components/user/ProfileImg';
 import SocialPlatformLogo from '@app/components/common/SocialPlatformLogo';
 import Switch from '@app/components/common/Switch';
 import Divider from '@app/components/common/Divider';

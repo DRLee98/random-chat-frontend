@@ -1,5 +1,5 @@
 import styled from 'styled-components/native';
-import ProfileImg from '@app/components/common/ProfileImg';
+import ProfileImg from '@app/components/user/ProfileImg';
 import Timestamp from '@app/components/common/Timestamp';
 
 import type {BundledMessage} from '@app/screens/chatRoom';
