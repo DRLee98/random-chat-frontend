@@ -18,6 +18,18 @@ export const getDateString = (date: string) => {
   return `${year}.${formatNumber(month)}.${formatNumber(day)}`;
 };
 
+export const getDateTimeString = (date: string) => {
+  const newDate = new Date(date);
+  const {year, month, day} = getYMD(newDate);
+
+  const hour = newDate.getHours();
+  const minute = newDate.getMinutes();
+
+  return `${year}.${formatNumber(month)}.${formatNumber(
+    day,
+  )} ${hour}:${formatNumber(minute)}`;
+};
+
 export const getDatestamp = (date: string) => {
   const today = new Date().getTime();
   const target = new Date(date).getTime();

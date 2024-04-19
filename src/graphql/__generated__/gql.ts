@@ -24,6 +24,12 @@ const documents = {
     "\n  query viewMessages($input: ViewMessagesInput!) {\n    viewMessages(input: $input) {\n      ok\n      error\n      hasNext\n      messages {\n        ...MessageBase\n      }\n    }\n  }\n": types.ViewMessagesDocument,
     "\n  query notice($input: NoticeInput!) {\n    notice(input: $input) {\n      ok\n      error\n      notice {\n        id\n        title\n        content\n        pinned\n        createdAt\n      }\n    }\n  }\n": types.NoticeDocument,
     "\n  query noticeList($input: NoticeListInput!) {\n    noticeList(input: $input) {\n      ok\n      error\n      hasNext\n      noticeList {\n        id\n        title\n        pinned\n        createdAt\n      }\n    }\n  }\n": types.NoticeListDocument,
+    "\n  mutation deleteNotification($input: DeleteNotificationInput!) {\n    deleteNotification(input: $input) {\n      ok\n      error\n    }\n  }\n": types.DeleteNotificationDocument,
+    "\n  mutation deleteReadNotifications {\n    deleteReadNotifications {\n      ok\n      error\n    }\n  }\n": types.DeleteReadNotificationsDocument,
+    "\n  mutation readAllNotifications {\n    readAllNotifications {\n      ok\n      error\n    }\n  }\n": types.ReadAllNotificationsDocument,
+    "\n  mutation readNotification($input: ReadNotificationInput!) {\n    readNotification(input: $input) {\n      ok\n      error\n    }\n  }\n": types.ReadNotificationDocument,
+    "\n  query unReadNotificationCount {\n    unReadNotificationCount {\n      ok\n      error\n      count\n    }\n  }\n": types.UnReadNotificationCountDocument,
+    "\n  query viewNotifications($input: ViewNotificationsInput!) {\n    viewNotifications(input: $input) {\n      ok\n      error\n      hasNext\n      notifications {\n        id\n        title\n        message\n        read\n        type\n        data\n        createdAt\n      }\n    }\n  }\n": types.ViewNotificationsDocument,
     "\n  mutation createRandomRoom {\n    createRandomRoom {\n      ok\n      error\n      room {\n        ...MyRoomBase\n      }\n    }\n  }\n": types.CreateRandomRoomDocument,
     "\n  mutation deleteRoom($input: DeleteRoomInput!) {\n    deleteRoom(input: $input) {\n      ok\n      error\n    }\n  }\n": types.DeleteRoomDocument,
     "\n  query myRooms($input: MyRoomsInput!) {\n    myRooms(input: $input) {\n      ok\n      error\n      hasNext\n      rooms {\n        ...MyRoomBase\n      }\n    }\n  }\n": types.MyRoomsDocument,
@@ -99,6 +105,30 @@ export function graphql(source: "\n  query notice($input: NoticeInput!) {\n    n
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(source: "\n  query noticeList($input: NoticeListInput!) {\n    noticeList(input: $input) {\n      ok\n      error\n      hasNext\n      noticeList {\n        id\n        title\n        pinned\n        createdAt\n      }\n    }\n  }\n"): (typeof documents)["\n  query noticeList($input: NoticeListInput!) {\n    noticeList(input: $input) {\n      ok\n      error\n      hasNext\n      noticeList {\n        id\n        title\n        pinned\n        createdAt\n      }\n    }\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  mutation deleteNotification($input: DeleteNotificationInput!) {\n    deleteNotification(input: $input) {\n      ok\n      error\n    }\n  }\n"): (typeof documents)["\n  mutation deleteNotification($input: DeleteNotificationInput!) {\n    deleteNotification(input: $input) {\n      ok\n      error\n    }\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  mutation deleteReadNotifications {\n    deleteReadNotifications {\n      ok\n      error\n    }\n  }\n"): (typeof documents)["\n  mutation deleteReadNotifications {\n    deleteReadNotifications {\n      ok\n      error\n    }\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  mutation readAllNotifications {\n    readAllNotifications {\n      ok\n      error\n    }\n  }\n"): (typeof documents)["\n  mutation readAllNotifications {\n    readAllNotifications {\n      ok\n      error\n    }\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  mutation readNotification($input: ReadNotificationInput!) {\n    readNotification(input: $input) {\n      ok\n      error\n    }\n  }\n"): (typeof documents)["\n  mutation readNotification($input: ReadNotificationInput!) {\n    readNotification(input: $input) {\n      ok\n      error\n    }\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  query unReadNotificationCount {\n    unReadNotificationCount {\n      ok\n      error\n      count\n    }\n  }\n"): (typeof documents)["\n  query unReadNotificationCount {\n    unReadNotificationCount {\n      ok\n      error\n      count\n    }\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  query viewNotifications($input: ViewNotificationsInput!) {\n    viewNotifications(input: $input) {\n      ok\n      error\n      hasNext\n      notifications {\n        id\n        title\n        message\n        read\n        type\n        data\n        createdAt\n      }\n    }\n  }\n"): (typeof documents)["\n  query viewNotifications($input: ViewNotificationsInput!) {\n    viewNotifications(input: $input) {\n      ok\n      error\n      hasNext\n      notifications {\n        id\n        title\n        message\n        read\n        type\n        data\n        createdAt\n      }\n    }\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

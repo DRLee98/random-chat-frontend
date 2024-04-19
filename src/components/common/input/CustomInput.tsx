@@ -61,9 +61,9 @@ const TextInput = styled.TextInput<CustomInputProps>`
     if (!value) return;
     switch (textAlign) {
       case 'center':
-        return 'padding: 0 18px';
+        return 'margin: 0 20px';
       default:
-        return 'padding-right: 18px';
+        return 'margin-right: 20px';
     }
   }};
 `;

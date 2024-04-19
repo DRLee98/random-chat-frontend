@@ -12,9 +12,11 @@ import ChatRoomScreen from '@app/screens/chatRoom';
 import MeScreen from '@app/screens/user/me';
 import UserScreen from '@app/screens/user';
 import ChatRoomEditScreen from '@app/screens/chatRoom/edit';
+import NotificationScreen from '@app/screens/notification';
 import SettingsNavigator from './settings';
 import Icon from 'react-native-vector-icons/Ionicons';
 import HeaderBackIcon from '@app/components/common/HeaderBackIcon';
+import NotificationIcon from '@app/components/notification/NotificationIcon';
 
 import {bottomToTopScreen, getDefaultScreenOptions} from './utils';
 
@@ -32,6 +34,7 @@ export enum MainNavigatorScreens {
   ChatRoomEdit = 'ChatRoomEdit',
   Me = 'Me',
   User = 'User',
+  Notification = 'Notification',
   SettingsStack = 'SettingsStack',
 }
 
@@ -44,6 +47,7 @@ export type MainNavigatorParamList = {
   ChatRoomEdit: ChatRoomEditScreenParams;
   Me: undefined;
   User: UserScreenScreenParams;
+  Notification: undefined;
   SettingsStack: undefined;
 };
 
@@ -87,13 +91,7 @@ const MainNavigator = () => {
               title: '홈',
               headerRight: () => (
                 <FlexBox>
-                  <TouchableOpacity onPress={() => {}}>
-                    <Icon
-                      name="notifications"
-                      color={theme.primary.default}
-                      size={24}
-                    />
-                  </TouchableOpacity>
+                  <NotificationIcon />
                   <TouchableOpacity
                     onPress={() => {
                       navigation.navigate(MainNavigatorScreens.SettingsStack);
@@ -127,6 +125,13 @@ const MainNavigator = () => {
             component={ChatRoomEditScreen}
             options={{
               title: '채팅방 수정',
+            }}
+          />
+          <Stack.Screen
+            name={MainNavigatorScreens.Notification}
+            component={NotificationScreen}
+            options={{
+              title: '알림 목록',
             }}
           />
           <Stack.Screen
