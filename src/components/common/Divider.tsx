@@ -7,7 +7,7 @@ const Divider = () => {
 
 const DividerElement = styled.View`
   border-bottom-color: ${({theme}) => theme.gray300.default};
-  border-bottom-width: ${StyleSheet.hairlineWidth};
+  border-bottom-width: ${StyleSheet.hairlineWidth}px;
 `;
 
 export default Divider;
