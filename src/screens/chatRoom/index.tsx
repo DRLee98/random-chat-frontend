@@ -43,6 +43,7 @@ export interface BundledMessage
 
 export interface ChatRoomScreenParams {
   roomId: string;
+  newMessageCount: number;
 }
 
 interface ChatRoomScreenProps
@@ -52,7 +53,7 @@ interface ChatRoomScreenProps
   > {}
 
 const ChatRoomScreen = ({route, navigation}: ChatRoomScreenProps) => {
-  const roomId = route.params.roomId;
+  const {roomId, newMessageCount} = route.params;
 
   const [value, setValue] = useState('');
 
@@ -66,7 +67,7 @@ const ChatRoomScreen = ({route, navigation}: ChatRoomScreenProps) => {
 
   const {me} = useMe();
   const {data: room} = useRoomDetail({roomId});
-  const {messages, fetchMore} = useViewMessages({
+  const {messages, fetchMore, refetch, networkStatus} = useViewMessages({
     roomId,
   });
 
@@ -132,10 +133,22 @@ const ChatRoomScreen = ({route, navigation}: ChatRoomScreenProps) => {
   });
 
   useEffect(() => {
-    if (messages && room?.roomDetail.room) {
+    if (messages && room?.roomDetail.room && newMessageCount > 0) {
       updateMyRoom(room.roomDetail.room.userRoom.id, {newMessage: 0});
     }
   }, [messages, room?.roomDetail.room]);
+
+  useEffect(() => {
+    if (networkStatus !== 1 && newMessageCount > 0) {
+      refetch();
+    }
+  }, []);
+
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerTitle: getChatRoomName(room?.roomDetail.room),
+    });
+  }, [room]);
 
   const bundledMessages = useMemo(() => {
     const bundled: BundledMessage[] = [];
@@ -172,12 +185,6 @@ const ChatRoomScreen = ({route, navigation}: ChatRoomScreenProps) => {
 
     return bundled;
   }, [messages]);
-
-  useLayoutEffect(() => {
-    navigation.setOptions({
-      headerTitle: getChatRoomName(room?.roomDetail.room),
-    });
-  }, [room]);
 
   return (
     <Container>

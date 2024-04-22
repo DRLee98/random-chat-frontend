@@ -29,6 +29,7 @@ const RoomItem = ({userRoom}: RoomItemProps) => {
   const goChatRoom = () => {
     navigation.navigate(MainNavigatorScreens.ChatRoom, {
       roomId: userRoom.room.id,
+      newMessageCount: userRoom.newMessage,
     });
   };
 
@@ -124,6 +125,7 @@ const SpaceBetween = styled.View`
 const NewMessage = styled.View`
   align-items: center;
   justify-content: center;
+  min-width: 20px;
   padding: 2px 6px;
   background-color: ${({theme}) => theme.red.accessible};
   border-radius: 10px;

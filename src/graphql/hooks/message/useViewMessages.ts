@@ -166,15 +166,4 @@ export const useUpdateViewMessages = (input: ViewMessagesInput) => {
   return {updateMessage, updateMessages, appendMessage, appendSystemMessage};
 };
 
-export const useRefetchMessages = () => {
-  const client = useApolloClient();
-
-  return (input: ViewMessagesInput) =>
-    client.query<ViewMessagesQuery, QueryViewMessagesArgs>({
-      query: VIEW_MESSAGES,
-      variables: {input},
-      fetchPolicy: 'network-only',
-    });
-};
-
 export default useViewMessages;
