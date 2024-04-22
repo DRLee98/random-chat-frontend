@@ -1,13 +1,19 @@
 import {useApolloClient, useQuery} from '@apollo/client';
-import {graphql} from '@app/graphql/__generated__';
+import {
+  FragmentType,
+  getFragmentData,
+  graphql,
+} from '@app/graphql/__generated__';
+
+import {NOTIFICATION_BASE} from '@app/graphql/fragments/notification';
 
 import type {QueryHookOptions} from '@apollo/client';
 import type {
   ViewNotificationsInput,
   ViewNotificationsQuery,
   QueryViewNotificationsArgs,
+  NotificationBaseFragment,
 } from '@app/graphql/__generated__/graphql';
-import type {RequiredItem} from 'types/utils';
 
 export const VIEW_NOTIFICATION = graphql(`
   query viewNotifications($input: ViewNotificationsInput!) {
@@ -16,13 +22,7 @@ export const VIEW_NOTIFICATION = graphql(`
       error
       hasNext
       notifications {
-        id
-        title
-        message
-        read
-        type
-        data
-        createdAt
+        ...NotificationBase
       }
     }
   }
@@ -42,6 +42,10 @@ const useViewNotifications = (
     ...options,
     variables: {input: input ?? {}},
   });
+
+  const notifications =
+    getFragmentData(NOTIFICATION_BASE, data?.viewNotifications.notifications) ??
+    [];
 
   const fetchMore = async () => {
     if (result.networkStatus !== 7) return;
@@ -73,14 +77,9 @@ const useViewNotifications = (
   return {
     ...result,
     fetchMore,
-    notifications: data?.viewNotifications.notifications,
+    notifications,
   };
 };
-
-type Notification = RequiredItem<
-  ViewNotificationsQuery['viewNotifications'],
-  'notifications'
->;
 
 export const useUpdateViewNotifications = (input?: ViewNotificationsInput) => {
   const client = useApolloClient();
@@ -94,10 +93,16 @@ export const useUpdateViewNotifications = (input?: ViewNotificationsInput) => {
       variables: {input: input ?? {}},
     });
 
-    return data?.viewNotifications.notifications ?? [];
+    const notifications =
+      getFragmentData(
+        NOTIFICATION_BASE,
+        data?.viewNotifications.notifications,
+      ) ?? [];
+
+    return notifications;
   };
 
-  const updateFn = (notifications: Notification[]) => {
+  const updateFn = (notifications: NotificationBaseFragment[]) => {
     client.cache.updateQuery<
       ViewNotificationsQuery,
       QueryViewNotificationsArgs
@@ -112,6 +117,18 @@ export const useUpdateViewNotifications = (input?: ViewNotificationsInput) => {
           },
         },
     );
+  };
+
+  const appendNotification = (
+    newNotification: FragmentType<typeof NOTIFICATION_BASE>,
+  ) => {
+    const notifications = getPrevData();
+    const newNotificationData = getFragmentData(
+      NOTIFICATION_BASE,
+      newNotification,
+    );
+    const updateNotifications = [newNotificationData, ...notifications];
+    updateFn(updateNotifications);
   };
 
   const readNotification = (id: string) => {
@@ -148,6 +165,7 @@ export const useUpdateViewNotifications = (input?: ViewNotificationsInput) => {
   };
 
   return {
+    appendNotification,
     readNotification,
     readAllNotifications,
     removeNotification,

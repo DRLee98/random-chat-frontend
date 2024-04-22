@@ -44,6 +44,22 @@ export const useUpdateUnReadNotificationCount = () => {
     );
   };
 
+  const updateIncreaseUnReadCount = (count: number) => {
+    client.cache.updateQuery<UnReadNotificationCountQuery>(
+      {query: UN_READ_NOTIFICATION_COUNT},
+      prev =>
+        prev?.unReadNotificationCount && {
+          ...prev,
+          unReadNotificationCount: {
+            ...prev.unReadNotificationCount,
+            count: prev.unReadNotificationCount.count
+              ? prev.unReadNotificationCount.count + count
+              : count,
+          },
+        },
+    );
+  };
+
   const updateDecreaseUnReadCount = (count: number) => {
     client.cache.updateQuery<UnReadNotificationCountQuery>(
       {query: UN_READ_NOTIFICATION_COUNT},
@@ -60,7 +76,11 @@ export const useUpdateUnReadNotificationCount = () => {
     );
   };
 
-  return {updateUnReadCount, updateDecreaseUnReadCount};
+  return {
+    updateUnReadCount,
+    updateIncreaseUnReadCount,
+    updateDecreaseUnReadCount,
+  };
 };
 
 export default useUnReadNotificationCount;

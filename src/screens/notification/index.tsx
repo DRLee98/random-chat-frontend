@@ -5,6 +5,7 @@ import {useUpdateUnReadNotificationCount} from '@app/graphql/hooks/notification/
 import useReadAllNotifications from '@app/graphql/hooks/notification/useReadAllNotifications';
 import useDeleteReadNotifications from '@app/graphql/hooks/notification/useDeleteReadNotifications';
 import useReadNotification from '@app/graphql/hooks/notification/useReadNotification';
+import useNewNotificationListener from '@app/graphql/hooks/notification/useNewNotificationListener';
 import {useTheme} from 'styled-components/native';
 
 import styled from 'styled-components/native';
@@ -16,16 +17,13 @@ import {getDateTimeString} from '@app/utils/date';
 import {MainNavigatorScreens} from '@app/navigators';
 import {NotificationType} from '@app/graphql/__generated__/graphql';
 
+import {NOTIFICATION_BASE} from '@app/graphql/fragments/notification';
+
 import type {StackScreenProps} from '@react-navigation/stack';
 import type {MainNavigatorParamList} from '@app/navigators';
 import type {FlatListProps} from 'react-native';
-import type {ViewNotificationsQuery} from '@app/graphql/__generated__/graphql';
-import type {RequiredItem} from 'types/utils';
-
-type Notification = RequiredItem<
-  ViewNotificationsQuery['viewNotifications'],
-  'notifications'
->;
+import type {NotificationBaseFragment} from '@app/graphql/__generated__/graphql';
+import type {FragmentType} from '@app/graphql/__generated__';
 
 interface NotificationScreenProps
   extends StackScreenProps<
@@ -37,10 +35,17 @@ const NotificationScreen = ({navigation}: NotificationScreenProps) => {
   const theme = useTheme();
 
   const {notifications, fetchMore} = useViewNotifications();
-  const {readNotification, readAllNotifications, removeReadNotifications} =
-    useUpdateViewNotifications();
-  const {updateUnReadCount, updateDecreaseUnReadCount} =
-    useUpdateUnReadNotificationCount();
+  const {
+    appendNotification,
+    readNotification,
+    readAllNotifications,
+    removeReadNotifications,
+  } = useUpdateViewNotifications();
+  const {
+    updateUnReadCount,
+    updateIncreaseUnReadCount,
+    updateDecreaseUnReadCount,
+  } = useUpdateUnReadNotificationCount();
 
   const [read] = useReadNotification();
   const [readAll] = useReadAllNotifications();
@@ -84,7 +89,14 @@ const NotificationScreen = ({navigation}: NotificationScreenProps) => {
     }
   };
 
-  const onPressNotification = (item: Notification) => {
+  const newNotificationFn = (data?: FragmentType<typeof NOTIFICATION_BASE>) => {
+    console.log('newNotificationFn', data);
+    if (!data) return;
+    updateIncreaseUnReadCount(1);
+    appendNotification(data);
+  };
+
+  const onPressNotification = (item: NotificationBaseFragment) => {
     readNotificationFn(item.id);
     if (
       (item.type === NotificationType.Room ||
@@ -93,10 +105,15 @@ const NotificationScreen = ({navigation}: NotificationScreenProps) => {
     ) {
       navigation.navigate(MainNavigatorScreens.ChatRoom, {
         roomId: item.data.roomId,
+        newMessageCount: 1, // 메시지를 refetch 하기 위해 1로 설정
       });
       return;
     }
   };
+
+  useNewNotificationListener({
+    onData: ({data}) => newNotificationFn(data.data?.newNotification),
+  });
 
   return (
     <Container>
@@ -164,7 +181,7 @@ const ButtonText = styled.Text`
   color: ${({theme}) => theme.gray100.default};
 `;
 
-interface ListProps extends FlatListProps<Notification> {}
+interface ListProps extends FlatListProps<NotificationBaseFragment> {}
 
 const List = styled.FlatList<ListProps>`
   flex: 1;
