@@ -15,6 +15,7 @@ import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/
 const documents = {
     "\n  fragment MessageBase on MessageObjectType {\n    id\n    contents\n    type\n    readUsersId\n    user {\n      id\n      nickname\n      profileUrl\n    }\n    createdAt\n  }\n": types.MessageBaseFragmentDoc,
     "\n  fragment NotificationBase on NotificationObjectType {\n    id\n    title\n    message\n    read\n    type\n    data\n    createdAt\n  }\n": types.NotificationBaseFragmentDoc,
+    "\n  fragment OpinionBase on OpinionObjectType {\n    id\n    title\n    content\n    imageUrls\n    category\n    status\n    createdAt\n    updatedAt\n    user {\n      id\n      nickname\n      profileUrl\n    }\n  }\n": types.OpinionBaseFragmentDoc,
     "\n  fragment UserRoomBase on UserRoomObjectType {\n    id\n    name\n    noti\n    pinnedAt\n    newMessage\n    room {\n      id\n    }\n  }\n": types.UserRoomBaseFragmentDoc,
     "\n  fragment MyRoomBase on MyRoom {\n    id\n    name\n    noti\n    pinnedAt\n    newMessage\n    lastMessage\n    room {\n      id\n      updatedAt\n    }\n    users {\n      id\n      nickname\n      profileUrl\n    }\n    updatedAt\n  }\n": types.MyRoomBaseFragmentDoc,
     "\n  fragment BlockUser on UserObjectType {\n    id\n    nickname\n    profileUrl\n    bio\n  }\n": types.BlockUserFragmentDoc,
@@ -32,6 +33,9 @@ const documents = {
     "\n  mutation readNotification($input: ReadNotificationInput!) {\n    readNotification(input: $input) {\n      ok\n      error\n    }\n  }\n": types.ReadNotificationDocument,
     "\n  query unReadNotificationCount {\n    unReadNotificationCount {\n      ok\n      error\n      count\n    }\n  }\n": types.UnReadNotificationCountDocument,
     "\n  query viewNotifications($input: ViewNotificationsInput!) {\n    viewNotifications(input: $input) {\n      ok\n      error\n      hasNext\n      notifications {\n        ...NotificationBase\n      }\n    }\n  }\n": types.ViewNotificationsDocument,
+    "\n  mutation createOpinion($input: CreateOpinionInput!) {\n    createOpinion(input: $input) {\n      ok\n      error\n      opinion {\n        ...OpinionBase\n      }\n    }\n  }\n": types.CreateOpinionDocument,
+    "\n  mutation deleteOpinion($input: DeleteOpinionInput!) {\n    deleteOpinion(input: $input) {\n      ok\n      error\n    }\n  }\n": types.DeleteOpinionDocument,
+    "\n  mutation editOpinion($input: EditOpinionInput!) {\n    editOpinion(input: $input) {\n      ok\n      error\n      opinion {\n        ...OpinionBase\n      }\n    }\n  }\n": types.EditOpinionDocument,
     "\n  mutation createRandomRoom {\n    createRandomRoom {\n      ok\n      error\n      room {\n        ...MyRoomBase\n      }\n    }\n  }\n": types.CreateRandomRoomDocument,
     "\n  mutation deleteRoom($input: DeleteRoomInput!) {\n    deleteRoom(input: $input) {\n      ok\n      error\n    }\n  }\n": types.DeleteRoomDocument,
     "\n  query myRooms($input: MyRoomsInput!) {\n    myRooms(input: $input) {\n      ok\n      error\n      hasNext\n      rooms {\n        ...MyRoomBase\n      }\n    }\n  }\n": types.MyRoomsDocument,
@@ -71,6 +75,10 @@ export function graphql(source: "\n  fragment MessageBase on MessageObjectType {
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(source: "\n  fragment NotificationBase on NotificationObjectType {\n    id\n    title\n    message\n    read\n    type\n    data\n    createdAt\n  }\n"): (typeof documents)["\n  fragment NotificationBase on NotificationObjectType {\n    id\n    title\n    message\n    read\n    type\n    data\n    createdAt\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  fragment OpinionBase on OpinionObjectType {\n    id\n    title\n    content\n    imageUrls\n    category\n    status\n    createdAt\n    updatedAt\n    user {\n      id\n      nickname\n      profileUrl\n    }\n  }\n"): (typeof documents)["\n  fragment OpinionBase on OpinionObjectType {\n    id\n    title\n    content\n    imageUrls\n    category\n    status\n    createdAt\n    updatedAt\n    user {\n      id\n      nickname\n      profileUrl\n    }\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
@@ -139,6 +147,18 @@ export function graphql(source: "\n  query unReadNotificationCount {\n    unRead
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(source: "\n  query viewNotifications($input: ViewNotificationsInput!) {\n    viewNotifications(input: $input) {\n      ok\n      error\n      hasNext\n      notifications {\n        ...NotificationBase\n      }\n    }\n  }\n"): (typeof documents)["\n  query viewNotifications($input: ViewNotificationsInput!) {\n    viewNotifications(input: $input) {\n      ok\n      error\n      hasNext\n      notifications {\n        ...NotificationBase\n      }\n    }\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  mutation createOpinion($input: CreateOpinionInput!) {\n    createOpinion(input: $input) {\n      ok\n      error\n      opinion {\n        ...OpinionBase\n      }\n    }\n  }\n"): (typeof documents)["\n  mutation createOpinion($input: CreateOpinionInput!) {\n    createOpinion(input: $input) {\n      ok\n      error\n      opinion {\n        ...OpinionBase\n      }\n    }\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  mutation deleteOpinion($input: DeleteOpinionInput!) {\n    deleteOpinion(input: $input) {\n      ok\n      error\n    }\n  }\n"): (typeof documents)["\n  mutation deleteOpinion($input: DeleteOpinionInput!) {\n    deleteOpinion(input: $input) {\n      ok\n      error\n    }\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  mutation editOpinion($input: EditOpinionInput!) {\n    editOpinion(input: $input) {\n      ok\n      error\n      opinion {\n        ...OpinionBase\n      }\n    }\n  }\n"): (typeof documents)["\n  mutation editOpinion($input: EditOpinionInput!) {\n    editOpinion(input: $input) {\n      ok\n      error\n      opinion {\n        ...OpinionBase\n      }\n    }\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

@@ -15,18 +15,20 @@ import type {ReactNativeFileType} from '@app/utils/file';
 
 interface PictureSelectButtonProps {
   children?: React.ReactNode;
-  onChange: (file: ReactNativeFileType) => void;
+  selectionLimit?: number;
+  onChange: (file: ReactNativeFileType[]) => void;
 }
 
 const PictureSelectButton = ({
   children,
+  selectionLimit,
   onChange,
 }: PictureSelectButtonProps) => {
   const theme = useTheme();
 
   const [visible, setVisible] = useState(false);
 
-  const assetToReactNativeFile = (asset: Asset) => {
+  const assetToReactNativeFile = (asset: Asset): ReactNativeFileType | null => {
     if (!asset.uri || !asset.fileName || !asset.type) return null;
     return makeFile({
       uri: asset.uri,
@@ -35,16 +37,22 @@ const PictureSelectButton = ({
     });
   };
 
+  const assetToReactNativeFiles = (assets: Asset[]): ReactNativeFileType[] => {
+    return assets
+      .map(assetToReactNativeFile)
+      .filter(Boolean) as ReactNativeFileType[];
+  };
+
   const pickImage = async () => {
     if (visible) setVisible(false);
     const result = await launchImageLibrary({
       mediaType: 'photo',
-      selectionLimit: 1,
+      selectionLimit: selectionLimit ?? 1,
     });
     if (result.didCancel || !result.assets) {
       return null;
     }
-    onChange(assetToReactNativeFile(result.assets[0]));
+    onChange(assetToReactNativeFiles(result.assets));
   };
 
   const takeImage = async () => {
@@ -56,7 +64,7 @@ const PictureSelectButton = ({
     if (result.didCancel || !result.assets) {
       return null;
     }
-    onChange(assetToReactNativeFile(result.assets[0]));
+    onChange(assetToReactNativeFiles(result.assets));
   };
 
   const press = () => {

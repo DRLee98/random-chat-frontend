@@ -46,11 +46,14 @@ const Container = styled.View`
   flex-direction: row;
   align-items: center;
 
+  height: 100%;
+
   margin: 0 6px;
 `;
 
 const TextInput = styled.TextInput<CustomInputProps>`
   flex: 1;
+  height: 100%;
 
   padding: 0 5px;
 

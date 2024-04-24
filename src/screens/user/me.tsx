@@ -47,8 +47,8 @@ const MeScreen = ({navigation}: MeScreenProps) => {
 
   const toggleEdit = () => setEdit(prev => !prev);
 
-  const onProfileChange = (file: ReactNativeFileType) => {
-    setFieldValue('profile', file);
+  const onProfileChange = (file: ReactNativeFileType[]) => {
+    setFieldValue('profile', file[0]);
   };
 
   const onRightButtonPress = () => {

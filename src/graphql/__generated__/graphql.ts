@@ -22,6 +22,29 @@ export type Scalars = {
   Upload: { input: any; output: any; }
 };
 
+export type CommentObjectType = {
+  __typename?: 'CommentObjectType';
+  createdAt: Scalars['DateTime']['output'];
+  id: Scalars['ID']['output'];
+  postId: Scalars['ID']['output'];
+  replies: Array<ReplyObjectType>;
+  text: Scalars['String']['output'];
+  updatedAt: Scalars['DateTime']['output'];
+  user: UserObjectType;
+};
+
+export type CreateCommentInput = {
+  postId: Scalars['ID']['input'];
+  text: Scalars['String']['input'];
+};
+
+export type CreateCommentOutput = {
+  __typename?: 'CreateCommentOutput';
+  comment?: Maybe<CommentObjectType>;
+  error?: Maybe<Scalars['String']['output']>;
+  ok: Scalars['Boolean']['output'];
+};
+
 export type CreateNoticeInput = {
   category: NoticeCategory;
   content: Scalars['String']['input'];
@@ -51,11 +74,37 @@ export type CreateNotificationOutput = {
   ok: Scalars['Boolean']['output'];
 };
 
+export type CreateOpinionInput = {
+  category: OpinionCategory;
+  content: Scalars['String']['input'];
+  images?: InputMaybe<Array<Scalars['Upload']['input']>>;
+  title: Scalars['String']['input'];
+};
+
+export type CreateOpinionOutput = {
+  __typename?: 'CreateOpinionOutput';
+  error?: Maybe<Scalars['String']['output']>;
+  ok: Scalars['Boolean']['output'];
+  opinion?: Maybe<OpinionObjectType>;
+};
+
 export type CreateRandomRoomOutput = {
   __typename?: 'CreateRandomRoomOutput';
   error?: Maybe<Scalars['String']['output']>;
   ok: Scalars['Boolean']['output'];
   room?: Maybe<MyRoom>;
+};
+
+export type CreateReplyInput = {
+  commentId: Scalars['ID']['input'];
+  text: Scalars['String']['input'];
+};
+
+export type CreateReplyOutput = {
+  __typename?: 'CreateReplyOutput';
+  error?: Maybe<Scalars['String']['output']>;
+  ok: Scalars['Boolean']['output'];
+  reply?: Maybe<ReplyObjectType>;
 };
 
 export type CreateUserInput = {
@@ -72,6 +121,16 @@ export type CreateUserOutput = {
   error?: Maybe<Scalars['String']['output']>;
   ok: Scalars['Boolean']['output'];
   user?: Maybe<UserObjectType>;
+};
+
+export type DeleteCommentInput = {
+  id: Scalars['ID']['input'];
+};
+
+export type DeleteCommentOutput = {
+  __typename?: 'DeleteCommentOutput';
+  error?: Maybe<Scalars['String']['output']>;
+  ok: Scalars['Boolean']['output'];
 };
 
 export type DeleteNoticeInput = {
@@ -94,8 +153,28 @@ export type DeleteNotificationOutput = {
   ok: Scalars['Boolean']['output'];
 };
 
+export type DeleteOpinionInput = {
+  id: Scalars['ID']['input'];
+};
+
+export type DeleteOpinionOutput = {
+  __typename?: 'DeleteOpinionOutput';
+  error?: Maybe<Scalars['String']['output']>;
+  ok: Scalars['Boolean']['output'];
+};
+
 export type DeleteReadNotificationsOutput = {
   __typename?: 'DeleteReadNotificationsOutput';
+  error?: Maybe<Scalars['String']['output']>;
+  ok: Scalars['Boolean']['output'];
+};
+
+export type DeleteReplyInput = {
+  id: Scalars['ID']['input'];
+};
+
+export type DeleteReplyOutput = {
+  __typename?: 'DeleteReplyOutput';
   error?: Maybe<Scalars['String']['output']>;
   ok: Scalars['Boolean']['output'];
 };
@@ -116,6 +195,18 @@ export type DeleteUserOutput = {
   ok: Scalars['Boolean']['output'];
 };
 
+export type EditCommentInput = {
+  id: Scalars['ID']['input'];
+  text: Scalars['String']['input'];
+};
+
+export type EditCommentOutput = {
+  __typename?: 'EditCommentOutput';
+  comment?: Maybe<CommentObjectType>;
+  error?: Maybe<Scalars['String']['output']>;
+  ok: Scalars['Boolean']['output'];
+};
+
 export type EditNoticeInput = {
   category?: InputMaybe<NoticeCategory>;
   content?: InputMaybe<Scalars['String']['input']>;
@@ -129,6 +220,33 @@ export type EditNoticeOutput = {
   error?: Maybe<Scalars['String']['output']>;
   notice?: Maybe<NoticeObjectType>;
   ok: Scalars['Boolean']['output'];
+};
+
+export type EditOpinionInput = {
+  content?: InputMaybe<Scalars['String']['input']>;
+  id: Scalars['ID']['input'];
+  imageUrls?: InputMaybe<Array<Scalars['String']['input']>>;
+  images?: InputMaybe<Array<Scalars['Upload']['input']>>;
+  title?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type EditOpinionOutput = {
+  __typename?: 'EditOpinionOutput';
+  error?: Maybe<Scalars['String']['output']>;
+  ok: Scalars['Boolean']['output'];
+  opinion?: Maybe<OpinionObjectType>;
+};
+
+export type EditReplyInput = {
+  id: Scalars['ID']['input'];
+  text: Scalars['String']['input'];
+};
+
+export type EditReplyOutput = {
+  __typename?: 'EditReplyOutput';
+  error?: Maybe<Scalars['String']['output']>;
+  ok: Scalars['Boolean']['output'];
+  reply?: Maybe<ReplyObjectType>;
 };
 
 export enum Language {
@@ -173,6 +291,7 @@ export type MeDetail = {
   autoTranslation: Scalars['Boolean']['output'];
   bio?: Maybe<Scalars['String']['output']>;
   blockUsers: Array<UserObjectType>;
+  comments: Array<CommentObjectType>;
   createdAt: Scalars['DateTime']['output'];
   fcmToken?: Maybe<Scalars['String']['output']>;
   id: Scalars['ID']['output'];
@@ -180,7 +299,9 @@ export type MeDetail = {
   nickname: Scalars['String']['output'];
   noti: Scalars['Boolean']['output'];
   notifications: Array<NotificationObjectType>;
+  opinions: Array<OpinionObjectType>;
   profileUrl?: Maybe<Scalars['String']['output']>;
+  replies: Array<ReplyObjectType>;
   socialPlatform: SocialPlatform;
   updatedAt: Scalars['DateTime']['output'];
 };
@@ -219,22 +340,36 @@ export enum MessageType {
 
 export type Mutation = {
   __typename?: 'Mutation';
+  createComment: CreateCommentOutput;
   createNotice: CreateNoticeOutput;
   createNotification: CreateNotificationOutput;
+  createOpinion: CreateOpinionOutput;
   createRandomRoom: CreateRandomRoomOutput;
+  createReply: CreateReplyOutput;
   createUser: CreateUserOutput;
+  deleteComment: DeleteCommentOutput;
   deleteNotice: DeleteNoticeOutput;
   deleteNotification: DeleteNotificationOutput;
+  deleteOpinion: DeleteOpinionOutput;
   deleteReadNotifications: DeleteReadNotificationsOutput;
+  deleteReply: DeleteReplyOutput;
   deleteRoom: DeleteRoomOutput;
   deleteUser: DeleteUserOutput;
+  editComment: EditCommentOutput;
   editNotice: EditNoticeOutput;
+  editOpinion: EditOpinionOutput;
+  editReply: EditReplyOutput;
   readAllNotifications: ReadAllNotificationsOutput;
   readNotification: ReadNotificationOutput;
   sendMessage: SendMessageOutput;
   toggleBlockUser: ToggleBlockUserOutput;
   updateRoom: UpdateRoomOutput;
   updateUser: UpdateUserOutput;
+};
+
+
+export type MutationCreateCommentArgs = {
+  input: CreateCommentInput;
 };
 
 
@@ -248,8 +383,23 @@ export type MutationCreateNotificationArgs = {
 };
 
 
+export type MutationCreateOpinionArgs = {
+  input: CreateOpinionInput;
+};
+
+
+export type MutationCreateReplyArgs = {
+  input: CreateReplyInput;
+};
+
+
 export type MutationCreateUserArgs = {
   input: CreateUserInput;
+};
+
+
+export type MutationDeleteCommentArgs = {
+  input: DeleteCommentInput;
 };
 
 
@@ -263,13 +413,38 @@ export type MutationDeleteNotificationArgs = {
 };
 
 
+export type MutationDeleteOpinionArgs = {
+  input: DeleteOpinionInput;
+};
+
+
+export type MutationDeleteReplyArgs = {
+  input: DeleteReplyInput;
+};
+
+
 export type MutationDeleteRoomArgs = {
   input: DeleteRoomInput;
 };
 
 
+export type MutationEditCommentArgs = {
+  input: EditCommentInput;
+};
+
+
 export type MutationEditNoticeArgs = {
   input: EditNoticeInput;
+};
+
+
+export type MutationEditOpinionArgs = {
+  input: EditOpinionInput;
+};
+
+
+export type MutationEditReplyArgs = {
+  input: EditReplyInput;
 };
 
 
@@ -295,6 +470,19 @@ export type MutationUpdateRoomArgs = {
 
 export type MutationUpdateUserArgs = {
   input: UpdateUserInput;
+};
+
+export type MyOpinionsInput = {
+  skip?: Scalars['Float']['input'];
+  take?: Scalars['Float']['input'];
+};
+
+export type MyOpinionsOutput = {
+  __typename?: 'MyOpinionsOutput';
+  error?: Maybe<Scalars['String']['output']>;
+  hasNext?: Maybe<Scalars['Boolean']['output']>;
+  ok: Scalars['Boolean']['output'];
+  opinions?: Maybe<Array<OpinionObjectType>>;
 };
 
 export type MyRoom = {
@@ -392,25 +580,72 @@ export enum NotificationType {
   System = 'SYSTEM'
 }
 
+export enum OpinionCategory {
+  Bug = 'BUG',
+  Etc = 'ETC',
+  Imporve = 'IMPORVE',
+  Inquiry = 'INQUIRY'
+}
+
+export type OpinionDetailInput = {
+  id: Scalars['ID']['input'];
+};
+
+export type OpinionDetailOutput = {
+  __typename?: 'OpinionDetailOutput';
+  error?: Maybe<Scalars['String']['output']>;
+  ok: Scalars['Boolean']['output'];
+  opinion?: Maybe<OpinionObjectType>;
+};
+
+export type OpinionObjectType = {
+  __typename?: 'OpinionObjectType';
+  category: OpinionCategory;
+  content: Scalars['String']['output'];
+  createdAt: Scalars['DateTime']['output'];
+  id: Scalars['ID']['output'];
+  imageUrls?: Maybe<Array<Scalars['String']['output']>>;
+  status: OpinionStatus;
+  title: Scalars['String']['output'];
+  updatedAt: Scalars['DateTime']['output'];
+  user: UserObjectType;
+};
+
+export enum OpinionStatus {
+  Answered = 'ANSWERED',
+  Read = 'READ',
+  Waiting = 'WAITING'
+}
+
 export type Query = {
   __typename?: 'Query';
   login: LoginOutput;
   me: MeOutput;
   meDetail: MeDetailOutput;
+  myOpinions: MyOpinionsOutput;
   myRooms: MyRoomsOutput;
   notice: NoticeOutput;
   noticeList: NoticeListOutput;
+  opinionDetail: OpinionDetailOutput;
   randomNickname: RandomNicknameOutput;
+  replyCount: ReplyCountOutput;
   roomDetail: RoomDetailOutput;
   unReadNotificationCount: UnReadNotificationCountOutput;
   userProfile: UserProfileOutput;
+  viewComments: ViewCommentsOutput;
   viewMessages: ViewMessagesOutput;
   viewNotifications: ViewNotificationsOutput;
+  viewReplies: ViewRepliesOutput;
 };
 
 
 export type QueryLoginArgs = {
   input: LoginInput;
+};
+
+
+export type QueryMyOpinionsArgs = {
+  input: MyOpinionsInput;
 };
 
 
@@ -429,6 +664,16 @@ export type QueryNoticeListArgs = {
 };
 
 
+export type QueryOpinionDetailArgs = {
+  input: OpinionDetailInput;
+};
+
+
+export type QueryReplyCountArgs = {
+  input: ReplyCountInput;
+};
+
+
 export type QueryRoomDetailArgs = {
   input: RoomDetailInput;
 };
@@ -439,6 +684,11 @@ export type QueryUserProfileArgs = {
 };
 
 
+export type QueryViewCommentsArgs = {
+  input: ViewCommentsInput;
+};
+
+
 export type QueryViewMessagesArgs = {
   input: ViewMessagesInput;
 };
@@ -446,6 +696,11 @@ export type QueryViewMessagesArgs = {
 
 export type QueryViewNotificationsArgs = {
   input: ViewNotificationsInput;
+};
+
+
+export type QueryViewRepliesArgs = {
+  input: ViewRepliesInput;
 };
 
 export type RandomNicknameOutput = {
@@ -480,6 +735,27 @@ export type ReadNotificationOutput = {
   __typename?: 'ReadNotificationOutput';
   error?: Maybe<Scalars['String']['output']>;
   ok: Scalars['Boolean']['output'];
+};
+
+export type ReplyCountInput = {
+  commentId: Scalars['ID']['input'];
+};
+
+export type ReplyCountOutput = {
+  __typename?: 'ReplyCountOutput';
+  count?: Maybe<Scalars['Float']['output']>;
+  error?: Maybe<Scalars['String']['output']>;
+  ok: Scalars['Boolean']['output'];
+};
+
+export type ReplyObjectType = {
+  __typename?: 'ReplyObjectType';
+  comment: CommentObjectType;
+  createdAt: Scalars['DateTime']['output'];
+  id: Scalars['ID']['output'];
+  text: Scalars['String']['output'];
+  updatedAt: Scalars['DateTime']['output'];
+  user: UserObjectType;
 };
 
 export type Room = {
@@ -636,6 +912,7 @@ export type UserObjectType = {
   autoTranslation: Scalars['Boolean']['output'];
   bio?: Maybe<Scalars['String']['output']>;
   blockUsers: Array<UserObjectType>;
+  comments: Array<CommentObjectType>;
   createdAt: Scalars['DateTime']['output'];
   fcmToken?: Maybe<Scalars['String']['output']>;
   id: Scalars['ID']['output'];
@@ -644,7 +921,9 @@ export type UserObjectType = {
   nickname: Scalars['String']['output'];
   noti: Scalars['Boolean']['output'];
   notifications: Array<NotificationObjectType>;
+  opinions: Array<OpinionObjectType>;
   profileUrl?: Maybe<Scalars['String']['output']>;
+  replies: Array<ReplyObjectType>;
   rooms: Array<UserRoomObjectType>;
   socialId: Scalars['String']['output'];
   socialPlatform: SocialPlatform;
@@ -675,6 +954,20 @@ export type UserRoomObjectType = {
   user: UserObjectType;
 };
 
+export type ViewCommentsInput = {
+  postId: Scalars['ID']['input'];
+  skip?: Scalars['Float']['input'];
+  take?: Scalars['Float']['input'];
+};
+
+export type ViewCommentsOutput = {
+  __typename?: 'ViewCommentsOutput';
+  comments?: Maybe<Array<CommentObjectType>>;
+  error?: Maybe<Scalars['String']['output']>;
+  hasNext?: Maybe<Scalars['Boolean']['output']>;
+  ok: Scalars['Boolean']['output'];
+};
+
 export type ViewMessagesInput = {
   roomId: Scalars['ID']['input'];
   skip?: Scalars['Float']['input'];
@@ -702,9 +995,25 @@ export type ViewNotificationsOutput = {
   ok: Scalars['Boolean']['output'];
 };
 
+export type ViewRepliesInput = {
+  commentId: Scalars['ID']['input'];
+  skip?: Scalars['Float']['input'];
+  take?: Scalars['Float']['input'];
+};
+
+export type ViewRepliesOutput = {
+  __typename?: 'ViewRepliesOutput';
+  error?: Maybe<Scalars['String']['output']>;
+  hasNext?: Maybe<Scalars['Boolean']['output']>;
+  ok: Scalars['Boolean']['output'];
+  replies?: Maybe<Array<ReplyObjectType>>;
+};
+
 export type MessageBaseFragment = { __typename?: 'MessageObjectType', id: string, contents: string, type: MessageType, readUsersId: Array<string>, createdAt: any, user: { __typename?: 'UserObjectType', id: string, nickname: string, profileUrl?: string | null } } & { ' $fragmentName'?: 'MessageBaseFragment' };
 
 export type NotificationBaseFragment = { __typename?: 'NotificationObjectType', id: string, title: string, message: string, read: boolean, type: NotificationType, data?: any | null, createdAt: any } & { ' $fragmentName'?: 'NotificationBaseFragment' };
+
+export type OpinionBaseFragment = { __typename?: 'OpinionObjectType', id: string, title: string, content: string, imageUrls?: Array<string> | null, category: OpinionCategory, status: OpinionStatus, createdAt: any, updatedAt: any, user: { __typename?: 'UserObjectType', id: string, nickname: string, profileUrl?: string | null } } & { ' $fragmentName'?: 'OpinionBaseFragment' };
 
 export type UserRoomBaseFragment = { __typename?: 'UserRoomObjectType', id: string, name?: string | null, noti: boolean, pinnedAt?: any | null, newMessage: number, room: { __typename?: 'Room', id: string } } & { ' $fragmentName'?: 'UserRoomBaseFragment' };
 
@@ -814,6 +1123,33 @@ export type ViewNotificationsQuery = { __typename?: 'Query', viewNotifications: 
       { __typename?: 'NotificationObjectType' }
       & { ' $fragmentRefs'?: { 'NotificationBaseFragment': NotificationBaseFragment } }
     )> | null } };
+
+export type CreateOpinionMutationVariables = Exact<{
+  input: CreateOpinionInput;
+}>;
+
+
+export type CreateOpinionMutation = { __typename?: 'Mutation', createOpinion: { __typename?: 'CreateOpinionOutput', ok: boolean, error?: string | null, opinion?: (
+      { __typename?: 'OpinionObjectType' }
+      & { ' $fragmentRefs'?: { 'OpinionBaseFragment': OpinionBaseFragment } }
+    ) | null } };
+
+export type DeleteOpinionMutationVariables = Exact<{
+  input: DeleteOpinionInput;
+}>;
+
+
+export type DeleteOpinionMutation = { __typename?: 'Mutation', deleteOpinion: { __typename?: 'DeleteOpinionOutput', ok: boolean, error?: string | null } };
+
+export type EditOpinionMutationVariables = Exact<{
+  input: EditOpinionInput;
+}>;
+
+
+export type EditOpinionMutation = { __typename?: 'Mutation', editOpinion: { __typename?: 'EditOpinionOutput', ok: boolean, error?: string | null, opinion?: (
+      { __typename?: 'OpinionObjectType' }
+      & { ' $fragmentRefs'?: { 'OpinionBaseFragment': OpinionBaseFragment } }
+    ) | null } };
 
 export type CreateRandomRoomMutationVariables = Exact<{ [key: string]: never; }>;
 
@@ -925,6 +1261,7 @@ export type UserProfileQuery = { __typename?: 'Query', userProfile: { __typename
 
 export const MessageBaseFragmentDoc = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"MessageBase"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"MessageObjectType"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"contents"}},{"kind":"Field","name":{"kind":"Name","value":"type"}},{"kind":"Field","name":{"kind":"Name","value":"readUsersId"}},{"kind":"Field","name":{"kind":"Name","value":"user"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"nickname"}},{"kind":"Field","name":{"kind":"Name","value":"profileUrl"}}]}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}}]}}]} as unknown as DocumentNode<MessageBaseFragment, unknown>;
 export const NotificationBaseFragmentDoc = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"NotificationBase"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"NotificationObjectType"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"message"}},{"kind":"Field","name":{"kind":"Name","value":"read"}},{"kind":"Field","name":{"kind":"Name","value":"type"}},{"kind":"Field","name":{"kind":"Name","value":"data"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}}]}}]} as unknown as DocumentNode<NotificationBaseFragment, unknown>;
+export const OpinionBaseFragmentDoc = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"OpinionBase"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"OpinionObjectType"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"content"}},{"kind":"Field","name":{"kind":"Name","value":"imageUrls"}},{"kind":"Field","name":{"kind":"Name","value":"category"}},{"kind":"Field","name":{"kind":"Name","value":"status"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"updatedAt"}},{"kind":"Field","name":{"kind":"Name","value":"user"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"nickname"}},{"kind":"Field","name":{"kind":"Name","value":"profileUrl"}}]}}]}}]} as unknown as DocumentNode<OpinionBaseFragment, unknown>;
 export const UserRoomBaseFragmentDoc = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"UserRoomBase"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"UserRoomObjectType"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"noti"}},{"kind":"Field","name":{"kind":"Name","value":"pinnedAt"}},{"kind":"Field","name":{"kind":"Name","value":"newMessage"}},{"kind":"Field","name":{"kind":"Name","value":"room"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}}]}}]} as unknown as DocumentNode<UserRoomBaseFragment, unknown>;
 export const MyRoomBaseFragmentDoc = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"MyRoomBase"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"MyRoom"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"noti"}},{"kind":"Field","name":{"kind":"Name","value":"pinnedAt"}},{"kind":"Field","name":{"kind":"Name","value":"newMessage"}},{"kind":"Field","name":{"kind":"Name","value":"lastMessage"}},{"kind":"Field","name":{"kind":"Name","value":"room"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"updatedAt"}}]}},{"kind":"Field","name":{"kind":"Name","value":"users"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"nickname"}},{"kind":"Field","name":{"kind":"Name","value":"profileUrl"}}]}},{"kind":"Field","name":{"kind":"Name","value":"updatedAt"}}]}}]} as unknown as DocumentNode<MyRoomBaseFragment, unknown>;
 export const BlockUserFragmentDoc = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"BlockUser"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"UserObjectType"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"nickname"}},{"kind":"Field","name":{"kind":"Name","value":"profileUrl"}},{"kind":"Field","name":{"kind":"Name","value":"bio"}}]}}]} as unknown as DocumentNode<BlockUserFragment, unknown>;
@@ -942,6 +1279,9 @@ export const ReadAllNotificationsDocument = {"kind":"Document","definitions":[{"
 export const ReadNotificationDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"readNotification"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ReadNotificationInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"readNotification"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"ok"}},{"kind":"Field","name":{"kind":"Name","value":"error"}}]}}]}}]} as unknown as DocumentNode<ReadNotificationMutation, ReadNotificationMutationVariables>;
 export const UnReadNotificationCountDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"unReadNotificationCount"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"unReadNotificationCount"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"ok"}},{"kind":"Field","name":{"kind":"Name","value":"error"}},{"kind":"Field","name":{"kind":"Name","value":"count"}}]}}]}}]} as unknown as DocumentNode<UnReadNotificationCountQuery, UnReadNotificationCountQueryVariables>;
 export const ViewNotificationsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"viewNotifications"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ViewNotificationsInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"viewNotifications"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"ok"}},{"kind":"Field","name":{"kind":"Name","value":"error"}},{"kind":"Field","name":{"kind":"Name","value":"hasNext"}},{"kind":"Field","name":{"kind":"Name","value":"notifications"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"NotificationBase"}}]}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"NotificationBase"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"NotificationObjectType"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"message"}},{"kind":"Field","name":{"kind":"Name","value":"read"}},{"kind":"Field","name":{"kind":"Name","value":"type"}},{"kind":"Field","name":{"kind":"Name","value":"data"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}}]}}]} as unknown as DocumentNode<ViewNotificationsQuery, ViewNotificationsQueryVariables>;
+export const CreateOpinionDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"createOpinion"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"CreateOpinionInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"createOpinion"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"ok"}},{"kind":"Field","name":{"kind":"Name","value":"error"}},{"kind":"Field","name":{"kind":"Name","value":"opinion"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"OpinionBase"}}]}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"OpinionBase"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"OpinionObjectType"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"content"}},{"kind":"Field","name":{"kind":"Name","value":"imageUrls"}},{"kind":"Field","name":{"kind":"Name","value":"category"}},{"kind":"Field","name":{"kind":"Name","value":"status"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"updatedAt"}},{"kind":"Field","name":{"kind":"Name","value":"user"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"nickname"}},{"kind":"Field","name":{"kind":"Name","value":"profileUrl"}}]}}]}}]} as unknown as DocumentNode<CreateOpinionMutation, CreateOpinionMutationVariables>;
+export const DeleteOpinionDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"deleteOpinion"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"DeleteOpinionInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"deleteOpinion"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"ok"}},{"kind":"Field","name":{"kind":"Name","value":"error"}}]}}]}}]} as unknown as DocumentNode<DeleteOpinionMutation, DeleteOpinionMutationVariables>;
+export const EditOpinionDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"editOpinion"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"EditOpinionInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"editOpinion"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"ok"}},{"kind":"Field","name":{"kind":"Name","value":"error"}},{"kind":"Field","name":{"kind":"Name","value":"opinion"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"OpinionBase"}}]}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"OpinionBase"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"OpinionObjectType"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"content"}},{"kind":"Field","name":{"kind":"Name","value":"imageUrls"}},{"kind":"Field","name":{"kind":"Name","value":"category"}},{"kind":"Field","name":{"kind":"Name","value":"status"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"updatedAt"}},{"kind":"Field","name":{"kind":"Name","value":"user"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"nickname"}},{"kind":"Field","name":{"kind":"Name","value":"profileUrl"}}]}}]}}]} as unknown as DocumentNode<EditOpinionMutation, EditOpinionMutationVariables>;
 export const CreateRandomRoomDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"createRandomRoom"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"createRandomRoom"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"ok"}},{"kind":"Field","name":{"kind":"Name","value":"error"}},{"kind":"Field","name":{"kind":"Name","value":"room"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"MyRoomBase"}}]}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"MyRoomBase"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"MyRoom"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"noti"}},{"kind":"Field","name":{"kind":"Name","value":"pinnedAt"}},{"kind":"Field","name":{"kind":"Name","value":"newMessage"}},{"kind":"Field","name":{"kind":"Name","value":"lastMessage"}},{"kind":"Field","name":{"kind":"Name","value":"room"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"updatedAt"}}]}},{"kind":"Field","name":{"kind":"Name","value":"users"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"nickname"}},{"kind":"Field","name":{"kind":"Name","value":"profileUrl"}}]}},{"kind":"Field","name":{"kind":"Name","value":"updatedAt"}}]}}]} as unknown as DocumentNode<CreateRandomRoomMutation, CreateRandomRoomMutationVariables>;
 export const DeleteRoomDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"deleteRoom"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"DeleteRoomInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"deleteRoom"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"ok"}},{"kind":"Field","name":{"kind":"Name","value":"error"}}]}}]}}]} as unknown as DocumentNode<DeleteRoomMutation, DeleteRoomMutationVariables>;
 export const MyRoomsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"myRooms"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"MyRoomsInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"myRooms"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"ok"}},{"kind":"Field","name":{"kind":"Name","value":"error"}},{"kind":"Field","name":{"kind":"Name","value":"hasNext"}},{"kind":"Field","name":{"kind":"Name","value":"rooms"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"MyRoomBase"}}]}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"MyRoomBase"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"MyRoom"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"noti"}},{"kind":"Field","name":{"kind":"Name","value":"pinnedAt"}},{"kind":"Field","name":{"kind":"Name","value":"newMessage"}},{"kind":"Field","name":{"kind":"Name","value":"lastMessage"}},{"kind":"Field","name":{"kind":"Name","value":"room"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"updatedAt"}}]}},{"kind":"Field","name":{"kind":"Name","value":"users"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"nickname"}},{"kind":"Field","name":{"kind":"Name","value":"profileUrl"}}]}},{"kind":"Field","name":{"kind":"Name","value":"updatedAt"}}]}}]} as unknown as DocumentNode<MyRoomsQuery, MyRoomsQueryVariables>;

@@ -47,8 +47,8 @@ const SignUpScreen = ({route, navigation}: SignUpScreenProps) => {
 
   const {getProps, setFieldValue, values, setValues} = useForm<FormValues>();
 
-  const onProfileChange = (file: ReactNativeFileType) => {
-    setFieldValue('profile', file);
+  const onProfileChange = (file: ReactNativeFileType[]) => {
+    setFieldValue('profile', file[0]);
   };
 
   const createRandomNickname = async () => {
