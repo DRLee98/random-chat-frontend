@@ -10,10 +10,5 @@ export const OPINION_BASE = graphql(`
     status
     createdAt
     updatedAt
-    user {
-      id
-      nickname
-      profileUrl
-    }
   }
 `);

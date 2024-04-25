@@ -1,4 +1,5 @@
 import useCreateOpinion from '@app/graphql/hooks/opinion/useCreateOpinion';
+import {useUpdateMyOpinions} from '@app/graphql/hooks/opinion/useMyOpinions';
 import useForm from '@app/hooks/useForm';
 
 import styled from 'styled-components/native';
@@ -8,6 +9,9 @@ import Btn from '@app/components/common/Button';
 import RadioList from '@app/components/common/RadioList';
 import PictureList from '@app/components/common/PictureList';
 
+import {getFragmentData} from '@app/graphql/__generated__';
+
+import {OPINION_BASE} from '@app/graphql/fragments/opinion';
 import {OpinionCategory} from '@app/graphql/__generated__/graphql';
 import {SettingsNavigatorScreens} from '@app/navigators/settings';
 
@@ -29,6 +33,7 @@ interface OpinionScreenProps
 
 const OpinionScreen = ({navigation}: OpinionScreenProps) => {
   const [createOpinion] = useCreateOpinion();
+  const {appendMyOpinion} = useUpdateMyOpinions();
 
   const opinionCategory: RadioData[] = [
     {label: '개선', value: OpinionCategory.Imporve},
@@ -67,6 +72,11 @@ const OpinionScreen = ({navigation}: OpinionScreenProps) => {
     });
 
     if (data?.createOpinion.ok) {
+      const opinionData = getFragmentData(
+        OPINION_BASE,
+        data.createOpinion.opinion,
+      );
+      opinionData && appendMyOpinion(opinionData);
       navigation.goBack();
     }
   };
@@ -153,7 +163,6 @@ const Button = styled(Btn)`
   padding: 20px 0;
 
   border-radius: 5px;
-  align-items: center;
 `;
 
 const ButtonText = styled.Text`

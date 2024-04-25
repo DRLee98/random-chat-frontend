@@ -177,7 +177,7 @@ const SettingsScreen = ({navigation}: SettingsScreenProps) => {
         <ListItem>
           <Button
             onPress={() =>
-              navigation.navigate(SettingsNavigatorScreens.MyOpinion)
+              navigation.navigate(SettingsNavigatorScreens.MyOpinions)
             }>
             <ListText>내가 작성한 의견</ListText>
           </Button>

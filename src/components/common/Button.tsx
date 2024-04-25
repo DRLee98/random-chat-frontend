@@ -37,6 +37,9 @@ interface ContainerProps {
 }
 
 const Container = styled.TouchableOpacity<ContainerProps>`
+  align-items: center;
+  justify-content: center;
+
   background-color: ${({press, theme, disabled}) =>
     disabled
       ? theme.gray300.default

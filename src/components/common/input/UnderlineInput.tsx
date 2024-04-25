@@ -8,7 +8,7 @@ import type {TextInputProps} from 'react-native';
 
 interface UnderlineInputProps extends TextInputProps {}
 
-const UnderlineInput = ({...props}: UnderlineInputProps) => {
+const UnderlineInput = ({style, ...props}: UnderlineInputProps) => {
   const theme = useTheme();
   const [focused, setFocused] = useState(false);
 
@@ -22,9 +22,12 @@ const UnderlineInput = ({...props}: UnderlineInputProps) => {
 
   return (
     <Container
-      style={{
-        borderColor: focused ? theme.primary.default : theme.gray200.default,
-      }}>
+      style={[
+        style,
+        {
+          borderColor: focused ? theme.primary.default : theme.gray200.default,
+        },
+      ]}>
       <CustomInput {...props} onFocus={onFocus} onBlur={onBlur} />
       {props.maxLength && (
         <Length>
