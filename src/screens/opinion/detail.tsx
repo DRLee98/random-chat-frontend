@@ -1,5 +1,7 @@
 import {useEffect} from 'react';
 import useOpinionDetail from '@app/graphql/hooks/opinion/useOpinionDetail';
+import useDeleteOpinion from '@app/graphql/hooks/opinion/useDeleteOpinion';
+import {useUpdateMyOpinions} from '@app/graphql/hooks/opinion/useMyOpinions';
 
 import styled from 'styled-components/native';
 
@@ -9,6 +11,7 @@ import CommentList from '@app/components/comment/CommentList';
 
 import {convertOpinionCategory, convertOpinionStatus} from '@app/utils/enum';
 import {getDateTimeString} from '@app/utils/date';
+import {AlertFn} from '@app/utils/app';
 
 import {SettingsNavigatorScreens} from '@app/navigators/settings';
 import {OpinionStatus} from '@app/graphql/__generated__/graphql';
@@ -27,7 +30,29 @@ interface OpinionDetailScreenProps
   > {}
 
 const OpinionDetailScreen = ({navigation, route}: OpinionDetailScreenProps) => {
-  const {opinion} = useOpinionDetail({id: route.params.id});
+  const id = route.params.id;
+
+  const {opinion} = useOpinionDetail({id});
+  const {removeMyOpinion} = useUpdateMyOpinions();
+
+  const [deleteOpinion] = useDeleteOpinion();
+
+  const deleteOpinionFn = async () => {
+    const {data} = await deleteOpinion({variables: {input: {id}}});
+
+    if (data?.deleteOpinion.ok) {
+      removeMyOpinion(id);
+      navigation.pop();
+    }
+  };
+
+  const onDeletePress = () => {
+    AlertFn({
+      title: '의견 삭제',
+      message: `${opinion?.title} 의견을 삭제 하시겠습니까?`,
+      onConfirm: deleteOpinionFn,
+    });
+  };
 
   useEffect(() => {
     navigation.setOptions({
@@ -39,7 +64,7 @@ const OpinionDetailScreen = ({navigation, route}: OpinionDetailScreenProps) => {
             </Button>
           )}
           {opinion?.status !== OpinionStatus.Read && (
-            <Button>
+            <Button onPress={onDeletePress}>
               <ButtonText>삭제</ButtonText>
             </Button>
           )}
