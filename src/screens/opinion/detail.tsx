@@ -58,11 +58,11 @@ const OpinionDetailScreen = ({navigation, route}: OpinionDetailScreenProps) => {
     navigation.setOptions({
       headerRight: () => (
         <ButtonBox>
-          {opinion?.status === OpinionStatus.Waiting && (
+          {/* {opinion?.status === OpinionStatus.Waiting && (
             <Button>
               <ButtonText>수정</ButtonText>
             </Button>
-          )}
+          )} */}
           {opinion?.status !== OpinionStatus.Read && (
             <Button onPress={onDeletePress}>
               <ButtonText>삭제</ButtonText>

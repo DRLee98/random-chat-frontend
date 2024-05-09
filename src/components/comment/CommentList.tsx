@@ -6,15 +6,19 @@ import useCreateComment from '@app/graphql/hooks/comment/useCreateComment';
 import useViewComments, {
   useUpdateViewComments,
 } from '@app/graphql/hooks/comment/useViewComments';
+import useNewCommentListener from '@app/graphql/hooks/comment/useNewCommentListener';
 
 import styled from 'styled-components/native';
-import UnderlineInput from '../common/input/UnderlineInput';
 import Btn from '../common/Button';
+import BorderInput from '../common/input/BorderInput';
 import ProfileImg from '../user/ProfileImg';
 import Timestamp from '../common/Timestamp';
 
+import {COMMENT_BASE} from '@app/graphql/fragments/comment';
+
 import type {FlatListProps} from 'react-native';
 import type {CommentBaseFragment} from '@app/graphql/__generated__/graphql';
+import type {FragmentType} from '@app/graphql/__generated__';
 
 interface CommentListProps {
   children: React.ReactNode;
@@ -32,6 +36,13 @@ const CommentList = ({children, postId}: CommentListProps) => {
 
   const [value, setValue] = useState('');
 
+  const appendComment = (comment?: FragmentType<typeof COMMENT_BASE>) => {
+    if (!comment) return;
+
+    updateIncreaseCommentCount(1);
+    appendViewComment(comment);
+  };
+
   const onCreaeteComment = async () => {
     if (value === '') return;
     const {data} = await createComment({
@@ -44,72 +55,89 @@ const CommentList = ({children, postId}: CommentListProps) => {
     });
 
     if (!data || !data.createComment.ok || !data.createComment.comment) return;
-    updateIncreaseCommentCount(1);
-    appendViewComment(data.createComment.comment);
+    appendComment(data.createComment.comment);
     setValue('');
   };
 
+  useNewCommentListener({
+    variables: {input: {postId}},
+    onData: ({data}) => appendComment(data.data?.newComment),
+  });
+
   return (
-    <Container
-      data={comments}
-      ListHeaderComponent={
-        <>
-          {children}
-          <Header>
-            <CommentCount>댓글 {count}개</CommentCount>
-            <InputBox>
-              <Input
-                value={value}
-                onChangeText={setValue}
-                placeholder="댓글을 입력해 주세요."
-                returnKeyType="done"
-                returnKeyLabel="작성"
-                onSubmitEditing={onCreaeteComment}
-              />
-              <Button onPress={onCreaeteComment} disabled={loading}>
-                {/* <Loading /> */}
-                <ButtonText>작성</ButtonText>
-              </Button>
-            </InputBox>
-          </Header>
-        </>
-      }
-      renderItem={({item}) => (
-        <ListItem>
-          <ProfileImg
-            id={item.user.id}
-            url={item.user.profileUrl}
-            size={40}
-            push
-          />
-          <ContentBox>
-            <NicknameBox>
-              <Nickname>{item.user.nickname}</Nickname>
-              <Timestamp date={item.updatedAt} type="date" />
-            </NicknameBox>
-            <Text>{item.text}</Text>
-          </ContentBox>
-        </ListItem>
-      )}
-      ItemSeparatorComponent={Separator}
-      keyExtractor={item => item.id}
-      onEndReached={fetchMore}
-      onEndReachedThreshold={0.7}
-    />
+    <Container>
+      <List
+        data={comments}
+        ListHeaderComponent={
+          <>
+            {children}
+            <Header>
+              <CommentCount>댓글 {count}개</CommentCount>
+            </Header>
+          </>
+        }
+        renderItem={({item}) => (
+          <ListItem>
+            <ProfileImg
+              id={item.user.id}
+              url={item.user.profileUrl}
+              size={40}
+              push
+            />
+            <ContentBox>
+              <NicknameBox>
+                <Nickname>{item.user.nickname}</Nickname>
+                <Timestamp date={item.updatedAt} type="date" />
+              </NicknameBox>
+              <Text>{item.text}</Text>
+            </ContentBox>
+          </ListItem>
+        )}
+        ItemSeparatorComponent={Separator}
+        ListFooterComponent={Footer}
+        keyExtractor={item => item.id}
+        onEndReached={fetchMore}
+        onEndReachedThreshold={0.7}
+      />
+      <InputBox>
+        <BorderInput
+          value={value}
+          onChangeText={setValue}
+          placeholder="댓글을 입력해 주세요."
+          returnKeyType="done"
+          returnKeyLabel="작성"
+          onSubmitEditing={onCreaeteComment}
+          right={
+            <Button onPress={onCreaeteComment} disabled={loading}>
+              {/* <Loading /> */}
+              <ButtonText>작성</ButtonText>
+            </Button>
+          }
+        />
+      </InputBox>
+    </Container>
   );
 };
 
-const Container = styled.FlatList<FlatListProps<CommentBaseFragment>>`
+const Container = styled.View`
   flex: 1;
 
-  padding: 0 20px;
-  padding-top: 20px;
+  padding: 20px 0px;
 
   background-color: ${({theme}) => theme.bgColor};
 `;
 
+const List = styled.FlatList<FlatListProps<CommentBaseFragment>>`
+  padding: 20px;
+`;
+
 const Header = styled.View`
   flex: 1;
+  margin-bottom: 20px;
+`;
+
+const Footer = styled.View`
+  height: 40px;
 `;
 
 const CommentCount = styled.Text`
@@ -119,25 +147,24 @@ const CommentCount = styled.Text`
 `;
 
 const InputBox = styled.View`
-  flex: 1;
+  height: 50px;
+
   flex-direction: row;
   align-items: center;
   justify-content: flex-end;
   gap: 10px;
 
-  margin-top: 5px;
-  margin-bottom: 20px;
-`;
-
-const Input = styled(UnderlineInput)`
-  flex: 1;
+  padding: 0 10px;
+  padding-top: 10px;
+  /* border-top-width: 1px;
+  border-top-color: ${({theme}) => theme.gray500.default}; */
 `;
 
 const Button = styled(Btn)`
-  height: 100%;
-  padding: 0 15px;
+  height: 40px;
+  aspect-ratio: 1;
 
-  border-radius: 5px;
+  border-radius: 999px;
 `;
 
 const ButtonText = styled.Text`
