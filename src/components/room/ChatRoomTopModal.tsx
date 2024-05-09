@@ -195,7 +195,7 @@ const SpaceBetween = styled.View`
 `;
 
 const ButtonBox = styled.View`
-  padding: 0 20px;
+  padding: 0 25px;
   padding-top: 10px;
 
   border-top-width: 1px;
@@ -206,7 +206,7 @@ const ButtonBox = styled.View`
 const ButtonList = styled.View`
   flex-direction: row;
   align-items: center;
-  gap: 15px;
+  gap: 20px;
 `;
 
 export default ChatRoomTopModal;
