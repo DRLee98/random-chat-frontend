@@ -2,8 +2,7 @@ import {useState} from 'react';
 
 import styled from 'styled-components/native';
 
-import type {TouchableOpacityProps} from 'react-native-gesture-handler';
-import type {GestureResponderEvent} from 'react-native';
+import type {TouchableOpacityProps, GestureResponderEvent} from 'react-native';
 
 interface ButtonProps extends TouchableOpacityProps {}
 

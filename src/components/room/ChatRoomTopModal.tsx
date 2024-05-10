@@ -75,7 +75,7 @@ const ChatRoomTopModal = ({roomId, roomDetail, me}: ChatRoomTopModalProps) => {
         <RoomNameBox>
           <RoomName>{getChatRoomName(roomDetail)}</RoomName>
           <EditButton onPress={onEditPress}>
-            <Icon name="pencil" size={14} color={theme.fontColor} />
+            <Icon name="pencil" size={18} color={theme.fontColor} />
           </EditButton>
         </RoomNameBox>
         <UserBox>
@@ -107,12 +107,14 @@ const ChatRoomTopModal = ({roomId, roomDetail, me}: ChatRoomTopModalProps) => {
                 userRoomId={roomDetail.userRoom.id}
                 noti={roomDetail.userRoom.noti}
                 color={theme.fontColor}
+                size={25}
               />
               <PinnedButton
                 roomId={roomId}
                 userRoomId={roomDetail.userRoom.id}
                 pinned={Boolean(roomDetail.userRoom.pinnedAt)}
                 color={theme.fontColor}
+                size={25}
               />
             </ButtonList>
             <ExitButton
@@ -121,6 +123,7 @@ const ChatRoomTopModal = ({roomId, roomDetail, me}: ChatRoomTopModalProps) => {
               type="icon"
               onAfterDelete={deleteRoomAfterFn}
               color={theme.fontColor}
+              size={25}
             />
           </SpaceBetween>
         </ButtonBox>
@@ -139,7 +142,7 @@ const RoomNameBox = styled.View`
   flex-direction: row;
   align-items: center;
   justify-content: center;
-  gap: 5px;
+  gap: 15px;
 `;
 
 const RoomName = styled.Text`
@@ -179,7 +182,7 @@ const UserList = styled.TouchableOpacity`
   align-items: center;
   gap: 10px;
 
-  margin: 5px 0;
+  margin: 10px 0;
 `;
 
 const UserName = styled.Text`
@@ -196,11 +199,11 @@ const SpaceBetween = styled.View`
 
 const ButtonBox = styled.View`
   padding: 0 25px;
-  padding-top: 10px;
+  padding-top: 15px;
 
   border-top-width: 1px;
   border-style: solid;
-  border-color: ${({theme}) => theme.gray300.default};
+  border-color: ${({theme}) => theme.gray500.default};
 `;
 
 const ButtonList = styled.View`

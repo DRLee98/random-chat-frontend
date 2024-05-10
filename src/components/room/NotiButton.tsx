@@ -2,7 +2,7 @@ import {useUpdateMyRooms} from '@app/graphql/hooks/room/useMyRooms';
 import {useUpdateRoomDetail} from '@app/graphql/hooks/room/useRoomDetail';
 import useUpdateRoom from '@app/graphql/hooks/room/useUpdateRoom';
 
-import {TouchableOpacity} from 'react-native-gesture-handler';
+import {TouchableOpacity} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 interface NotiButtonProps {

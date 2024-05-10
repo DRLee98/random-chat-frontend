@@ -6,7 +6,11 @@ import {useAnimatedStyle, useSharedValue} from 'react-native-reanimated';
 import styled from 'styled-components/native';
 
 import Animated from 'react-native-reanimated';
-import {Gesture, GestureDetector} from 'react-native-gesture-handler';
+import {
+  Gesture,
+  GestureDetector,
+  GestureHandlerRootView,
+} from 'react-native-gesture-handler';
 
 import {runOnJS, withTiming} from 'react-native-reanimated';
 
@@ -80,25 +84,31 @@ const TopModal = ({children, onCloseModal, ...props}: TopModalProps) => {
 
   return (
     <Modal transparent {...props}>
-      <Overlay activeOpacity={1} onPress={onOverlayPress}>
-        <AnimatedView style={style} onLayout={onConatinerLayout}>
-          <Container activeOpacity={1}>
-            <ChildrenBox onLayout={onChildrenLayout}>
-              {children}
-              <GestureDetector gesture={pan}>
-                <DragArea>
-                  <DragBar />
-                </DragArea>
-              </GestureDetector>
-            </ChildrenBox>
-          </Container>
-        </AnimatedView>
-      </Overlay>
+      <GestureHandlerRoot>
+        <Overlay activeOpacity={1} onPress={onOverlayPress}>
+          <AnimatedView style={style} onLayout={onConatinerLayout}>
+            <Container activeOpacity={1}>
+              <ChildrenBox onLayout={onChildrenLayout}>
+                {children}
+                <GestureDetector gesture={pan}>
+                  <DragArea>
+                    <DragBar />
+                  </DragArea>
+                </GestureDetector>
+              </ChildrenBox>
+            </Container>
+          </AnimatedView>
+        </Overlay>
+      </GestureHandlerRoot>
     </Modal>
   );
 };
 
 const Modal = styled.Modal``;
+
+const GestureHandlerRoot = styled(GestureHandlerRootView)`
+  flex: 1;
+`;
 
 const Overlay = styled.TouchableOpacity`
   flex: 1;
