@@ -3,9 +3,9 @@ import useCreateRandomRoom from '@app/graphql/hooks/room/useCreateRandomRoom';
 import useNewRoomListener from '@app/graphql/hooks/room/useNewRoomListener';
 import useUpdateNewMessageListener from '@app/graphql/hooks/message/useUpdateNewMessageListener';
 
-import styled from 'styled-components/native';
-import {Button} from 'react-native';
+import styled, {useTheme} from 'styled-components/native';
 import RoomItem from '@app/components/room/RoomItem';
+import Icon from 'react-native-vector-icons/FontAwesome5';
 
 import {getFragmentData} from '@app/graphql/__generated__';
 import {MY_ROOM_BASE} from '@app/graphql/fragments/room';
@@ -24,7 +24,9 @@ interface HomeScreenProps
   extends StackScreenProps<MainNavigatorParamList, MainNavigatorScreens.Home> {}
 
 const HomeScreen = ({navigation}: HomeScreenProps) => {
-  const [createRandomRoom] = useCreateRandomRoom();
+  const theme = useTheme();
+
+  const [createRandomRoom, {loading}] = useCreateRandomRoom();
 
   const {rooms, fetchMore} = useMyRooms();
   const {updateMyRoom, appendMyRoom, sortMyRooms} = useUpdateMyRooms();
@@ -63,27 +65,57 @@ const HomeScreen = ({navigation}: HomeScreenProps) => {
   });
 
   return (
-    <Container
-      data={rooms}
-      renderItem={({item}) => <RoomItem userRoom={item} />}
-      keyExtractor={item => item.id}
-      ListHeaderComponent={
-        <Button title="채팅방 생성" onPress={createRandomRoomFn} />
-      }
-      ListFooterComponent={Footer}
-      onEndReached={fetchMore}
-      onEndReachedThreshold={0.5}
-    />
+    <Container>
+      <CreateRoomButton onPress={createRandomRoomFn} disabled={loading}>
+        {loading ? (
+          <Loading size={30} color={theme.bgColor} />
+        ) : (
+          <Icon name="dice" size={30} color={theme.bgColor} />
+        )}
+        <CreateRoomText>랜덤 채팅방 생성</CreateRoomText>
+      </CreateRoomButton>
+      <List
+        data={rooms}
+        renderItem={({item}) => <RoomItem userRoom={item} />}
+        keyExtractor={item => item.id}
+        ListFooterComponent={Footer}
+        onEndReached={fetchMore}
+        onEndReachedThreshold={0.5}
+      />
+    </Container>
   );
 };
 
-const Container = styled.FlatList<FlatListProps<MyRoomBaseFragment>>`
-  width: 100%;
+const Container = styled.View`
   background-color: ${({theme}) => theme.bgColor};
 `;
 
+const List = styled.FlatList<FlatListProps<MyRoomBaseFragment>>``;
+
 const Footer = styled.View`
   height: 30px;
+`;
+
+const CreateRoomButton = styled.TouchableOpacity`
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+
+  margin: 0px 20px;
+  margin-bottom: 10px;
+  padding: 15px;
+
+  background-color: ${({theme}) => theme.primary.default};
+  border-radius: 999px;
+`;
+
+const Loading = styled.ActivityIndicator``;
+
+const CreateRoomText = styled.Text`
+  font-size: 16px;
+  font-weight: bold;
+  color: ${({theme}) => theme.bgColor};
 `;
 
 export default HomeScreen;
