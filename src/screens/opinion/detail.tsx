@@ -2,8 +2,9 @@ import {useEffect} from 'react';
 import useOpinionDetail from '@app/graphql/hooks/opinion/useOpinionDetail';
 import useDeleteOpinion from '@app/graphql/hooks/opinion/useDeleteOpinion';
 import {useUpdateMyOpinions} from '@app/graphql/hooks/opinion/useMyOpinions';
+import {useModal} from '@app/contexts/modalContext';
 
-import styled from 'styled-components/native';
+import styled, {useTheme} from 'styled-components/native';
 
 import Divider from '@app/components/common/Divider';
 import PictureList from '@app/components/common/PictureList';
@@ -11,7 +12,6 @@ import CommentList from '@app/components/comment/CommentList';
 
 import {convertOpinionCategory, convertOpinionStatus} from '@app/utils/enum';
 import {getDateTimeString} from '@app/utils/date';
-import {AlertFn} from '@app/utils/app';
 
 import {SettingsNavigatorScreens} from '@app/navigators/settings';
 import {OpinionStatus} from '@app/graphql/__generated__/graphql';
@@ -32,6 +32,9 @@ interface OpinionDetailScreenProps
 const OpinionDetailScreen = ({navigation, route}: OpinionDetailScreenProps) => {
   const id = route.params.id;
 
+  const theme = useTheme();
+  const showModal = useModal();
+
   const {opinion} = useOpinionDetail({id});
   const {removeMyOpinion} = useUpdateMyOpinions();
 
@@ -47,10 +50,19 @@ const OpinionDetailScreen = ({navigation, route}: OpinionDetailScreenProps) => {
   };
 
   const onDeletePress = () => {
-    AlertFn({
+    showModal({
       title: '의견 삭제',
       message: `${opinion?.title} 의견을 삭제 하시겠습니까?`,
-      onConfirm: deleteOpinionFn,
+      buttons: [
+        {
+          text: '취소',
+        },
+        {
+          text: '삭제',
+          onPress: deleteOpinionFn,
+          textColor: theme.red.default,
+        },
+      ],
     });
   };
 

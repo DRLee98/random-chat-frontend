@@ -5,8 +5,9 @@ import useMeDetail, {
 } from '@app/graphql/hooks/user/useMeDetail';
 import useUpdateUser from '@app/graphql/hooks/user/useUpdateUser';
 import useDeleteUser from '@app/graphql/hooks/user/useDeleteUser';
+import {useModal} from '@app/contexts/modalContext';
 
-import styled from 'styled-components/native';
+import styled, {useTheme} from 'styled-components/native';
 
 import ProfileImg from '@app/components/user/ProfileImg';
 import SocialPlatformLogo from '@app/components/common/SocialPlatformLogo';
@@ -14,7 +15,7 @@ import Switch from '@app/components/common/Switch';
 import Divider from '@app/components/common/Divider';
 
 import {AppState} from 'react-native';
-import {AlertFn, openAppSettings} from '@app/utils/app';
+import {openAppSettings} from '@app/utils/app';
 import {messagingEnabled} from '@app/utils/fcm';
 
 import {SettingsNavigatorScreens} from '@app/navigators/settings';
@@ -29,7 +30,9 @@ interface SettingsScreenProps
   > {}
 
 const SettingsScreen = ({navigation}: SettingsScreenProps) => {
+  const theme = useTheme();
   const logout = useLogout();
+  const showModal = useModal();
 
   const {me} = useMeDetail();
   const updateMeDetail = useUpdateMeDetail();
@@ -54,11 +57,20 @@ const SettingsScreen = ({navigation}: SettingsScreenProps) => {
   const onChangeNotification = async (value: boolean) => {
     const enabled = await messagingEnabled();
     if (!enabled) {
-      return AlertFn({
+      return showModal({
         title: '알림 설정',
         message: '알림을 받기 위해선 알림 권한이 필요합니다.',
-        confirmText: '설정으로 이동',
-        onConfirm: openAppSettings,
+        buttons: [
+          {
+            text: '취소',
+          },
+          {
+            text: '설정으로 이동',
+            onPress: openAppSettings,
+            textColor: theme.bgColor,
+            bgColor: theme.primary.default,
+          },
+        ],
       });
     }
     setNotiEnabled(value);
@@ -90,18 +102,36 @@ const SettingsScreen = ({navigation}: SettingsScreenProps) => {
   };
 
   const onLogout = () => {
-    AlertFn({
+    showModal({
       title: '로그아웃',
       message: '로그아웃 하시겠어요?',
-      onConfirm: logout,
+      buttons: [
+        {
+          text: '취소',
+        },
+        {
+          text: '로그아웃',
+          onPress: logout,
+          textColor: theme.red.default,
+        },
+      ],
     });
   };
 
   const onDeleteUser = () => {
-    AlertFn({
+    showModal({
       title: '회원탈퇴',
       message: '정말 탈퇴하시겠습니까?',
-      onConfirm: deleteUserFn,
+      buttons: [
+        {
+          text: '취소',
+        },
+        {
+          text: '탈퇴',
+          onPress: deleteUserFn,
+          textColor: theme.red.default,
+        },
+      ],
     });
   };
 

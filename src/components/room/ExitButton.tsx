@@ -1,9 +1,9 @@
 import useDeleteRoom from '@app/graphql/hooks/room/useDeleteRoom';
 import {useUpdateMyRooms} from '@app/graphql/hooks/room/useMyRooms';
+import {useModal} from '@app/contexts/modalContext';
 
-import styled from 'styled-components/native';
+import styled, {useTheme} from 'styled-components/native';
 
-import {Alert} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
 interface ExitButtonProps {
@@ -23,6 +23,9 @@ const ExitButton = ({
   color,
   onAfterDelete,
 }: ExitButtonProps) => {
+  const theme = useTheme();
+  const showModal = useModal();
+
   const [deleteRoom] = useDeleteRoom();
 
   const {removeMyRoom} = useUpdateMyRooms();
@@ -42,14 +45,20 @@ const ExitButton = ({
   };
 
   const AlertFn = async () => {
-    Alert.alert('채팅방 나가기', `${roomName}방을 나가시겠습니까?`, [
-      {text: '취소', style: 'cancel'},
-      {
-        text: '나가기',
-        style: 'destructive',
-        onPress: deleteRoomFn,
-      },
-    ]);
+    showModal({
+      title: '채팅방 나가기',
+      message: `${roomName}방을 나가시겠습니까?`,
+      buttons: [
+        {
+          text: '취소',
+        },
+        {
+          text: '나가기',
+          onPress: deleteRoomFn,
+          textColor: theme.red.default,
+        },
+      ],
+    });
   };
 
   return (

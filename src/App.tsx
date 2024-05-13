@@ -1,5 +1,4 @@
 import React, {useEffect, useLayoutEffect, useState} from 'react';
-import {RecoilRoot} from 'recoil';
 import {ApolloProvider} from '@apollo/client';
 import {client} from './apollo';
 
@@ -9,6 +8,7 @@ import {ThemeProvider} from 'styled-components/native';
 import {lightTheme, darkTheme} from './styles/theme';
 
 import MainNavigator from './navigators';
+import ModalProvider from './contexts/modalContext';
 
 import {Alert, Appearance} from 'react-native';
 import messaging from '@react-native-firebase/messaging';
@@ -45,11 +45,11 @@ function App() {
   return (
     <SafeAreaProvider>
       <ApolloProvider client={client}>
-        <RecoilRoot>
-          <ThemeProvider theme={theme}>
+        <ThemeProvider theme={theme}>
+          <ModalProvider>
             <MainNavigator />
-          </ThemeProvider>
-        </RecoilRoot>
+          </ModalProvider>
+        </ThemeProvider>
       </ApolloProvider>
     </SafeAreaProvider>
   );
