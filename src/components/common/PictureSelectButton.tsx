@@ -86,7 +86,7 @@ const PictureSelectButton = ({
   };
 
   return (
-    <Container>
+    <>
       <Button onPress={press}>
         {children ?? (
           <IconBox>
@@ -109,11 +109,9 @@ const PictureSelectButton = ({
           </Overlay>
         </Modal>
       )}
-    </Container>
+    </>
   );
 };
-
-const Container = styled.View``;
 
 const Button = styled.TouchableOpacity``;
 
@@ -131,9 +129,9 @@ const IconBox = styled.View`
 
 const Overlay = styled.TouchableOpacity`
   flex: 1;
-  align-items: 'center';
-  justify-content: 'center';
-  background-color: 'rgba(0,0,0,0.3)';
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(0, 0, 0, 0.3);
 `;
 
 const ModalContainer = styled.View`
