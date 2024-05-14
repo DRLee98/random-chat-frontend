@@ -63,7 +63,7 @@ const useMyRooms = (
     });
   };
 
-  return {...result, rooms, fetchMore};
+  return {...result, rooms, fetchMore, hasNext: data?.myRooms.hasNext ?? false};
 };
 
 export const useUpdateMyRooms = (input?: MyRoomsInput) => {

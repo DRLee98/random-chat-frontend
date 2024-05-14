@@ -5,6 +5,7 @@ import useUpdateNewMessageListener from '@app/graphql/hooks/message/useUpdateNew
 
 import styled, {useTheme} from 'styled-components/native';
 import RoomItem from '@app/components/room/RoomItem';
+import Skeleton from '@app/components/common/Skeleton';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 
 import {getFragmentData} from '@app/graphql/__generated__';
@@ -28,7 +29,7 @@ const HomeScreen = ({navigation}: HomeScreenProps) => {
 
   const [createRandomRoom, {loading}] = useCreateRandomRoom();
 
-  const {rooms, fetchMore} = useMyRooms();
+  const {rooms, fetchMore, hasNext} = useMyRooms();
   const {updateMyRoom, appendMyRoom, sortMyRooms} = useUpdateMyRooms();
 
   const goChatRoom = (item: MyRoomBaseFragment) => {
@@ -78,7 +79,16 @@ const HomeScreen = ({navigation}: HomeScreenProps) => {
         data={rooms}
         renderItem={({item}) => <RoomItem userRoom={item} />}
         keyExtractor={item => item.id}
-        ListFooterComponent={Footer}
+        ListFooterComponent={
+          <>
+            {hasNext && (
+              <SkeletonContainer>
+                <Skeleton height={60} borderRadius={10} />
+              </SkeletonContainer>
+            )}
+            <Footer />
+          </>
+        }
         onEndReached={fetchMore}
         onEndReachedThreshold={0.5}
       />
@@ -117,6 +127,10 @@ const CreateRoomText = styled.Text`
   font-size: 16px;
   font-weight: bold;
   color: ${({theme}) => theme.bgColor};
+`;
+
+const SkeletonContainer = styled.View`
+  padding: 0 15px;
 `;
 
 export default HomeScreen;
