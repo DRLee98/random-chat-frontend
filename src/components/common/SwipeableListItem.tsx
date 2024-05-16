@@ -89,7 +89,7 @@ const SwipeableListItem = ({
   };
 
   const pan = Gesture.Pan()
-    .activeOffsetX([-10, 10])
+    .activeOffsetX([-30, 30])
     .onChange(e => {
       offset.value = onPanChange(e);
     })
