@@ -7,6 +7,7 @@ import useViewComments, {
   useUpdateViewComments,
 } from '@app/graphql/hooks/comment/useViewComments';
 import useNewCommentListener from '@app/graphql/hooks/comment/useNewCommentListener';
+import {useModal} from '@app/contexts/modalContext';
 
 import styled from 'styled-components/native';
 import Btn from '../common/Button';
@@ -26,6 +27,8 @@ interface CommentListProps {
 }
 
 const CommentList = ({children, postId}: CommentListProps) => {
+  const showModal = useModal();
+
   const {count} = useCommentCount({postId});
   const {comments, fetchMore} = useViewComments({postId});
 
@@ -54,9 +57,17 @@ const CommentList = ({children, postId}: CommentListProps) => {
       },
     });
 
-    if (!data || !data.createComment.ok || !data.createComment.comment) return;
-    appendComment(data.createComment.comment);
-    setValue('');
+    if (data?.createComment.comment) {
+      appendComment(data.createComment.comment);
+      setValue('');
+    }
+    if (data?.createComment.error) {
+      showModal({
+        title: '댓글 작성에 실패했어요',
+        message: data.createComment.error,
+        buttons: [{text: '확인'}],
+      });
+    }
   };
 
   useNewCommentListener({

@@ -7,7 +7,7 @@ import {useModal} from '@app/contexts/modalContext';
 import styled, {useTheme} from 'styled-components/native';
 
 import Divider from '@app/components/common/Divider';
-import PictureList from '@app/components/common/PictureList';
+import {UrlPictureList} from '@app/components/common/PictureList';
 import CommentList from '@app/components/comment/CommentList';
 
 import {convertOpinionCategory, convertOpinionStatus} from '@app/utils/enum';
@@ -46,6 +46,13 @@ const OpinionDetailScreen = ({navigation, route}: OpinionDetailScreenProps) => {
     if (data?.deleteOpinion.ok) {
       removeMyOpinion(id);
       navigation.pop();
+    }
+    if (data?.deleteOpinion.error) {
+      showModal({
+        title: '의견 삭제에 실패했어요',
+        message: data.deleteOpinion.error,
+        buttons: [{text: '확인'}],
+      });
     }
   };
 
@@ -108,6 +115,7 @@ const OpinionDetailScreen = ({navigation, route}: OpinionDetailScreenProps) => {
 
 const Container = styled.View`
   flex: 1;
+  padding-bottom: 15px;
 `;
 
 const Title = styled.Text`

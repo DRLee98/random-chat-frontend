@@ -6,6 +6,7 @@ import {useUpdateMe} from '@app/graphql/hooks/user/useMe';
 import {useTheme} from 'styled-components/native';
 import useForm from '@app/hooks/useForm';
 import useUpdateUser from '@app/graphql/hooks/user/useUpdateUser';
+import {useModal} from '@app/contexts/modalContext';
 
 import styled from 'styled-components/native';
 
@@ -36,6 +37,7 @@ interface MeScreenProps
 
 const MeScreen = ({navigation}: MeScreenProps) => {
   const theme = useTheme();
+  const showModal = useModal();
 
   const {me} = useMeDetail();
   const updateMe = useUpdateMe();
@@ -88,6 +90,13 @@ const MeScreen = ({navigation}: MeScreenProps) => {
       updateMe(updateCacheValues);
       updateMeDetail(updateCacheValues);
       toggleEdit();
+    }
+    if (data?.updateUser.error) {
+      showModal({
+        title: '유저 정보 수정에 실패했어요',
+        message: data.updateUser.error,
+        buttons: [{text: '확인'}],
+      });
     }
   };
 

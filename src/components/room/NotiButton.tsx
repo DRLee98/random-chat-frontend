@@ -1,3 +1,4 @@
+import {useModal} from '@app/contexts/modalContext';
 import {useUpdateMyRooms} from '@app/graphql/hooks/room/useMyRooms';
 import {useUpdateRoomDetail} from '@app/graphql/hooks/room/useRoomDetail';
 import useUpdateRoom from '@app/graphql/hooks/room/useUpdateRoom';
@@ -20,6 +21,8 @@ const NotiButton = ({
   size = 20,
   color,
 }: NotiButtonProps) => {
+  const showModal = useModal();
+
   const [updateRoom] = useUpdateRoom();
   const {updateMyRoom} = useUpdateMyRooms();
   const {updateRoomDetail} = useUpdateRoomDetail({roomId});
@@ -37,6 +40,12 @@ const NotiButton = ({
       const updateValue = !noti;
       updateRoomDetail({noti: updateValue});
       updateMyRoom(userRoomId, {noti: updateValue});
+    }
+    if (data?.updateRoom.error) {
+      showModal({
+        message: data.updateRoom.error,
+        buttons: [{text: '확인'}],
+      });
     }
   };
 

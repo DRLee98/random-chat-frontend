@@ -42,6 +42,13 @@ const ExitButton = ({
       removeMyRoom(roomId);
       onAfterDelete?.();
     }
+    if (data?.deleteRoom.error) {
+      showModal({
+        title: '채팅방 나가기에 실패했어요',
+        message: data.deleteRoom.error,
+        buttons: [{text: '확인'}],
+      });
+    }
   };
 
   const AlertFn = async () => {

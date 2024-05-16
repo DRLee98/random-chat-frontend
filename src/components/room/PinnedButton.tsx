@@ -1,3 +1,4 @@
+import {useModal} from '@app/contexts/modalContext';
 import {useUpdateMyRooms} from '@app/graphql/hooks/room/useMyRooms';
 import {useUpdateRoomDetail} from '@app/graphql/hooks/room/useRoomDetail';
 import useUpdateRoom from '@app/graphql/hooks/room/useUpdateRoom';
@@ -20,6 +21,8 @@ const PinnedButton = ({
   size = 20,
   color,
 }: PinnedButtonProps) => {
+  const showModal = useModal();
+
   const [updateRoom] = useUpdateRoom();
   const {updateMyRoom, sortMyRooms} = useUpdateMyRooms();
   const {updateRoomDetail} = useUpdateRoomDetail({roomId});
@@ -38,6 +41,12 @@ const PinnedButton = ({
       updateRoomDetail({pinnedAt: updateValue});
       updateMyRoom(userRoomId, {pinnedAt: updateValue});
       sortMyRooms();
+    }
+    if (data?.updateRoom.error) {
+      showModal({
+        message: data.updateRoom.error,
+        buttons: [{text: '확인'}],
+      });
     }
   };
 

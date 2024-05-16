@@ -2,6 +2,7 @@ import useMyRooms, {useUpdateMyRooms} from '@app/graphql/hooks/room/useMyRooms';
 import useCreateRandomRoom from '@app/graphql/hooks/room/useCreateRandomRoom';
 import useNewRoomListener from '@app/graphql/hooks/room/useNewRoomListener';
 import useUpdateNewMessageListener from '@app/graphql/hooks/message/useUpdateNewMessageListener';
+import {useModal} from '@app/contexts/modalContext';
 
 import styled, {useTheme} from 'styled-components/native';
 import RoomItem from '@app/components/room/RoomItem';
@@ -26,6 +27,7 @@ interface HomeScreenProps
 
 const HomeScreen = ({navigation}: HomeScreenProps) => {
   const theme = useTheme();
+  const showModal = useModal();
 
   const [createRandomRoom, {loading}] = useCreateRandomRoom();
 
@@ -49,11 +51,18 @@ const HomeScreen = ({navigation}: HomeScreenProps) => {
       const userRoomData = getFragmentData(MY_ROOM_BASE, userRoom);
       goChatRoom(userRoomData);
     }
+    if (data?.createRandomRoom.error) {
+      showModal({
+        title: '랜덤 채팅방 생성에 실패했어요',
+        message: data.createRandomRoom.error,
+        buttons: [{text: '확인'}],
+      });
+    }
   };
 
   const updateNewMessage = (data?: UpdateNewMessageInUserRoom) => {
     if (!data) return;
-    const {id, newMessage, lastMessage, roomId} = data;
+    const {id, newMessage, lastMessage} = data;
     updateMyRoom(id, {newMessage, lastMessage}, {updatedAt: new Date()});
     sortMyRooms();
   };

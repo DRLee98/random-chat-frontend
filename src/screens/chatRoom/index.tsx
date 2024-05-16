@@ -8,6 +8,7 @@ import useNewMessageListener from '@app/graphql/hooks/message/useNewMessageListe
 import useReadMessageListener from '@app/graphql/hooks/message/useReadMessageListener';
 import useSendMessage from '@app/graphql/hooks/message/useSendMessage';
 import useMe from '@app/graphql/hooks/user/useMe';
+import {useModal} from '@app/contexts/modalContext';
 
 import styled from 'styled-components/native';
 
@@ -54,6 +55,8 @@ interface ChatRoomScreenProps
 
 const ChatRoomScreen = ({route, navigation}: ChatRoomScreenProps) => {
   const {roomId, newMessageCount} = route.params;
+
+  const showModal = useModal();
 
   const [value, setValue] = useState('');
 
@@ -110,8 +113,15 @@ const ChatRoomScreen = ({route, navigation}: ChatRoomScreenProps) => {
     });
     if (data?.sendMessage.message) {
       appendMessageFn(data.sendMessage.message);
+      setValue('');
     }
-    setValue('');
+    if (data?.sendMessage.error) {
+      showModal({
+        title: '메시지 전송에 실패했어요',
+        message: data.sendMessage.error,
+        buttons: [{text: '확인'}],
+      });
+    }
   };
 
   const formatReadCount = (readUsersId: string[]) => {

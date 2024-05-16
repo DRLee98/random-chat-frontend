@@ -4,6 +4,7 @@ import useCreateUser from '@app/graphql/hooks/user/useCreateUser';
 import useRandomNickname from '@app/graphql/hooks/user/useRandomNickname';
 import {useTheme} from 'styled-components/native';
 import useForm from '@app/hooks/useForm';
+import {useModal} from '@app/contexts/modalContext';
 
 import styled from 'styled-components/native';
 
@@ -40,6 +41,7 @@ interface SignUpScreenProps
 
 const SignUpScreen = ({route, navigation}: SignUpScreenProps) => {
   const theme = useTheme();
+  const showModal = useModal();
 
   const login = useLoginAndSetToken();
   const [createUser] = useCreateUser();
@@ -80,11 +82,23 @@ const SignUpScreen = ({route, navigation}: SignUpScreenProps) => {
             console.error('login failed');
           }
         }
+        if (data?.createUser.error) {
+          showModal({
+            title: '유저 생성에 실패했어요',
+            message: data.createUser.error,
+            buttons: [{text: '확인'}],
+          });
+        }
       }
     } catch (error) {
       if (error instanceof ApolloError) {
         error.graphQLErrors.forEach(e => {
           console.error('error', e.message);
+          showModal({
+            title: '유저 생성에 실패했어요',
+            message: e.message,
+            buttons: [{text: '확인'}],
+          });
         });
       } else {
         console.error('error', error);

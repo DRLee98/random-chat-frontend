@@ -1,5 +1,6 @@
 import useLogin from '@app/graphql/hooks/user/useLogin';
 import useUpdateUser from '@app/graphql/hooks/user/useUpdateUser';
+import {useModal} from '@app/contexts/modalContext';
 
 import {setToken} from '@app/utils/encStorage';
 import {getFcmToken} from '@app/utils/fcm';
@@ -14,6 +15,8 @@ import type {LazyQueryHookOptions} from '@apollo/client';
 const useLoginAndSetToken = (
   options?: LazyQueryHookOptions<LoginQuery, QueryLoginArgs>,
 ) => {
+  const showModal = useModal();
+
   const [login] = useLogin(options);
   const [updateUser] = useUpdateUser();
 
@@ -34,6 +37,12 @@ const useLoginAndSetToken = (
       });
       return true;
     }
+    if (data?.login.error)
+      showModal({
+        title: '로그인에 실패했어요',
+        message: data.login.error,
+        buttons: [{text: '확인'}],
+      });
     return false;
   };
 

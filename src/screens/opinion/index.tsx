@@ -1,6 +1,7 @@
 import useCreateOpinion from '@app/graphql/hooks/opinion/useCreateOpinion';
 import {useUpdateMyOpinions} from '@app/graphql/hooks/opinion/useMyOpinions';
 import useForm from '@app/hooks/useForm';
+import {useModal} from '@app/contexts/modalContext';
 
 import styled from 'styled-components/native';
 
@@ -32,6 +33,8 @@ interface OpinionScreenProps
   > {}
 
 const OpinionScreen = ({navigation}: OpinionScreenProps) => {
+  const showModal = useModal();
+
   const [createOpinion] = useCreateOpinion();
   const {appendMyOpinion} = useUpdateMyOpinions();
 
@@ -78,6 +81,13 @@ const OpinionScreen = ({navigation}: OpinionScreenProps) => {
       );
       opinionData && appendMyOpinion(opinionData);
       navigation.goBack();
+    }
+    if (data?.createOpinion.error) {
+      showModal({
+        title: '의견 작성에 실패했어요',
+        message: data.createOpinion.error,
+        buttons: [{text: '확인'}],
+      });
     }
   };
 

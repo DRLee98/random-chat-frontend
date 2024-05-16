@@ -52,6 +52,13 @@ const SettingsScreen = ({navigation}: SettingsScreenProps) => {
     if (data?.deleteUser.ok) {
       logout();
     }
+    if (data?.deleteUser.error) {
+      showModal({
+        title: '회원 탈퇴에 실패했어요',
+        message: data.deleteUser.error,
+        buttons: [{text: '확인'}],
+      });
+    }
   };
 
   const onChangeNotification = async (value: boolean) => {
@@ -82,8 +89,12 @@ const SettingsScreen = ({navigation}: SettingsScreenProps) => {
         },
       },
     });
-    if (!data?.updateUser.ok) {
+    if (data?.updateUser.error) {
       updateMeDetail({noti: !value});
+      showModal({
+        message: data.updateUser.error,
+        buttons: [{text: '확인'}],
+      });
     }
   };
 
@@ -96,8 +107,12 @@ const SettingsScreen = ({navigation}: SettingsScreenProps) => {
         },
       },
     });
-    if (!data?.updateUser.ok) {
+    if (data?.updateUser.error) {
       updateMeDetail({allowMessage: !value});
+      showModal({
+        message: data.updateUser.error,
+        buttons: [{text: '확인'}],
+      });
     }
   };
 

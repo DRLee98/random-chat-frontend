@@ -36,20 +36,22 @@ const ToggleUserBlockButton = ({
         },
       },
     });
-    if (
-      !data ||
-      !data.toggleBlockUser.ok ||
-      !data.toggleBlockUser.updateBlockUsers
-    )
-      return;
-    const updateBlockUsers = getFragmentData(
-      BLOCK_USER,
-      data.toggleBlockUser.updateBlockUsers,
-    );
-    updateMe({
-      blockUserIds: updateBlockUsers.map(user => user.id),
-    });
-    updateMeDetail({blockUsers: data.toggleBlockUser.updateBlockUsers});
+    if (data?.toggleBlockUser.updateBlockUsers) {
+      const updateBlockUsers = getFragmentData(
+        BLOCK_USER,
+        data.toggleBlockUser.updateBlockUsers,
+      );
+      updateMe({
+        blockUserIds: updateBlockUsers.map(user => user.id),
+      });
+      updateMeDetail({blockUsers: data.toggleBlockUser.updateBlockUsers});
+    }
+    if (data?.toggleBlockUser.error) {
+      showModal({
+        message: data.toggleBlockUser.error,
+        buttons: [{text: '확인'}],
+      });
+    }
   };
 
   const onPress = () => {

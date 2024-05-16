@@ -3,6 +3,7 @@ import {useUpdateMyRooms} from '@app/graphql/hooks/room/useMyRooms';
 import {useUpdateRoomDetail} from '@app/graphql/hooks/room/useRoomDetail';
 import useUpdateRoom from '@app/graphql/hooks/room/useUpdateRoom';
 import {useTheme} from 'styled-components/native';
+import {useModal} from '@app/contexts/modalContext';
 
 import styled from 'styled-components/native';
 
@@ -29,6 +30,7 @@ const ChatRoomEditScreen = ({route, navigation}: ChatRoomEditScreenProps) => {
   const {roomId, userRoomId, userRoomName} = route.params;
 
   const theme = useTheme();
+  const showModal = useModal();
 
   const [value, setValue] = useState(userRoomName);
 
@@ -50,6 +52,13 @@ const ChatRoomEditScreen = ({route, navigation}: ChatRoomEditScreenProps) => {
       updateRoomDetail({name: value});
       updateMyRoom(userRoomId, {name: value});
       navigation.goBack();
+    }
+    if (data?.updateRoom.error) {
+      showModal({
+        title: '채팅방 수정에 실패했어요',
+        message: data.updateRoom.error,
+        buttons: [{text: '확인'}],
+      });
     }
   };
 
