@@ -71,6 +71,32 @@ const PictureList = ({
   );
 };
 
+interface UrlPictureListProps {
+  pictures: string[];
+}
+
+export const UrlPictureList = ({pictures}: UrlPictureListProps) => {
+  const [previewUri, setPreviewUri] = useState<string>();
+
+  return (
+    <>
+      <List horizontal>
+        {pictures.map((url, index) => (
+          <PictureBox
+            key={`image-${index}`}
+            activeOpacity={1}
+            onPress={() => setPreviewUri(url)}>
+            <Picture source={{uri: url}} />
+          </PictureBox>
+        ))}
+      </List>
+      <PicturePreviewModal
+        uri={previewUri}
+        onClose={() => setPreviewUri(undefined)}
+      />
+    </>
+  );
+};
 const List = styled.ScrollView``;
 
 const PictureBox = styled.TouchableOpacity``;

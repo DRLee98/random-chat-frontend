@@ -108,6 +108,7 @@ const OpinionDetailScreen = ({navigation, route}: OpinionDetailScreenProps) => {
         </InfoBox>
         <Divider />
         <Content>{opinion?.content}</Content>
+        {opinion.imageUrls && <UrlPictureList pictures={opinion.imageUrls} />}
       </Container>
     </CommentList>
   );
