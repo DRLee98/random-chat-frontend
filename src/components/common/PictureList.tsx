@@ -21,7 +21,9 @@ const PictureList = ({
   edit,
   onChaneg,
 }: PictureListProps) => {
-  const [previewUri, setPreviewUri] = useState<string>();
+  const urls = pictures.map(p => p.uri);
+
+  const [previewUriIndex, setPreviewUriIndex] = useState<number>();
 
   const onSelectedPictures = (images: ReactNativeFileType[]) => {
     onChaneg?.([...pictures, ...images]);
@@ -52,7 +54,7 @@ const PictureList = ({
           <PictureBox
             key={`image-${index}`}
             activeOpacity={1}
-            onPress={() => setPreviewUri(image.uri)}>
+            onPress={() => setPreviewUriIndex(index)}>
             <Picture source={{uri: image.uri}}>
               {edit && (
                 <PictureDeleteButton onPress={() => onRemovePicture(index)}>
@@ -64,8 +66,9 @@ const PictureList = ({
         ))}
       </List>
       <PicturePreviewModal
-        uri={previewUri}
-        onClose={() => setPreviewUri(undefined)}
+        urls={urls}
+        previewIndex={previewUriIndex}
+        onClose={() => setPreviewUriIndex(undefined)}
       />
     </>
   );
@@ -76,7 +79,7 @@ interface UrlPictureListProps {
 }
 
 export const UrlPictureList = ({pictures}: UrlPictureListProps) => {
-  const [previewUri, setPreviewUri] = useState<string>();
+  const [previewUriIndex, setPreviewUriIndex] = useState<number>();
 
   return (
     <>
@@ -85,14 +88,15 @@ export const UrlPictureList = ({pictures}: UrlPictureListProps) => {
           <PictureBox
             key={`image-${index}`}
             activeOpacity={1}
-            onPress={() => setPreviewUri(url)}>
+            onPress={() => setPreviewUriIndex(index)}>
             <Picture source={{uri: url}} />
           </PictureBox>
         ))}
       </List>
       <PicturePreviewModal
-        uri={previewUri}
-        onClose={() => setPreviewUri(undefined)}
+        urls={pictures}
+        previewIndex={previewUriIndex}
+        onClose={() => setPreviewUriIndex(undefined)}
       />
     </>
   );
