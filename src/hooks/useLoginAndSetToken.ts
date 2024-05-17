@@ -15,7 +15,7 @@ import type {LazyQueryHookOptions} from '@apollo/client';
 const useLoginAndSetToken = (
   options?: LazyQueryHookOptions<LoginQuery, QueryLoginArgs>,
 ) => {
-  const showModal = useModal();
+  // const showModal = useModal();
 
   const [login] = useLogin(options);
   const [updateUser] = useUpdateUser();
@@ -37,12 +37,12 @@ const useLoginAndSetToken = (
       });
       return true;
     }
-    if (data?.login.error)
-      showModal({
-        title: '로그인에 실패했어요',
-        message: data.login.error,
-        buttons: [{text: '확인'}],
-      });
+    // if (data?.login.error)
+    //   showModal({
+    //     title: '로그인에 실패했어요',
+    //     message: data.login.error,
+    //     buttons: [{text: '확인'}],
+    //   });
     return false;
   };
 
