@@ -4,9 +4,10 @@ import useNewRoomListener from '@app/graphql/hooks/room/useNewRoomListener';
 import useUpdateNewMessageListener from '@app/graphql/hooks/message/useUpdateNewMessageListener';
 import {useModal} from '@app/contexts/modalContext';
 
-import styled, {useTheme} from 'styled-components/native';
+import styled from 'styled-components/native';
 import RoomItem from '@app/components/room/RoomItem';
 import Skeleton from '@app/components/common/Skeleton';
+import Loader from '@app/components/common/Loader';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 
 import {getFragmentData} from '@app/graphql/__generated__';
@@ -26,7 +27,6 @@ interface HomeScreenProps
   extends StackScreenProps<MainNavigatorParamList, MainNavigatorScreens.Home> {}
 
 const HomeScreen = ({navigation}: HomeScreenProps) => {
-  const theme = useTheme();
   const showModal = useModal();
 
   const [createRandomRoom, {loading}] = useCreateRandomRoom();
@@ -77,11 +77,7 @@ const HomeScreen = ({navigation}: HomeScreenProps) => {
   return (
     <Container>
       <CreateRoomButton onPress={createRandomRoomFn} disabled={loading}>
-        {loading ? (
-          <Loading size={30} color={theme.bgColor} />
-        ) : (
-          <Icon name="dice" size={30} color={theme.bgColor} />
-        )}
+        {loading ? <Loader size={30} /> : <StyledIcon name="dice" size={30} />}
         <CreateRoomText>랜덤 채팅방 생성</CreateRoomText>
       </CreateRoomButton>
       <List
@@ -130,7 +126,9 @@ const CreateRoomButton = styled.TouchableOpacity`
   border-radius: 999px;
 `;
 
-const Loading = styled.ActivityIndicator``;
+const StyledIcon = styled(Icon)`
+  color: ${({theme}) => theme.bgColor};
+`;
 
 const CreateRoomText = styled.Text`
   font-size: 16px;

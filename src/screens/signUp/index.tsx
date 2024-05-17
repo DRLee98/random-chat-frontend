@@ -44,7 +44,7 @@ const SignUpScreen = ({route, navigation}: SignUpScreenProps) => {
   const showModal = useModal();
 
   const login = useLoginAndSetToken();
-  const [createUser] = useCreateUser();
+  const [createUser, {loading}] = useCreateUser();
   const [randomNickname] = useRandomNickname();
 
   const {getProps, setFieldValue, values, setValues} = useForm<FormValues>();
@@ -140,8 +140,10 @@ const SignUpScreen = ({route, navigation}: SignUpScreenProps) => {
         {...getProps('nickname')}
       />
 
-      <RegistButton onPress={regist}>
-        <RegistText>*** 시작하기</RegistText>
+      <RegistButton onPress={regist} disabled={loading}>
+        <RegistText>
+          {loading ? '잠시만 기다려 주세요' : '랜덤채팅 시작하기'}
+        </RegistText>
       </RegistButton>
     </Container>
   );
@@ -150,7 +152,7 @@ const SignUpScreen = ({route, navigation}: SignUpScreenProps) => {
 const Container = styled.View`
   flex: 1;
   align-items: center;
-  gap: 10px;
+  gap: 15px;
 
   padding: 0 30px;
   padding-top: 35%;
@@ -179,13 +181,13 @@ const RegistButton = styled.TouchableOpacity`
   justify-content: center;
 
   width: 100%;
-  padding: 12px;
+  height: 50px;
   background-color: ${({theme}) => theme.primary.default};
   border-radius: 999px;
 `;
 
 const RegistText = styled.Text`
-  font-size: 18px;
+  font-size: 16px;
   font-weight: 700;
   color: ${({theme}) => theme.bgColor};
 `;

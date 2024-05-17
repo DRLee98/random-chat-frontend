@@ -15,6 +15,7 @@ import styled from 'styled-components/native';
 import Message from '@app/components/chat/Message';
 import Input from '@app/components/common/input/BorderInput';
 import ChatRoomTopModal from '@app/components/room/ChatRoomTopModal';
+import Loader from '@app/components/common/Loader';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 import {MainNavigatorScreens} from '@app/navigators';
@@ -60,7 +61,7 @@ const ChatRoomScreen = ({route, navigation}: ChatRoomScreenProps) => {
 
   const [value, setValue] = useState('');
 
-  const [sendMessage] = useSendMessage();
+  const [sendMessage, {loading}] = useSendMessage();
 
   const {updateMyRoom, sortMyRooms} = useUpdateMyRooms();
   const {updateMessages, appendMessage, appendSystemMessage} =
@@ -102,6 +103,7 @@ const ChatRoomScreen = ({route, navigation}: ChatRoomScreenProps) => {
 
   const sendMessageFn = async () => {
     if (!me || !value) return;
+    if (loading) return;
     const {data} = await sendMessage({
       variables: {
         input: {
@@ -221,8 +223,12 @@ const ChatRoomScreen = ({route, navigation}: ChatRoomScreenProps) => {
           onChange={e => setValue(e.nativeEvent.text)}
           returnKeyType="send"
           right={
-            <SendButton>
-              <SendIcon name="send" size={16} onPress={sendMessageFn} />
+            <SendButton disabled={loading}>
+              {loading ? (
+                <Loader size={16} />
+              ) : (
+                <SendIcon name="send" size={16} onPress={sendMessageFn} />
+              )}
             </SendButton>
           }
         />

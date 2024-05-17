@@ -10,10 +10,12 @@ import useNewCommentListener from '@app/graphql/hooks/comment/useNewCommentListe
 import {useModal} from '@app/contexts/modalContext';
 
 import styled from 'styled-components/native';
+
 import Btn from '../common/Button';
 import BorderInput from '../common/input/BorderInput';
 import ProfileImg from '../user/ProfileImg';
 import Timestamp from '../common/Timestamp';
+import Loader from '../common/Loader';
 
 import {COMMENT_BASE} from '@app/graphql/fragments/comment';
 
@@ -120,8 +122,7 @@ const CommentList = ({children, postId}: CommentListProps) => {
           onSubmitEditing={onCreaeteComment}
           right={
             <Button onPress={onCreaeteComment} disabled={loading}>
-              {/* <Loading /> */}
-              <ButtonText>작성</ButtonText>
+              {loading ? <Loader /> : <ButtonText>작성</ButtonText>}
             </Button>
           }
         />
@@ -216,7 +217,5 @@ const Text = styled.Text`
 const Separator = styled.View`
   height: 15px;
 `;
-
-const Loading = styled.ActivityIndicator``;
 
 export default CommentList;

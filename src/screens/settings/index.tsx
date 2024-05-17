@@ -249,7 +249,7 @@ const SettingsScreen = ({navigation}: SettingsScreenProps) => {
 const Container = styled.ScrollView`
   flex: 1;
 
-  padding: 0 20px;
+  padding: 20px;
 
   background-color: ${({theme}) => theme.gray600.default};
 `;
@@ -259,7 +259,7 @@ const MyProfile = styled.View`
   align-items: center;
   gap: 20px;
 
-  margin: 20px 0;
+  margin-bottom: 20px;
   padding: 10px;
   background-color: ${({theme}) => theme.bgColor};
   border-radius: 15px;

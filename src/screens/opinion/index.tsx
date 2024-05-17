@@ -35,7 +35,7 @@ interface OpinionScreenProps
 const OpinionScreen = ({navigation}: OpinionScreenProps) => {
   const showModal = useModal();
 
-  const [createOpinion] = useCreateOpinion();
+  const [createOpinion, {loading}] = useCreateOpinion();
   const {appendMyOpinion} = useUpdateMyOpinions();
 
   const opinionCategory: RadioData[] = [
@@ -63,6 +63,7 @@ const OpinionScreen = ({navigation}: OpinionScreenProps) => {
 
   const onCreateOpinion = async () => {
     if (!values.title || !values.content) return;
+    if (loading) return;
 
     const input: FormValues = {
       ...values,
@@ -123,8 +124,8 @@ const OpinionScreen = ({navigation}: OpinionScreenProps) => {
         <ButtonBox>
           <Button
             onPress={onCreateOpinion}
-            disabled={!values.title || !values.content}>
-            <ButtonText>작성하기</ButtonText>
+            disabled={!values.title || !values.content || loading}>
+            <ButtonText>{loading ? '작성 중...' : '작성하기'}</ButtonText>
           </Button>
         </ButtonBox>
       </Container>
@@ -170,7 +171,7 @@ const ButtonBox = styled.View`
 `;
 
 const Button = styled(Btn)`
-  padding: 20px 0;
+  height: 60px;
 
   border-radius: 5px;
 `;
