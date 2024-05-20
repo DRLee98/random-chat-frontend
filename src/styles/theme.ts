@@ -4,8 +4,8 @@ export const lightTheme: DefaultTheme = {
   bgColor: '#fff',
   fontColor: '#222',
   primary: {
-    default: '#fd7e45',
-    accessible: '#fd8643',
+    default: '#f27059',
+    accessible: '#f4845f',
   },
   red: {
     default: 'rgb(255,59,48)',
@@ -89,8 +89,8 @@ export const darkTheme: DefaultTheme = {
   bgColor: '#222',
   fontColor: '#fff',
   primary: {
-    default: '#fe604d',
-    accessible: '#fe694b',
+    default: '#f27059',
+    accessible: '#f4845f',
   },
   red: {
     default: 'rgb(255,69,58)',

@@ -131,11 +131,9 @@ const CommentList = ({children, postId}: CommentListProps) => {
   );
 };
 
-const Container = styled.View`
+const Container = styled.SafeAreaView`
   flex: 1;
-
-  padding: 20px 0px;
-
+  padding-bottom: 20px;
   background-color: ${({theme}) => theme.bgColor};
 `;
 

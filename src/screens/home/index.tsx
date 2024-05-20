@@ -76,10 +76,16 @@ const HomeScreen = ({navigation}: HomeScreenProps) => {
 
   return (
     <Container>
-      <CreateRoomButton onPress={createRandomRoomFn} disabled={loading}>
-        {loading ? <Loader size={30} /> : <StyledIcon name="dice" size={30} />}
-        <CreateRoomText>랜덤 채팅방 생성</CreateRoomText>
-      </CreateRoomButton>
+      {rooms.length > 0 && (
+        <CreateRoomButton onPress={createRandomRoomFn} disabled={loading}>
+          {loading ? (
+            <Loader size={30} />
+          ) : (
+            <StyledIcon name="dice" size={30} />
+          )}
+          <CreateRoomText>랜덤 채팅방 생성</CreateRoomText>
+        </CreateRoomButton>
+      )}
       <List
         data={rooms}
         renderItem={({item}) => <RoomItem userRoom={item} />}
@@ -93,6 +99,18 @@ const HomeScreen = ({navigation}: HomeScreenProps) => {
             )}
             <Footer />
           </>
+        }
+        ListEmptyComponent={
+          <EmptyBox>
+            <CreateRoomButton onPress={createRandomRoomFn} disabled={loading}>
+              {loading ? (
+                <Loader size={50} />
+              ) : (
+                <StyledIcon name="dice" size={50} />
+              )}
+            </CreateRoomButton>
+            <EmptyText>{`위의 버튼을 눌러\n랜덤으로 채팅방을 생성해\n대화를 시작해보세요!`}</EmptyText>
+          </EmptyBox>
         }
         onEndReached={fetchMore}
         onEndReachedThreshold={0.5}
@@ -120,7 +138,7 @@ const CreateRoomButton = styled.TouchableOpacity`
 
   margin: 0px 20px;
   margin-bottom: 10px;
-  padding: 15px;
+  padding: 15px 20px;
 
   background-color: ${({theme}) => theme.primary.default};
   border-radius: 999px;
@@ -138,6 +156,21 @@ const CreateRoomText = styled.Text`
 
 const SkeletonContainer = styled.View`
   padding: 0 15px;
+`;
+
+const EmptyBox = styled.View`
+  align-items: center;
+  justify-content: center;
+
+  width: 100%;
+  aspect-ratio: 1;
+`;
+
+const EmptyText = styled.Text`
+  text-align: center;
+  font-size: 16px;
+  line-height: 25px;
+  color: ${({theme}) => theme.fontColor};
 `;
 
 export default HomeScreen;
