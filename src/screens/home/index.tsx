@@ -26,7 +26,7 @@ interface HomeScreenProps
   extends StackScreenProps<MainNavigatorParamList, MainNavigatorScreens.Home> {}
 
 const HomeScreen = (props: HomeScreenProps) => {
-  const {rooms, fetchMore, hasNext} = useMyRooms();
+  const {rooms, fetchMore, hasNext, loading} = useMyRooms();
   const {updateMyRoom, appendMyRoom, sortMyRooms} = useUpdateMyRooms();
 
   const [simpleButton, setSimpleButton] = useState(false);
@@ -49,6 +49,7 @@ const HomeScreen = (props: HomeScreenProps) => {
     onData: ({data}) => updateNewMessage(data.data?.updateNewMessageInUserRoom),
   });
 
+  if (loading) return <Container />;
   return (
     <Container>
       {rooms.length > 0 && (

@@ -1,6 +1,4 @@
-import {TouchableOpacity} from 'react-native';
 import {TransitionPresets} from '@react-navigation/stack';
-import Icon from 'react-native-vector-icons/Ionicons';
 
 import type {StackNavigationOptions} from '@react-navigation/stack';
 import type {DefaultTheme} from 'styled-components/native';

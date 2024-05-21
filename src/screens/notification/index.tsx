@@ -6,15 +6,13 @@ import useReadAllNotifications from '@app/graphql/hooks/notification/useReadAllN
 import useDeleteReadNotifications from '@app/graphql/hooks/notification/useDeleteReadNotifications';
 import useReadNotification from '@app/graphql/hooks/notification/useReadNotification';
 import useNewNotificationListener from '@app/graphql/hooks/notification/useNewNotificationListener';
-import {useTheme} from 'styled-components/native';
 
 import styled from 'styled-components/native';
+import NotificationItem from '@app/components/notification/NotificationItem';
 
-import Icon from 'react-native-vector-icons/Entypo';
-
-import {getDateTimeString} from '@app/utils/date';
-
+import {StackActions} from '@react-navigation/native';
 import {MainNavigatorScreens} from '@app/navigators';
+import {SettingsNavigatorScreens} from '@app/navigators/settings';
 import {NotificationType} from '@app/graphql/__generated__/graphql';
 
 import {NOTIFICATION_BASE} from '@app/graphql/fragments/notification';
@@ -32,8 +30,6 @@ interface NotificationScreenProps
   > {}
 
 const NotificationScreen = ({navigation}: NotificationScreenProps) => {
-  const theme = useTheme();
-
   const {notifications, fetchMore} = useViewNotifications();
   const {
     appendNotification,
@@ -50,21 +46,6 @@ const NotificationScreen = ({navigation}: NotificationScreenProps) => {
   const [read] = useReadNotification();
   const [readAll] = useReadAllNotifications();
   const [deleteRead] = useDeleteReadNotifications();
-
-  const getIconName = (type: NotificationType) => {
-    switch (type) {
-      case NotificationType.System:
-        return 'cog';
-      case NotificationType.Event:
-        return 'megaphone';
-      case NotificationType.Room:
-        return 'mail';
-      case NotificationType.Message:
-        return 'message';
-      default:
-        return '';
-    }
-  };
 
   const readNotificationFn = async (id: string) => {
     const {data} = await read({variables: {input: {id}}});
@@ -90,7 +71,6 @@ const NotificationScreen = ({navigation}: NotificationScreenProps) => {
   };
 
   const newNotificationFn = (data?: FragmentType<typeof NOTIFICATION_BASE>) => {
-    console.log('newNotificationFn', data);
     if (!data) return;
     updateIncreaseUnReadCount(1);
     appendNotification(data);
@@ -107,6 +87,15 @@ const NotificationScreen = ({navigation}: NotificationScreenProps) => {
         roomId: item.data.roomId,
         newMessageCount: 1, // 메시지를 refetch 하기 위해 1로 설정
       });
+      return;
+    }
+
+    if (item.type === NotificationType.System && item.data?.opinionId) {
+      const action = StackActions.push(MainNavigatorScreens.SettingsStack, {
+        screen: SettingsNavigatorScreens.OpinionDetail,
+        params: {id: item.data.opinionId},
+      });
+      navigation.dispatch(action);
       return;
     }
   };
@@ -128,23 +117,11 @@ const NotificationScreen = ({navigation}: NotificationScreenProps) => {
       <List
         data={notifications}
         renderItem={({item, index}) => (
-          <ListItem
-            even={(index + 1) % 2 === 0}
-            read={item.read}
-            onPress={() => onPressNotification(item)}>
-            {getIconName(item.type) && (
-              <Icon
-                name={getIconName(item.type)}
-                size={35}
-                color={item.read ? theme.fontColor : theme.primary.default}
-              />
-            )}
-            <ContentBox>
-              <Title>{item.title}</Title>
-              <Message>{item.message}</Message>
-              <CreatedAt>{getDateTimeString(item.createdAt)}</CreatedAt>
-            </ContentBox>
-          </ListItem>
+          <NotificationItem
+            grayBg={(index + 1) % 2 === 0}
+            notification={item}
+            onPressNotification={onPressNotification}
+          />
         )}
         ListEmptyComponent={
           <EmptyBox>
@@ -185,43 +162,6 @@ interface ListProps extends FlatListProps<NotificationBaseFragment> {}
 
 const List = styled.FlatList<ListProps>`
   flex: 1;
-`;
-
-interface ListItemProps {
-  even: boolean;
-  read: boolean;
-}
-
-const ListItem = styled.TouchableOpacity<ListItemProps>`
-  flex-direction: row;
-  align-items: flex-start;
-  gap: 10px;
-
-  padding: 12px 20px;
-
-  background-color: ${({even, theme}) =>
-    even ? theme.gray700.default : theme.bgColor};
-  opacity: ${({read}) => (!read ? 1 : 0.5)};
-`;
-
-const ContentBox = styled.View`
-  gap: 4px;
-`;
-
-const Title = styled.Text`
-  font-size: 15px;
-  font-weight: 600;
-  color: ${({theme}) => theme.fontColor};
-`;
-
-const Message = styled.Text`
-  font-size: 13px;
-  color: ${({theme}) => theme.fontColor};
-`;
-
-const CreatedAt = styled.Text`
-  font-size: 12px;
-  color: ${({theme}) => theme.gray200.default};
 `;
 
 const EmptyBox = styled.View`

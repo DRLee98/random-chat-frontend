@@ -59,6 +59,7 @@ export type CreateCommentOutput = {
 export type CreateNoticeInput = {
   category: NoticeCategory;
   content: Scalars['String']['input'];
+  password: Scalars['String']['input'];
   pinned?: InputMaybe<Scalars['Boolean']['input']>;
   title: Scalars['String']['input'];
 };
@@ -146,6 +147,7 @@ export type DeleteCommentOutput = {
 
 export type DeleteNoticeInput = {
   id: Scalars['ID']['input'];
+  password: Scalars['String']['input'];
 };
 
 export type DeleteNoticeOutput = {
@@ -222,6 +224,7 @@ export type EditNoticeInput = {
   category?: InputMaybe<NoticeCategory>;
   content?: InputMaybe<Scalars['String']['input']>;
   id: Scalars['ID']['input'];
+  password: Scalars['String']['input'];
   pinned?: InputMaybe<Scalars['Boolean']['input']>;
   title?: InputMaybe<Scalars['String']['input']>;
 };
@@ -374,6 +377,7 @@ export type Mutation = {
   readNotification: ReadNotificationOutput;
   sendMessage: SendMessageOutput;
   toggleBlockUser: ToggleBlockUserOutput;
+  updateOpinionStatus: UpdateOpinionStatusOutput;
   updateRoom: UpdateRoomOutput;
   updateUser: UpdateUserOutput;
 };
@@ -471,6 +475,11 @@ export type MutationSendMessageArgs = {
 
 export type MutationToggleBlockUserArgs = {
   input: ToggleBlockUserInput;
+};
+
+
+export type MutationUpdateOpinionStatusArgs = {
+  input: UpdateOpinionStatusInput;
 };
 
 
@@ -591,6 +600,7 @@ export type NotificationObjectType = {
 export enum NotificationType {
   Event = 'EVENT',
   Message = 'MESSAGE',
+  Opinion = 'OPINION',
   Room = 'ROOM',
   System = 'SYSTEM'
 }
@@ -892,6 +902,18 @@ export type UpdateNewMessageInUserRoom = {
   newMessage: Scalars['Float']['output'];
   roomId: Scalars['ID']['output'];
   userId: Scalars['ID']['output'];
+};
+
+export type UpdateOpinionStatusInput = {
+  id: Scalars['ID']['input'];
+  password: Scalars['String']['input'];
+  status: OpinionStatus;
+};
+
+export type UpdateOpinionStatusOutput = {
+  __typename?: 'UpdateOpinionStatusOutput';
+  error?: Maybe<Scalars['String']['output']>;
+  ok: Scalars['Boolean']['output'];
 };
 
 export type UpdateRoomInput = {
