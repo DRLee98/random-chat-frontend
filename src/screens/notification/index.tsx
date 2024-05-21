@@ -4,16 +4,12 @@ import useViewNotifications, {
 import {useUpdateUnReadNotificationCount} from '@app/graphql/hooks/notification/useUnReadNotificationCount';
 import useReadAllNotifications from '@app/graphql/hooks/notification/useReadAllNotifications';
 import useDeleteReadNotifications from '@app/graphql/hooks/notification/useDeleteReadNotifications';
-import useReadNotification from '@app/graphql/hooks/notification/useReadNotification';
 import useNewNotificationListener from '@app/graphql/hooks/notification/useNewNotificationListener';
 
 import styled from 'styled-components/native';
 import NotificationItem from '@app/components/notification/NotificationItem';
 
-import {StackActions} from '@react-navigation/native';
 import {MainNavigatorScreens} from '@app/navigators';
-import {SettingsNavigatorScreens} from '@app/navigators/settings';
-import {NotificationType} from '@app/graphql/__generated__/graphql';
 
 import {NOTIFICATION_BASE} from '@app/graphql/fragments/notification';
 
@@ -29,31 +25,15 @@ interface NotificationScreenProps
     MainNavigatorScreens.Notification
   > {}
 
-const NotificationScreen = ({navigation}: NotificationScreenProps) => {
+const NotificationScreen = (props: NotificationScreenProps) => {
   const {notifications, fetchMore} = useViewNotifications();
-  const {
-    appendNotification,
-    readNotification,
-    readAllNotifications,
-    removeReadNotifications,
-  } = useUpdateViewNotifications();
-  const {
-    updateUnReadCount,
-    updateIncreaseUnReadCount,
-    updateDecreaseUnReadCount,
-  } = useUpdateUnReadNotificationCount();
+  const {appendNotification, readAllNotifications, removeReadNotifications} =
+    useUpdateViewNotifications();
+  const {updateUnReadCount, updateIncreaseUnReadCount} =
+    useUpdateUnReadNotificationCount();
 
-  const [read] = useReadNotification();
   const [readAll] = useReadAllNotifications();
   const [deleteRead] = useDeleteReadNotifications();
-
-  const readNotificationFn = async (id: string) => {
-    const {data} = await read({variables: {input: {id}}});
-    if (data?.readNotification.ok) {
-      readNotification(id);
-      updateDecreaseUnReadCount(1);
-    }
-  };
 
   const readAllNotificationsFn = async () => {
     const {data} = await readAll();
@@ -76,30 +56,6 @@ const NotificationScreen = ({navigation}: NotificationScreenProps) => {
     appendNotification(data);
   };
 
-  const onPressNotification = (item: NotificationBaseFragment) => {
-    readNotificationFn(item.id);
-    if (
-      (item.type === NotificationType.Room ||
-        item.type === NotificationType.Message) &&
-      item.data?.roomId
-    ) {
-      navigation.navigate(MainNavigatorScreens.ChatRoom, {
-        roomId: item.data.roomId,
-        newMessageCount: 1, // 메시지를 refetch 하기 위해 1로 설정
-      });
-      return;
-    }
-
-    if (item.type === NotificationType.System && item.data?.opinionId) {
-      const action = StackActions.push(MainNavigatorScreens.SettingsStack, {
-        screen: SettingsNavigatorScreens.OpinionDetail,
-        params: {id: item.data.opinionId},
-      });
-      navigation.dispatch(action);
-      return;
-    }
-  };
-
   useNewNotificationListener({
     onData: ({data}) => newNotificationFn(data.data?.newNotification),
   });
@@ -120,7 +76,6 @@ const NotificationScreen = ({navigation}: NotificationScreenProps) => {
           <NotificationItem
             grayBg={(index + 1) % 2 === 0}
             notification={item}
-            onPressNotification={onPressNotification}
           />
         )}
         ListEmptyComponent={

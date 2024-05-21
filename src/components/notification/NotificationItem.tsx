@@ -1,5 +1,8 @@
+import {useNavigation} from '@react-navigation/native';
 import {useUpdateViewNotifications} from '@app/graphql/hooks/notification/useViewNotifications';
+import {useUpdateUnReadNotificationCount} from '@app/graphql/hooks/notification/useUnReadNotificationCount';
 import useDeleteNotification from '@app/graphql/hooks/notification/useDeleteNotification';
+import useReadNotification from '@app/graphql/hooks/notification/useReadNotification';
 
 import styled from 'styled-components/native';
 
@@ -8,22 +11,27 @@ import SwipeableListItem from '../common/SwipeableListItem';
 
 import {getDateTimeString} from '@app/utils/date';
 
+import {StackActions} from '@react-navigation/native';
+import {MainNavigatorScreens} from '@app/navigators';
+import {SettingsNavigatorScreens} from '@app/navigators/settings';
 import {NotificationType} from '@app/graphql/__generated__/graphql';
 
 import type {NotificationBaseFragment} from '@app/graphql/__generated__/graphql';
+import type {MainNavigatorParamList} from '@app/navigators';
+import type {NavigationProp} from '@react-navigation/native';
 
 interface NotificationItemProps {
   grayBg: boolean;
   notification: NotificationBaseFragment;
-  onPressNotification: (notification: NotificationBaseFragment) => void;
 }
 
-const NotificationItem = ({
-  grayBg,
-  notification,
-  onPressNotification,
-}: NotificationItemProps) => {
-  const {removeNotification} = useUpdateViewNotifications();
+const NotificationItem = ({grayBg, notification}: NotificationItemProps) => {
+  const navigation = useNavigation<NavigationProp<MainNavigatorParamList>>();
+
+  const {readNotification, removeNotification} = useUpdateViewNotifications();
+  const {updateDecreaseUnReadCount} = useUpdateUnReadNotificationCount();
+
+  const [read] = useReadNotification();
   const [deleteNotification] = useDeleteNotification();
 
   const deleteNotificationFn = async () => {
@@ -34,6 +42,41 @@ const NotificationItem = ({
     });
     if (data?.deleteNotification.ok) {
       removeNotification(notification.id);
+    }
+  };
+
+  const readNotificationFn = async (id: string) => {
+    const {data} = await read({variables: {input: {id}}});
+    if (data?.readNotification.ok) {
+      readNotification(id);
+      updateDecreaseUnReadCount(1);
+    }
+  };
+
+  const onReadAndGo = () => {
+    readNotificationFn(notification.id);
+    if (
+      (notification.type === NotificationType.Room ||
+        notification.type === NotificationType.Message) &&
+      notification.data?.roomId
+    ) {
+      navigation.navigate(MainNavigatorScreens.ChatRoom, {
+        roomId: notification.data.roomId,
+        newMessageCount: 1, // 메시지를 refetch 하기 위해 1로 설정
+      });
+      return;
+    }
+
+    if (
+      notification.type === NotificationType.Opinion &&
+      notification.data?.opinionId
+    ) {
+      const action = StackActions.push(MainNavigatorScreens.SettingsStack, {
+        screen: SettingsNavigatorScreens.OpinionDetail,
+        params: {id: notification.data.opinionId},
+      });
+      navigation.dispatch(action);
+      return;
     }
   };
 
@@ -65,7 +108,7 @@ const NotificationItem = ({
         <Container
           grayBg={grayBg}
           read={notification.read}
-          onPress={() => onPressNotification(notification)}>
+          onPress={onReadAndGo}>
           {getIconName(notification.type) && (
             <StyledIcon
               read={notification.read}
