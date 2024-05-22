@@ -15,6 +15,7 @@ import {SettingsNavigatorScreens} from '@app/navigators/settings';
 import type {StackScreenProps} from '@react-navigation/stack';
 import type {SettingsNavigatorParamList} from '@app/navigators/settings';
 import type {BlockUserFragment} from '@app/graphql/__generated__/graphql';
+import type {FlatListProps} from 'react-native';
 
 interface BlockUsersScreenProps
   extends StackScreenProps<
@@ -35,9 +36,10 @@ const BlockUsersScreen = ({}: BlockUsersScreenProps) => {
   }, [me]);
 
   return (
-    <Container>
-      {blockUsers.map(item => (
-        <ListItem key={`block-user-${item.id}`}>
+    <Container
+      data={blockUsers}
+      renderItem={({item}) => (
+        <ListItem>
           <UserBox>
             <ProfileImg id={item.id} size={45} url={item.profileUrl} push />
             <UserInfo>
@@ -51,12 +53,18 @@ const BlockUsersScreen = ({}: BlockUsersScreenProps) => {
           </UserBox>
           <ToggleUserBlockButton userId={item.id} nickname={item.nickname} />
         </ListItem>
-      ))}
-    </Container>
+      )}
+      ListEmptyComponent={
+        <EmptyBox>
+          <EmptyText>차단중인 유저가 없습니다</EmptyText>
+        </EmptyBox>
+      }
+      keyExtractor={item => `block-user-${item.id}`}
+    />
   );
 };
 
-const Container = styled.ScrollView`
+const Container = styled.FlatList<FlatListProps<BlockUserFragment>>`
   flex: 1;
   padding: 0 20px;
   padding-top: 20px;
@@ -90,6 +98,19 @@ const Bio = styled.Text`
   width: 85%;
   font-size: 12px;
   color: ${({theme}) => theme.gray200.default};
+`;
+
+const EmptyBox = styled.View`
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+
+  height: 400px;
+`;
+
+const EmptyText = styled.Text`
+  font-size: 16px;
+  color: ${({theme}) => theme.gray100.default};
 `;
 
 export default BlockUsersScreen;

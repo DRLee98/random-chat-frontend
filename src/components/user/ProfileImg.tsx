@@ -1,9 +1,10 @@
-import {useMemo} from 'react';
+import {useMemo, useState} from 'react';
 import {useNavigation} from '@react-navigation/native';
 import useMe from '@app/graphql/hooks/user/useMe';
 import {useTheme} from 'styled-components/native';
 
 import styled from 'styled-components/native';
+import PicturePreviewModal from '../common/PicturePreivewModal';
 
 import {shuffleList} from '@app/utils/common';
 import {areColorsSimilar} from '@app/utils/color';
@@ -27,8 +28,14 @@ const ProfileImg = ({id, url, size = 60, push = false}: ProfileImgProps) => {
 
   const {me} = useMe();
 
+  const [previewModalShow, setPreviewModalShow] = useState(false);
+
   const onPress = () => {
-    if (!id || !push) return;
+    if (!id) return;
+    if (!push) {
+      if (url) setPreviewModalShow(true);
+      return;
+    }
     if (me?.id === id) return navigation.navigate(MainNavigatorScreens.Me);
     navigation.navigate(MainNavigatorScreens.User, {userId: id});
   };
@@ -62,14 +69,25 @@ const ProfileImg = ({id, url, size = 60, push = false}: ProfileImgProps) => {
     return color;
   }, [profileColors, id]);
 
-  if (!push)
+  if (!push && !url)
     return (
-      <Image url={url} size={size} bgColor={bgColor} textColor={textColor} />
+      <>
+        <Image url={url} size={size} bgColor={bgColor} textColor={textColor} />
+      </>
     );
   return (
-    <Container onPress={onPress}>
-      <Image url={url} size={size} bgColor={bgColor} textColor={textColor} />
-    </Container>
+    <>
+      <Container onPress={onPress}>
+        <Image url={url} size={size} bgColor={bgColor} textColor={textColor} />
+      </Container>
+      {url && (
+        <PicturePreviewModal
+          urls={[url]}
+          previewIndex={previewModalShow ? 0 : undefined}
+          onClose={() => setPreviewModalShow(false)}
+        />
+      )}
+    </>
   );
 };
 
