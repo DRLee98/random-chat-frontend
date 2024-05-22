@@ -78,9 +78,9 @@ const CreateRoomButton = ({simple, size}: CreateRoomButtonProps) => {
   return (
     <Button onPress={createRandomRoomFn}>
       {loading ? (
-        <Loader size={size ?? 25} />
+        <Loader color="#fff" size={size ?? 25} />
       ) : (
-        <StyledIcon name="dice" size={size ?? 25} />
+        <Icon color="#fff" name="dice" size={size ?? 25} />
       )}
       <AnimatedBox style={style}>
         <Text onLayout={onLayout} numberOfLines={1} ellipsizeMode="clip">
@@ -102,10 +102,6 @@ const Button = styled.TouchableOpacity`
   border-radius: 999px;
 `;
 
-const StyledIcon = styled(Icon)`
-  color: ${({theme}) => theme.bgColor};
-`;
-
 const AnimatedBox = styled(Animated.View)`
   position: relative;
 
@@ -123,7 +119,7 @@ const Text = styled.Text`
 
   font-size: 16px;
   font-weight: bold;
-  color: ${({theme}) => theme.bgColor};
+  color: #fff;
 `;
 
 export default CreateRoomButton;
