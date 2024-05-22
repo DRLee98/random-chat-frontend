@@ -73,7 +73,16 @@ const useMyOpinions = (
     });
   };
 
-  return {...result, opinions, fetchMore};
+  const refetch = async () =>
+    result.refetch({input: {...input, take: opinions.length, skip: 0}});
+
+  return {
+    ...result,
+    opinions,
+    fetchMore,
+    refetch,
+    hasNext: data?.myOpinions.hasNext ?? false,
+  };
 };
 
 export const useUpdateMyOpinions = (input?: MyOpinionsInput) => {

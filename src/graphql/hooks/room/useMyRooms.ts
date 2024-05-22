@@ -63,7 +63,16 @@ const useMyRooms = (
     });
   };
 
-  return {...result, rooms, fetchMore, hasNext: data?.myRooms.hasNext ?? false};
+  const refetch = async () =>
+    result.refetch({input: {...input, take: rooms.length, skip: 0}});
+
+  return {
+    ...result,
+    rooms,
+    fetchMore,
+    refetch,
+    hasNext: data?.myRooms.hasNext ?? false,
+  };
 };
 
 export const useUpdateMyRooms = (input?: MyRoomsInput) => {

@@ -19,7 +19,7 @@ interface MyOpinionScreenProps
   > {}
 
 const MyOpinionScreen = ({navigation}: MyOpinionScreenProps) => {
-  const {opinions, fetchMore} = useMyOpinions();
+  const {opinions, fetchMore, refetch, networkStatus} = useMyOpinions();
 
   return (
     <Container>
@@ -51,6 +51,8 @@ const MyOpinionScreen = ({navigation}: MyOpinionScreenProps) => {
         keyExtractor={item => item.id}
         onEndReached={fetchMore}
         onEndReachedThreshold={0.5}
+        refreshing={networkStatus === 4}
+        onRefresh={refetch}
       />
     </Container>
   );
