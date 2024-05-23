@@ -2,7 +2,7 @@ import {useEffect} from 'react';
 import useLoginAndSetToken from '@app/hooks/useLoginAndSetToken';
 
 import styled from 'styled-components/native';
-import Icon from 'react-native-vector-icons/FontAwesome5';
+import BubbleDiceIcon from '@app/components/common/BubbleDiceIcon';
 
 import {getSociald, removeSociald} from '@app/utils/encStorage';
 
@@ -38,7 +38,7 @@ const SplashScreen = ({navigation}: SplashScreenProps) => {
 
   return (
     <Container>
-      <StyledIcon name="dice" size={80} />
+      <BubbleDiceIcon />
     </Container>
   );
 };
@@ -49,10 +49,6 @@ const Container = styled.View`
   justify-content: center;
 
   background-color: ${({theme}) => theme.bgColor};
-`;
-
-const StyledIcon = styled(Icon)`
-  color: ${({theme}) => theme.primary.default};
 `;
 
 export default SplashScreen;

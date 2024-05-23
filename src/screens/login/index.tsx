@@ -1,3 +1,4 @@
+import useThemeMode from '@app/hooks/useThemeMode';
 import useLoginAndSetToken from '@app/hooks/useLoginAndSetToken';
 
 import {kakaoLogin} from '@app/apis/kakao';
@@ -5,11 +6,14 @@ import {naverLogin} from '@app/apis/naver';
 
 import styled from 'styled-components/native';
 import SocialLoginButton from '@app/components/login/SocialLoginButton';
-import Icon from 'react-native-vector-icons/FontAwesome5';
+import BubbleDiceIcon from '@app/components/common/BubbleDiceIcon';
 
 import naverLogo from '@app/assets/images/naver_logo.png';
 import kakaoLogo from '@app/assets/images/kakao_logo.png';
+import appleBlackLogo from '@app/assets/images/apple_black.png';
+import appleWhiteLogo from '@app/assets/images/apple_white.png';
 
+import {Platform} from 'react-native';
 import {MainNavigatorScreens} from '@app/navigators';
 
 import {setSociald} from '@app/utils/encStorage';
@@ -27,6 +31,7 @@ interface LoginScreenProps
   > {}
 
 const LoginScreen = ({navigation}: LoginScreenProps) => {
+  const theme = useThemeMode();
   const login = useLoginAndSetToken();
 
   const naverLoginFn = async () => {
@@ -67,7 +72,7 @@ const LoginScreen = ({navigation}: LoginScreenProps) => {
   return (
     <Container>
       <IconBox>
-        <StyledIcon name="dice" size={80} />
+        <BubbleDiceIcon />
       </IconBox>
       <ButtonBox>
         <SocialLoginButton
@@ -84,6 +89,15 @@ const LoginScreen = ({navigation}: LoginScreenProps) => {
           bgColor="#ffeb01"
           onPress={kakaoLoginFn}
         />
+        {Platform.OS === 'ios' && (
+          <SocialLoginButton
+            image={theme === 'dark' ? appleWhiteLogo : appleBlackLogo}
+            text="애플 로그인"
+            textColor={theme === 'dark' ? '#000000' : '#FFFFFF'}
+            bgColor={theme === 'dark' ? '#FFFFFF' : '#000000'}
+            onPress={naverLoginFn}
+          />
+        )}
       </ButtonBox>
     </Container>
   );
@@ -99,10 +113,6 @@ const IconBox = styled.View`
   flex: 3;
   align-items: center;
   justify-content: center;
-`;
-
-const StyledIcon = styled(Icon)`
-  color: ${({theme}) => theme.primary.default};
 `;
 
 const ButtonBox = styled.View`

@@ -1,4 +1,4 @@
-import {TouchableOpacity, Text, Image, View} from 'react-native';
+import styled from 'styled-components/native';
 
 import type {ImageSourcePropType} from 'react-native';
 
@@ -18,34 +18,36 @@ const SocialLoginButton = ({
   onPress,
 }: SocialLoginButtonProps) => {
   return (
-    <TouchableOpacity onPress={onPress}>
-      <View
-        style={{
-          flexDirection: 'row',
-          alignItems: 'center',
-          width: 250,
-          backgroundColor: bgColor,
-          paddingHorizontal: 22,
-          paddingVertical: 10,
-          borderRadius: 999,
-        }}>
-        <Image
-          source={image}
-          style={{width: 30, height: 30}}
-          resizeMode="contain"
-        />
-        <Text
-          style={{
-            flex: 1,
-            textAlign: 'center',
-            fontWeight: '600',
-            color: textColor,
-          }}>
-          {text}
-        </Text>
-      </View>
-    </TouchableOpacity>
+    <Container bgColor={bgColor} onPress={onPress}>
+      <Image source={image} resizeMode="cover" />
+      <Text textColor={textColor}>{text}</Text>
+    </Container>
   );
 };
+
+const Container = styled.TouchableOpacity<
+  Pick<SocialLoginButtonProps, 'bgColor'>
+>`
+  flex-direction: row;
+  align-items: center;
+
+  width: 250px;
+  padding: 10px 22px;
+
+  background-color: ${({bgColor}) => bgColor};
+  border-radius: 999px;
+`;
+
+const Image = styled.Image`
+  width: 30px;
+  height: 30px;
+`;
+
+const Text = styled.Text<Pick<SocialLoginButtonProps, 'textColor'>>`
+  flex: 1;
+  text-align: center;
+  font-weight: 600;
+  color: ${({textColor}) => textColor};
+`;
 
 export default SocialLoginButton;
