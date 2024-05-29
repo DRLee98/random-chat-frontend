@@ -118,9 +118,19 @@ const MeScreen = ({navigation}: MeScreenProps) => {
             url={values?.profile?.uri ?? me.profileUrl}
           />
           {edit && (
-            <ProfileEditButtonBox>
-              <PictureSelectButton onChange={onProfileChange} />
-            </ProfileEditButtonBox>
+            <>
+              <PictureDeleteButton
+                onPress={() => setFieldValue('profile', undefined)}>
+                <Icon
+                  name="close-circle"
+                  size={25}
+                  color={theme.primary.default}
+                />
+              </PictureDeleteButton>
+              <ProfileEditButtonBox>
+                <PictureSelectButton onChange={onProfileChange} />
+              </ProfileEditButtonBox>
+            </>
           )}
         </ProfileImgBox>
         <NicknameBox>
@@ -183,6 +193,12 @@ const Container = styled.View`
 
 const ProfileImgBox = styled.View`
   position: relative;
+`;
+
+const PictureDeleteButton = styled.TouchableOpacity`
+  position: absolute;
+  right: 0px;
+  top: 0px;
 `;
 
 const ProfileEditButtonBox = styled.View`

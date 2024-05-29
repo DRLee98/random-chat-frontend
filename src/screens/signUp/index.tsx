@@ -126,6 +126,10 @@ const SignUpScreen = ({route, navigation}: SignUpScreenProps) => {
     <Container>
       <ProfileImgBox>
         <ProfileImg url={values.profile?.uri} size={120} />
+        <PictureDeleteButton
+          onPress={() => setFieldValue('profile', undefined)}>
+          <Icon name="close-circle" size={25} color={theme.primary.default} />
+        </PictureDeleteButton>
         <PictureSelectButtonBox>
           <PictureSelectButton onChange={onProfileChange} />
         </PictureSelectButtonBox>
@@ -162,6 +166,12 @@ const Container = styled.View`
 
 const ProfileImgBox = styled.View`
   position: relative;
+`;
+
+const PictureDeleteButton = styled.TouchableOpacity`
+  position: absolute;
+  right: 0px;
+  top: 0px;
 `;
 
 const PictureSelectButtonBox = styled.View`
