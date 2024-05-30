@@ -162,7 +162,14 @@ const SettingsScreen = ({navigation}: SettingsScreenProps) => {
     <Container>
       {me && (
         <MyProfile>
-          <ProfileImg id={me.id} url={me?.profileUrl} size={80} push />
+          <ProfileImg
+            id={me.id}
+            url={me?.profileUrl}
+            bgColor={me.profileBgColor}
+            textColor={me.profileTextColor}
+            size={80}
+            push
+          />
           <MyProfileInfo>
             <NicknameBox>
               <Nickname ellipsizeMode="tail" numberOfLines={1}>

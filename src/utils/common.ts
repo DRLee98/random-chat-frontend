@@ -9,3 +9,5 @@ export const shuffleList = (list: string[], num: number) => {
 
   return newList;
 };
+
+export const getRandomNumber = (max: number) => Math.floor(Math.random() * max);

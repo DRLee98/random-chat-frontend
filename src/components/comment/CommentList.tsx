@@ -94,6 +94,8 @@ const CommentList = ({children, postId}: CommentListProps) => {
             <ProfileImg
               id={item.user.id}
               url={item.user.profileUrl}
+              bgColor={item.user.profileBgColor}
+              textColor={item.user.profileTextColor}
               size={40}
               push
             />

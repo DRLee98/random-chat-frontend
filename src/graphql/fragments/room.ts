@@ -29,6 +29,8 @@ export const MY_ROOM_BASE = graphql(`
       id
       nickname
       profileUrl
+      profileBgColor
+      profileTextColor
     }
     updatedAt
   }

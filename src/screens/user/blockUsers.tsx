@@ -41,7 +41,14 @@ const BlockUsersScreen = ({}: BlockUsersScreenProps) => {
       renderItem={({item}) => (
         <ListItem>
           <UserBox>
-            <ProfileImg id={item.id} size={45} url={item.profileUrl} push />
+            <ProfileImg
+              id={item.id}
+              url={item.profileUrl}
+              bgColor={item.profileBgColor}
+              textColor={item.profileTextColor}
+              size={45}
+              push
+            />
             <UserInfo>
               <Nickname ellipsizeMode="tail" numberOfLines={1}>
                 {item.nickname}

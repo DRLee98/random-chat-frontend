@@ -33,8 +33,10 @@ const UserScreen = ({route, navigation}: UserScreenProps) => {
       <Container>
         <ProfileImg
           id={data.userProfile.user.id}
-          size={120}
           url={data.userProfile.user.profileUrl}
+          bgColor={data.userProfile.user.profileBgColor}
+          textColor={data.userProfile.user.profileTextColor}
+          size={120}
         />
         <NicknameBox>
           <Nickname>{data.userProfile.user.nickname}</Nickname>

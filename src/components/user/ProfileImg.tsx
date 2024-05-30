@@ -20,9 +20,18 @@ interface ProfileImgProps {
   url?: string | null;
   size?: number;
   push?: boolean;
+  bgColor: string;
+  textColor: string;
 }
 
-const ProfileImg = ({id, url, size = 60, push = false}: ProfileImgProps) => {
+const ProfileImg = ({
+  id,
+  url,
+  size = 60,
+  push = false,
+  bgColor,
+  textColor,
+}: ProfileImgProps) => {
   const theme = useTheme();
   const navigation = useNavigation<NavigationProp<MainNavigatorParamList>>();
 
@@ -39,35 +48,6 @@ const ProfileImg = ({id, url, size = 60, push = false}: ProfileImgProps) => {
     if (me?.id === id) return navigation.navigate(MainNavigatorScreens.Me);
     navigation.navigate(MainNavigatorScreens.User, {userId: id});
   };
-
-  const getColor = (shuffleNumId: number, shuffleNum: number) => {
-    const list = shuffleList(profileColors, shuffleNum);
-
-    return list[+shuffleNumId % list.length];
-  };
-
-  const bgColor = useMemo(() => {
-    if (url) return '';
-    if (!id) return theme.gray600.default;
-    return getColor(+id, +id % 10);
-  }, [profileColors, id]);
-
-  const textColor = useMemo(() => {
-    if (url) return '';
-    if (!id) return theme.fontColor;
-    let num = 8;
-    let color = getColor(+id, +id % num);
-    while (true) {
-      const similarColor = areColorsSimilar(color, bgColor);
-      if (similarColor) {
-        num++;
-        color = getColor(+id, +id % num);
-      } else {
-        break;
-      }
-    }
-    return color;
-  }, [profileColors, id]);
 
   if (!push && !url)
     return (

@@ -82,7 +82,13 @@ const ChatRoomTopModal = ({roomId, roomDetail, me}: ChatRoomTopModalProps) => {
           {me && (
             <UserList onPress={() => onUserPress()}>
               <ProfileBox>
-                <ProfileImg id={me.id} url={me.profileUrl} size={40} />
+                <ProfileImg
+                  id={me.id}
+                  url={me.profileUrl}
+                  bgColor={me.profileBgColor}
+                  textColor={me.profileTextColor}
+                  size={40}
+                />
                 <MeBox>
                   <Me>나</Me>
                 </MeBox>
@@ -94,7 +100,13 @@ const ChatRoomTopModal = ({roomId, roomDetail, me}: ChatRoomTopModalProps) => {
             <UserList
               key={`user-${user.id}`}
               onPress={() => onUserPress(user.id)}>
-              <ProfileImg id={user.id} url={user.profileUrl} size={40} />
+              <ProfileImg
+                id={user.id}
+                url={user.profileUrl}
+                bgColor={user.profileBgColor}
+                textColor={user.profileTextColor}
+                size={40}
+              />
               <UserName>{user.nickname}</UserName>
             </UserList>
           ))}

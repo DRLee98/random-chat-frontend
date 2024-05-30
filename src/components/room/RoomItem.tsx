@@ -72,6 +72,8 @@ const RoomItem = ({userRoom}: RoomItemProps) => {
         <ProfileImg
           id={userRoom.users[0].id}
           url={userRoom.users[0].profileUrl}
+          bgColor={userRoom.users[0].profileBgColor}
+          textColor={userRoom.users[0].profileTextColor}
           size={50}
         />
         <ContentsBox>

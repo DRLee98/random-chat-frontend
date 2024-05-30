@@ -19,13 +19,18 @@ import {MainNavigatorScreens} from '@app/navigators';
 
 import {setSociald} from '@app/utils/encStorage';
 import {makeFile} from '@app/utils/file';
+import {getRandomColor} from '@app/utils/color';
 
 import type {StackScreenProps} from '@react-navigation/stack';
 import type {MainNavigatorParamList} from '@app/navigators';
 import type {CreateUserInput} from '@app/graphql/__generated__/graphql';
 import type {ReactNativeFileType} from '@app/utils/file';
 
-export interface SignUpScreenParams extends Omit<CreateUserInput, 'profile'> {
+export interface SignUpScreenParams
+  extends Omit<
+    CreateUserInput,
+    'profile' | 'profileBgColor' | 'profileTextColor'
+  > {
   profileUrl?: string;
 }
 
@@ -107,8 +112,14 @@ const SignUpScreen = ({route, navigation}: SignUpScreenProps) => {
   };
 
   useEffect(() => {
+    const bgColor = getRandomColor();
+    const textColor = getRandomColor(bgColor);
     const {profileUrl, ...v} = route.params;
-    const initValues: FormValues = {...v};
+    const initValues: FormValues = {
+      ...v,
+      profileBgColor: bgColor,
+      profileTextColor: textColor,
+    };
     if (profileUrl) {
       const file = makeFile({
         uri: profileUrl,
@@ -125,11 +136,18 @@ const SignUpScreen = ({route, navigation}: SignUpScreenProps) => {
   return (
     <Container>
       <ProfileImgBox>
-        <ProfileImg url={values.profile?.uri} size={120} />
-        <PictureDeleteButton
-          onPress={() => setFieldValue('profile', undefined)}>
-          <Icon name="close-circle" size={25} color={theme.primary.default} />
-        </PictureDeleteButton>
+        <ProfileImg
+          url={values.profile?.uri}
+          bgColor={values.profileBgColor ?? ''}
+          textColor={values.profileTextColor ?? ''}
+          size={120}
+        />
+        {values.profile && (
+          <PictureDeleteButton
+            onPress={() => setFieldValue('profile', undefined)}>
+            <Icon name="close-circle" size={25} color={theme.primary.default} />
+          </PictureDeleteButton>
+        )}
         <PictureSelectButtonBox>
           <PictureSelectButton onChange={onProfileChange} />
         </PictureSelectButtonBox>
@@ -166,6 +184,8 @@ const Container = styled.View`
 
 const ProfileImgBox = styled.View`
   position: relative;
+
+  margin-bottom: 30px;
 `;
 
 const PictureDeleteButton = styled.TouchableOpacity`

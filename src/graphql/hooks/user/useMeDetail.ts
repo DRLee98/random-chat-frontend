@@ -13,6 +13,8 @@ export const ME_DETAIL = graphql(`
         id
         nickname
         profileUrl
+        profileBgColor
+        profileTextColor
         bio
         socialPlatform
         noti

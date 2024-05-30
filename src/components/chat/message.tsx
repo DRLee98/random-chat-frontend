@@ -28,7 +28,14 @@ const Message = ({
   return (
     <Row myMessage={myMessage}>
       {!myMessage && (
-        <ProfileImg size={32} id={user.id} url={user.profileUrl} push={true} />
+        <ProfileImg
+          size={32}
+          id={user.id}
+          url={user.profileUrl}
+          bgColor={user.profileBgColor}
+          textColor={user.profileTextColor}
+          push
+        />
       )}
       <TextList>
         {contents.map((item, i, list) => (

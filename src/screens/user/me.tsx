@@ -114,8 +114,10 @@ const MeScreen = ({navigation}: MeScreenProps) => {
         <ProfileImgBox>
           <ProfileImg
             id={me.id}
-            size={120}
             url={values?.profile?.uri ?? me.profileUrl}
+            bgColor={me.profileBgColor}
+            textColor={me.profileTextColor}
+            size={120}
           />
           {edit && (
             <>

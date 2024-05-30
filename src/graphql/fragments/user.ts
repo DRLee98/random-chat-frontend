@@ -5,6 +5,8 @@ export const BLOCK_USER = graphql(`
     id
     nickname
     profileUrl
+    profileBgColor
+    profileTextColor
     bio
   }
 `);

@@ -26,6 +26,8 @@ const ROOM_DETAIL = graphql(`
           id
           nickname
           profileUrl
+          profileBgColor
+          profileTextColor
           bio
           language
         }

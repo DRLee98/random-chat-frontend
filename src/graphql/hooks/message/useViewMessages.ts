@@ -156,6 +156,8 @@ export const useUpdateViewMessages = (input: ViewMessagesInput) => {
         id: '',
         nickname: '',
         profileUrl: '',
+        profileBgColor: '',
+        profileTextColor: '',
       },
     };
     const messages = getPrevData();

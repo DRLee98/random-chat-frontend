@@ -17,6 +17,8 @@ const USER_PROFILE = graphql(`
         id
         nickname
         profileUrl
+        profileBgColor
+        profileTextColor
         bio
       }
     }

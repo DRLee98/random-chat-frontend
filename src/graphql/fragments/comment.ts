@@ -10,6 +10,8 @@ export const COMMENT_BASE = graphql(`
       id
       nickname
       profileUrl
+      profileBgColor
+      profileTextColor
     }
   }
 `);

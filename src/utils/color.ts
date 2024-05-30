@@ -1,3 +1,6 @@
+import {getRandomNumber} from './common';
+import {profileColors} from './constants';
+
 const hexToRgb = (hex: string) => {
   if (!hex) return {r: 0, g: 0, b: 0};
   // HEX에서 # 제거
@@ -43,4 +46,24 @@ export const areColorsSimilar = (
 
   // 거리가 임계값보다 작거나 같으면 비슷한 것으로 판단
   return distance <= threshold;
+};
+
+export const getRandomColor = (compareColor?: string) => {
+  let color = '';
+
+  const num = getRandomNumber(profileColors.length);
+  color = profileColors[num];
+
+  while (Boolean(compareColor)) {
+    if (!compareColor) break;
+    const isSimilar = areColorsSimilar(color, compareColor);
+    if (isSimilar) {
+      const num = getRandomNumber(profileColors.length);
+      color = profileColors[num];
+    } else {
+      break;
+    }
+  }
+
+  return color;
 };

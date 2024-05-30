@@ -13,6 +13,8 @@ export const ME = graphql(`
         id
         nickname
         profileUrl
+        profileBgColor
+        profileTextColor
         blockUserIds
       }
     }

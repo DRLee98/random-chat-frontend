@@ -10,6 +10,8 @@ export const MESSAGE_BASE = graphql(`
       id
       nickname
       profileUrl
+      profileBgColor
+      profileTextColor
     }
     createdAt
   }
