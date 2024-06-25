@@ -15,7 +15,11 @@ export async function messagingEnabled() {
 }
 
 export async function getFcmToken() {
-  const enabled = await messagingEnabled();
-  if (!enabled) return undefined;
-  return messaging().getToken();
+  try {
+    const enabled = await messagingEnabled();
+    if (!enabled) return undefined;
+    return messaging().getToken();
+  } catch (error) {
+    return undefined;
+  }
 }

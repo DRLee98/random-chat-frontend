@@ -6,6 +6,7 @@
     "android": "react-native run-android",
     "ios": "react-native run-ios",
     "lint": "eslint .",
+    "prestart": "sh android-fcm-config-create.sh",
     "start": "react-native start",
     "start:reset-cache": "react-native start --reset-cache",
     "test": "jest",
