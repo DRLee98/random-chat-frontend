@@ -7,32 +7,19 @@ import {SafeAreaProvider} from 'react-native-safe-area-context';
 import {ThemeProvider} from 'styled-components/native';
 import {lightTheme, darkTheme} from './styles/theme';
 
+import {NavigationContainer} from '@react-navigation/native';
 import MainNavigator from './navigators';
 import ModalProvider from './contexts/modalContext';
 
-import {Alert, Appearance} from 'react-native';
+import {Appearance} from 'react-native';
 import messaging from '@react-native-firebase/messaging';
-import {requestUserPermission} from '@app/utils/fcm';
 
-import type {FirebaseMessagingTypes} from '@react-native-firebase/messaging/lib';
+messaging().setBackgroundMessageHandler(async remoteMessage => {
+  console.log('Message handled in the background!', remoteMessage);
+});
 
 function App() {
   const [theme, setTheme] = useState(lightTheme);
-
-  useEffect(() => {
-    requestUserPermission();
-
-    const unsubscribe = messaging().onMessage(
-      async (remoteMessage: FirebaseMessagingTypes.RemoteMessage) => {
-        Alert.alert(
-          'A new FCM message arrived!',
-          JSON.stringify(remoteMessage),
-        );
-      },
-    );
-
-    return unsubscribe;
-  }, []);
 
   useLayoutEffect(() => {
     const initTheme = Appearance.getColorScheme();
@@ -47,7 +34,9 @@ function App() {
       <ApolloProvider client={client}>
         <ThemeProvider theme={theme}>
           <ModalProvider>
-            <MainNavigator />
+            <NavigationContainer>
+              <MainNavigator />
+            </NavigationContainer>
           </ModalProvider>
         </ThemeProvider>
       </ApolloProvider>

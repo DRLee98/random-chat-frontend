@@ -3,8 +3,10 @@ import {appleAuth} from '@invertase/react-native-apple-authentication';
 export const appleLogin = async () => {
   const appleAuthRequestResponse = await appleAuth.performRequest({
     requestedOperation: appleAuth.Operation.LOGIN,
-    requestedScopes: [appleAuth.Scope.FULL_NAME, appleAuth.Scope.EMAIL],
+    requestedScopes: [appleAuth.Scope.FULL_NAME],
   });
+
+  console.log(appleAuthRequestResponse);
 
   // get current authentication state for user
   // /!\ This method must be tested on a real device. On the iOS simulator it always throws an error.
@@ -14,6 +16,7 @@ export const appleLogin = async () => {
 
   // use credentialState response to ensure the user is authenticated
   if (credentialState === appleAuth.State.AUTHORIZED) {
-    // user is authenticated
+    return appleAuthRequestResponse;
   }
+  return null;
 };

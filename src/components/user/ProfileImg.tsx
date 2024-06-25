@@ -6,10 +6,6 @@ import {useTheme} from 'styled-components/native';
 import styled from 'styled-components/native';
 import PicturePreviewModal from '../common/PicturePreivewModal';
 
-import {shuffleList} from '@app/utils/common';
-import {areColorsSimilar} from '@app/utils/color';
-import {profileColors} from '@app/utils/constants';
-
 import {MainNavigatorScreens} from '@app/navigators';
 
 import type {NavigationProp} from '@react-navigation/native';
@@ -20,8 +16,8 @@ interface ProfileImgProps {
   url?: string | null;
   size?: number;
   push?: boolean;
-  bgColor: string;
-  textColor: string;
+  bgColor?: string;
+  textColor?: string;
 }
 
 const ProfileImg = ({
@@ -74,8 +70,8 @@ const ProfileImg = ({
 interface ImageProps {
   url?: string | null;
   size: number;
-  bgColor: string;
-  textColor: string;
+  bgColor?: string;
+  textColor?: string;
 }
 
 const Image = ({url, size, bgColor, textColor}: ImageProps) => {
@@ -102,13 +98,13 @@ const ColorBox = styled.View<DefaultProfileProps>`
   width: ${({size}) => size}px;
   height: ${({size}) => size}px;
   border-radius: ${({size}) => size / 2.4}px;
-  background-color: ${({color, theme}) => color ?? theme.bgColor};
+  background-color: ${({color, theme}) => color || theme.bgColor};
 `;
 
 const Text = styled.Text<DefaultProfileProps>`
   font-size: ${({size}) => size / 1.5}px;
   font-weight: 600;
-  color: ${({color, theme}) => color ?? theme.fontColor};
+  color: ${({color, theme}) => color || theme.fontColor};
 `;
 
 const Img = styled.Image<Required<Pick<ProfileImgProps, 'size'>>>`

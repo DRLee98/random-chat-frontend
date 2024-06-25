@@ -3,6 +3,7 @@ import useLoginAndSetToken from '@app/hooks/useLoginAndSetToken';
 
 import {kakaoLogin} from '@app/apis/kakao';
 import {naverLogin} from '@app/apis/naver';
+import {appleLogin} from '@app/apis/apple';
 
 import styled from 'styled-components/native';
 import SocialLoginButton from '@app/components/login/SocialLoginButton';
@@ -56,6 +57,16 @@ const LoginScreen = ({navigation}: LoginScreenProps) => {
     });
   };
 
+  const appleLoginFn = async () => {
+    const profile = await appleLogin();
+    if (!profile) return;
+    loginFn({
+      socialId: profile.user + '',
+      socialPlatform: SocialPlatform.Apple,
+      nickname: '',
+    });
+  };
+
   const loginFn = async (input: SignUpScreenParams) => {
     const result = await login({
       socialId: input.socialId,
@@ -95,7 +106,7 @@ const LoginScreen = ({navigation}: LoginScreenProps) => {
             text="애플 로그인"
             textColor={theme === 'dark' ? '#000000' : '#FFFFFF'}
             bgColor={theme === 'dark' ? '#FFFFFF' : '#000000'}
-            onPress={naverLoginFn}
+            onPress={appleLoginFn}
           />
         )}
       </ButtonBox>
