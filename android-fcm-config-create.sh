@@ -73,5 +73,5 @@ JSON="{
 }"
 
 touch android/app/google-services.json
-echo $JSON | tee -a android/app/google-services.json
+echo $JSON | tee android/app/google-services.json > '/dev/null'
 exit 0
