@@ -8,6 +8,7 @@
     "lint": "eslint .",
     "prestart": "sh android-fcm-config-create.sh",
     "start": "react-native start",
+    "prestart:reset-cache": "sh android-fcm-config-create.sh",
     "start:reset-cache": "react-native start --reset-cache",
     "test": "jest",
     "pod-install": "cd ios && pod install && cd ..",

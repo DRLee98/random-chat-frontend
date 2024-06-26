@@ -13,22 +13,32 @@ ApiKey=""
 
 i=1
 while read line || [ -n "$line" ] ; do
-  KEY="${line%%=*}"
-  VALUE="${line#*=}"
-  if [ $KEY == "FIREBASE_GCM_SENDER_ID" ]; then
-    ProjectNumber=$VALUE
-  elif [ $KEY == "FIREBASE_PROJECT_ID" ]; then
-    ProjectId=$VALUE
-  elif [ $KEY == "FIREBASE_STORAGE_BUCKET" ]; then
-    StorageBucket=$VALUE
-  elif [ $KEY == "FIREBASE_AOS_APP_ID" ]; then
-    MobilesdkAppId=$VALUE
-  elif [ $KEY == "FIREBASE_API_KEY" ]; then
-    ApiKey=$VALUE
+  if  [[ ! -z $line ]]; then
+    KEY="${line%%=*}"
+    VALUE="${line#*=}"
+    
+    case $KEY in
+        "FIREBASE_GCM_SENDER_ID")
+            ProjectNumber=$VALUE
+            ;;
+        "FIREBASE_PROJECT_ID")
+            ProjectId=$VALUE
+            ;;
+        "FIREBASE_STORAGE_BUCKET")
+            StorageBucket=$VALUE
+            ;;
+        "FIREBASE_AOS_APP_ID")
+            MobilesdkAppId=$VALUE
+            ;;
+        "FIREBASE_API_KEY")
+            ApiKey=$VALUE
+            ;;
+    esac
+
+    unset KEY
+    unset VALUE
   fi
 
-  unset KEY
-  unset VALUE
   ((i+=1))
 done < .env
 

@@ -68,4 +68,4 @@ yarn-error.log
 .env
 
 /ios/tmp.xcconfig
-**/google-services.json
+/android/app/google-services.json
