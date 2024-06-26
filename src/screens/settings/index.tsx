@@ -47,6 +47,17 @@ const SettingsScreen = ({navigation}: SettingsScreenProps) => {
     setNotiEnabled(Boolean(enabled && userNoti));
   };
 
+  const logoutFn = () => {
+    updateUser({
+      variables: {
+        input: {
+          fcmToken: '',
+        },
+      },
+    });
+    logout();
+  };
+
   const deleteUserFn = async () => {
     const {data} = await deleteUser();
     if (data?.deleteUser.ok) {
@@ -126,7 +137,7 @@ const SettingsScreen = ({navigation}: SettingsScreenProps) => {
         },
         {
           text: '로그아웃',
-          onPress: logout,
+          onPress: logoutFn,
           textColor: theme.red.default,
         },
       ],
@@ -156,7 +167,7 @@ const SettingsScreen = ({navigation}: SettingsScreenProps) => {
     return () => {
       unsubscribe.remove();
     };
-  }, []);
+  }, [me?.noti]);
 
   return (
     <Container>
