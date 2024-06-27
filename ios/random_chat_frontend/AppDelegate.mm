@@ -5,6 +5,7 @@
 #import <NaverThirdPartyLogin/NaverThirdPartyLoginConnection.h>
 #import <RNKakaoLogins.h>
 #import <Firebase.h>
+#import "RNSplashScreen.h"
 
 
 @implementation AppDelegate
@@ -19,6 +20,8 @@
   if ([FIRApp defaultApp] == nil) {
     [FIRApp configure];
   }
+  
+  [RNSplashScreen show];
 
   return [super application:application didFinishLaunchingWithOptions:launchOptions];
 }

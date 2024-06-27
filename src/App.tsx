@@ -2,6 +2,8 @@ import React, {useEffect, useLayoutEffect, useState} from 'react';
 import {ApolloProvider} from '@apollo/client';
 import {client} from './apollo';
 
+import SplashScreen from 'react-native-splash-screen';
+
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 
 import {ThemeProvider} from 'styled-components/native';
@@ -20,6 +22,10 @@ messaging().setBackgroundMessageHandler(async remoteMessage => {
 
 function App() {
   const [theme, setTheme] = useState(lightTheme);
+
+  useEffect(() => {
+    SplashScreen.hide();
+  }, []);
 
   useLayoutEffect(() => {
     const initTheme = Appearance.getColorScheme();
