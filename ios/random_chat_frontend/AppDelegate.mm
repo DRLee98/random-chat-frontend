@@ -20,8 +20,6 @@
   if ([FIRApp defaultApp] == nil) {
     [FIRApp configure];
   }
-  
-  [RNSplashScreen show];
 
   return [super application:application didFinishLaunchingWithOptions:launchOptions];
 }
