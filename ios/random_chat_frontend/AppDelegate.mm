@@ -19,6 +19,7 @@
 
   if ([FIRApp defaultApp] == nil) {
     [FIRApp configure];
+    [application registerForRemoteNotifications]; 
   }
 
   return [super application:application didFinishLaunchingWithOptions:launchOptions];
@@ -40,6 +41,11 @@
   }
 
   return YES;
+}
+
+- (void)application:(UIApplication *)application
+ didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
+ [FIRMessaging messaging].APNSToken = deviceToken;
 }
 
 - (NSURL *)sourceURLForBridge:(RCTBridge *)bridge
