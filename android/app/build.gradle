@@ -84,8 +84,8 @@ android {
         applicationId "com.random_chat_frontend"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 1
-        versionName "1.0"
+        versionCode 2
+        versionName "1.01"
         resValue "string", "build_config_package", "com.random_chat_frontend"
         resValue "string", "kakao_app_key", project.env.get("KAKAO_NATIVE_APP_KEY")
         manifestPlaceholders['KAKAO_NATIVE_APP_KEY'] = project.env.get("KAKAO_NATIVE_APP_KEY")
