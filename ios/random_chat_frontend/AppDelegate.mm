@@ -1,10 +1,10 @@
+#import <Firebase.h>
 #import "AppDelegate.h"
 #import "RNCConfig.h"
 
 #import <React/RCTBundleURLProvider.h>
 #import <NaverThirdPartyLogin/NaverThirdPartyLoginConnection.h>
 #import <RNKakaoLogins.h>
-#import <Firebase.h>
 #import "RNSplashScreen.h"
 
 
