@@ -35,10 +35,10 @@ export const getDefaultScreenOptions = ({
     backgroundColor: theme.bgColor,
   },
   headerLeftContainerStyle: {
-    paddingLeft: 10,
+    paddingLeft: 15,
   },
   headerRightContainerStyle: {
-    paddingRight: 10,
+    paddingRight: 15,
   },
   headerTitleStyle: {
     color: theme.fontColor,

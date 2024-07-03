@@ -13,7 +13,7 @@ import {NavigationContainer} from '@react-navigation/native';
 import MainNavigator from './navigators';
 import ModalProvider from './contexts/modalContext';
 
-import {Appearance} from 'react-native';
+import {Appearance, Platform} from 'react-native';
 import messaging from '@react-native-firebase/messaging';
 
 messaging().setBackgroundMessageHandler(async remoteMessage => {
@@ -24,7 +24,9 @@ function App() {
   const [theme, setTheme] = useState(lightTheme);
 
   useEffect(() => {
-    SplashScreen.hide();
+    if (Platform.OS === 'ios') {
+      SplashScreen.hide();
+    }
   }, []);
 
   useLayoutEffect(() => {

@@ -1,5 +1,4 @@
-import useDeleteRoom from '@app/graphql/hooks/room/useDeleteRoom';
-import {useUpdateMyRooms} from '@app/graphql/hooks/room/useMyRooms';
+import useExitRoom from '@app/hooks/useExitRoom';
 import {useModal} from '@app/contexts/modalContext';
 
 import styled, {useTheme} from 'styled-components/native';
@@ -26,29 +25,10 @@ const ExitButton = ({
   const theme = useTheme();
   const showModal = useModal();
 
-  const [deleteRoom] = useDeleteRoom();
+  const exitRoom = useExitRoom();
 
-  const {removeMyRoom} = useUpdateMyRooms();
-
-  const deleteRoomFn = async () => {
-    const {data} = await deleteRoom({
-      variables: {
-        input: {
-          roomId,
-        },
-      },
-    });
-    if (data?.deleteRoom.ok) {
-      removeMyRoom(roomId);
-      onAfterDelete?.();
-    }
-    if (data?.deleteRoom.error) {
-      showModal({
-        title: '채팅방 나가기에 실패했어요',
-        message: data.deleteRoom.error,
-        buttons: [{text: '확인'}],
-      });
-    }
+  const exitRoomFn = () => {
+    exitRoom(roomId, onAfterDelete);
   };
 
   const AlertFn = async () => {
@@ -61,7 +41,7 @@ const ExitButton = ({
         },
         {
           text: '나가기',
-          onPress: deleteRoomFn,
+          onPress: exitRoomFn,
           textColor: theme.red.default,
         },
       ],

@@ -1,6 +1,7 @@
 import {useNavigation} from '@react-navigation/native';
-import {useLayoutEffect, useState} from 'react';
+import {useEffect, useLayoutEffect, useState} from 'react';
 import {useTheme} from 'styled-components/native';
+import useExitRoom from '@app/hooks/useExitRoom';
 
 import styled from 'styled-components/native';
 
@@ -21,6 +22,7 @@ import type {
   MeQuery,
   RoomDetailQuery,
 } from '@app/graphql/__generated__/graphql';
+import ToggleUserBlockButton from '../user/ToggleUserBlockButton';
 
 interface ChatRoomTopModalProps {
   roomId: string;
@@ -31,6 +33,8 @@ interface ChatRoomTopModalProps {
 const ChatRoomTopModal = ({roomId, roomDetail, me}: ChatRoomTopModalProps) => {
   const theme = useTheme();
   const navigation = useNavigation<NavigationProp<MainNavigatorParamList>>();
+
+  const exitRoom = useExitRoom();
 
   const [modalVisible, setModalVisible] = useState(false);
 
@@ -58,6 +62,35 @@ const ChatRoomTopModal = ({roomId, roomDetail, me}: ChatRoomTopModalProps) => {
     navigation.reset({routes: [{name: MainNavigatorScreens.Home}]});
   };
 
+  const onAfterBlockFn = () => {
+    exitRoom(roomId, deleteRoomAfterFn);
+  };
+
+  useEffect(() => {
+    if (modalVisible) {
+      navigation.setOptions({
+        headerRight: () => null,
+        headerTitle: () => (
+          <RoomNameBox>
+            <RoomName>{getChatRoomName(roomDetail)}</RoomName>
+            <EditButton onPress={onEditPress}>
+              <Icon name="pencil" size={18} color={theme.fontColor} />
+            </EditButton>
+          </RoomNameBox>
+        ),
+      });
+    } else {
+      navigation.setOptions({
+        headerRight: () => (
+          <ModalButton onPress={openModal}>
+            <Icon name="bars" size={18} color={theme.fontColor} />
+          </ModalButton>
+        ),
+        headerTitle: getChatRoomName(roomDetail),
+      });
+    }
+  }, [modalVisible]);
+
   useLayoutEffect(() => {
     navigation.setOptions({
       headerRight: () => (
@@ -72,42 +105,45 @@ const ChatRoomTopModal = ({roomId, roomDetail, me}: ChatRoomTopModalProps) => {
   return (
     <TopModal visible={modalVisible} onCloseModal={closeModal}>
       <Containder>
-        <RoomNameBox>
-          <RoomName>{getChatRoomName(roomDetail)}</RoomName>
-          <EditButton onPress={onEditPress}>
-            <Icon name="pencil" size={18} color={theme.fontColor} />
-          </EditButton>
-        </RoomNameBox>
         <UserBox>
           {me && (
             <UserList onPress={() => onUserPress()}>
-              <ProfileBox>
-                <ProfileImg
-                  id={me.id}
-                  url={me.profileUrl}
-                  bgColor={me.profileBgColor}
-                  textColor={me.profileTextColor}
-                  size={40}
-                />
-                <MeBox>
-                  <Me>나</Me>
-                </MeBox>
-              </ProfileBox>
-              <UserName>{me.nickname}</UserName>
+              <UserInfo>
+                <ProfileBox>
+                  <ProfileImg
+                    id={me.id}
+                    url={me.profileUrl}
+                    bgColor={me.profileBgColor}
+                    textColor={me.profileTextColor}
+                    size={40}
+                  />
+                  <MeBox>
+                    <Me>나</Me>
+                  </MeBox>
+                </ProfileBox>
+                <UserName>{me.nickname}</UserName>
+              </UserInfo>
             </UserList>
           )}
           {roomDetail.users.map(user => (
             <UserList
               key={`user-${user.id}`}
               onPress={() => onUserPress(user.id)}>
-              <ProfileImg
-                id={user.id}
-                url={user.profileUrl}
-                bgColor={user.profileBgColor}
-                textColor={user.profileTextColor}
-                size={40}
+              <UserInfo>
+                <ProfileImg
+                  id={user.id}
+                  url={user.profileUrl}
+                  bgColor={user.profileBgColor}
+                  textColor={user.profileTextColor}
+                  size={40}
+                />
+                <UserName>{user.nickname}</UserName>
+              </UserInfo>
+              <ToggleUserBlockButton
+                userId={user.id}
+                nickname={user.nickname}
+                onAfterBlock={onAfterBlockFn}
               />
-              <UserName>{user.nickname}</UserName>
             </UserList>
           ))}
         </UserBox>
@@ -192,9 +228,15 @@ const Me = styled.Text`
 const UserList = styled.TouchableOpacity`
   flex-direction: row;
   align-items: center;
-  gap: 10px;
+  justify-content: space-between;
 
   margin: 10px 0;
+`;
+
+const UserInfo = styled.View`
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
 `;
 
 const UserName = styled.Text`

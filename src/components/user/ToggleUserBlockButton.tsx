@@ -12,11 +12,13 @@ import {BLOCK_USER} from '@app/graphql/fragments/user';
 interface ToggleUserBlockButtonProps {
   userId: string;
   nickname: string;
+  onAfterBlock?: () => void;
 }
 
 const ToggleUserBlockButton = ({
   userId,
   nickname,
+  onAfterBlock,
 }: ToggleUserBlockButtonProps) => {
   const theme = useTheme();
   const showModal = useModal();
@@ -37,6 +39,9 @@ const ToggleUserBlockButton = ({
       },
     });
     if (data?.toggleBlockUser.updateBlockUsers) {
+      if (!me?.blockUserIds.includes(userId)) {
+        onAfterBlock?.();
+      }
       const updateBlockUsers = getFragmentData(
         BLOCK_USER,
         data.toggleBlockUser.updateBlockUsers,

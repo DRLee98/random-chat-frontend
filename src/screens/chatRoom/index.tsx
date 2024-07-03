@@ -156,12 +156,6 @@ const ChatRoomScreen = ({route, navigation}: ChatRoomScreenProps) => {
     }
   }, []);
 
-  useLayoutEffect(() => {
-    navigation.setOptions({
-      headerTitle: getChatRoomName(room?.roomDetail.room),
-    });
-  }, [room]);
-
   const bundledMessages = useMemo(() => {
     const bundled: BundledMessage[] = [];
 
@@ -200,11 +194,6 @@ const ChatRoomScreen = ({route, navigation}: ChatRoomScreenProps) => {
 
   return (
     <Container>
-      <ChatRoomTopModal
-        roomId={roomId}
-        roomDetail={room?.roomDetail.room}
-        me={me}
-      />
       <MessageBox
         inverted
         data={[...bundledMessages].reverse()}
@@ -233,6 +222,11 @@ const ChatRoomScreen = ({route, navigation}: ChatRoomScreenProps) => {
           }
         />
       </InputBox>
+      <ChatRoomTopModal
+        roomId={roomId}
+        roomDetail={room?.roomDetail.room}
+        me={me}
+      />
     </Container>
   );
 };

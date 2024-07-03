@@ -1,5 +1,4 @@
 import {useEffect, useState} from 'react';
-import {useNavigation} from '@react-navigation/native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {useAnimatedStyle, useSharedValue} from 'react-native-reanimated';
 
@@ -11,24 +10,19 @@ import {
   GestureDetector,
   GestureHandlerRootView,
 } from 'react-native-gesture-handler';
+import {View} from 'react-native';
 
 import {runOnJS, withTiming} from 'react-native-reanimated';
 
-import type {
-  GestureResponderEvent,
-  LayoutChangeEvent,
-  ModalProps,
-} from 'react-native';
-import type {MainNavigatorParamList} from '@app/navigators';
-import type {NavigationProp} from '@react-navigation/native';
+import type {GestureResponderEvent, LayoutChangeEvent} from 'react-native';
 
-interface TopModalProps extends ModalProps {
+interface TopModalProps {
+  visible: boolean;
+  children: React.ReactNode;
   onCloseModal: () => void;
 }
 
-const TopModal = ({children, onCloseModal, ...props}: TopModalProps) => {
-  const navigation = useNavigation<NavigationProp<MainNavigatorParamList>>();
-
+const TopModal = ({visible, children, onCloseModal}: TopModalProps) => {
   const [fullHegiht, setFullHeight] = useState(0);
   const [childrenHegiht, setChildrenHeight] = useState(0);
 
@@ -45,22 +39,25 @@ const TopModal = ({children, onCloseModal, ...props}: TopModalProps) => {
 
   const onChildrenLayout = (e: LayoutChangeEvent) => {
     setChildrenHeight(e.nativeEvent.layout.height);
-    const viewHeight =
-      fullHegiht - e.nativeEvent.layout.height - insets.top - 22;
+    const viewHeight = fullHegiht - e.nativeEvent.layout.height;
     offset.value = withTiming(-viewHeight);
   };
 
   const onOverlayPress = (e: GestureResponderEvent) => {
     e.stopPropagation();
-    onCloseModalFn();
+    onCloseFn();
   };
 
-  const onCloseModalFn = () => {
+  const onCloseFn = () => {
     offset.value = withTiming(-fullHegiht, {duration: 300}, finished => {
       if (finished) {
         runOnJS(onCloseModal)();
       }
     });
+  };
+
+  const onOpenFn = () => {
+    offset.value = withTiming(fullHegiht, {duration: 300});
   };
 
   const pan = Gesture.Pan()
@@ -71,19 +68,21 @@ const TopModal = ({children, onCloseModal, ...props}: TopModalProps) => {
     .onEnd(e => {
       const viewHeight = fullHegiht - childrenHegiht - insets.top - 22;
       if (viewHeight + 50 < fullHegiht - e.absoluteY) {
-        return onCloseModalFn();
+        return onCloseFn();
       }
       offset.value = withTiming(-viewHeight);
     })
     .runOnJS(true);
 
   useEffect(() => {
-    const unsubscribe = navigation.addListener('blur', onCloseModal);
-    return unsubscribe;
-  }, []);
+    if (visible) {
+      onOpenFn();
+    }
+  }, [visible]);
 
+  if (!visible) return null;
   return (
-    <Modal transparent {...props}>
+    <RootContainer>
       <GestureHandlerRoot>
         <Overlay activeOpacity={1} onPress={onOverlayPress}>
           <AnimatedView style={style} onLayout={onConatinerLayout}>
@@ -100,11 +99,15 @@ const TopModal = ({children, onCloseModal, ...props}: TopModalProps) => {
           </AnimatedView>
         </Overlay>
       </GestureHandlerRoot>
-    </Modal>
+    </RootContainer>
   );
 };
 
-const Modal = styled.Modal``;
+const RootContainer = styled.View`
+  position: absolute;
+  top: 0;
+  bottom: 0;
+`;
 
 const GestureHandlerRoot = styled(GestureHandlerRootView)`
   flex: 1;
