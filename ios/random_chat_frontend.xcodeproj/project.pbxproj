@@ -13,6 +13,7 @@
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 		E98167162C33BD33009088E1 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = E98167152C33BD33009088E1 /* GoogleService-Info.plist */; };
+		E9E5AAF42C34F620002E8024 /* main.jsbundle in Resources */ = {isa = PBXBuildFile; fileRef = E9E5AAF32C34F620002E8024 /* main.jsbundle */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -51,6 +52,7 @@
 		E9BF099E2B9955F900A62514 /* FontAwesome.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = FontAwesome.ttf; sourceTree = "<group>"; };
 		E9BF099F2B9955F900A62514 /* Ionicons.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Ionicons.ttf; sourceTree = "<group>"; };
 		E9BF09A02B9955F900A62514 /* FontAwesome5_Brands.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = FontAwesome5_Brands.ttf; sourceTree = "<group>"; };
+		E9E5AAF32C34F620002E8024 /* main.jsbundle */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = main.jsbundle; path = random_chat_frontend/main.jsbundle; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
@@ -86,6 +88,7 @@
 		13B07FAE1A68108700A75B9A /* random_chat_frontend */ = {
 			isa = PBXGroup;
 			children = (
+				E9E5AAF32C34F620002E8024 /* main.jsbundle */,
 				E98167152C33BD33009088E1 /* GoogleService-Info.plist */,
 				E98AA3CA2BAC26F400C39E18 /* random_chat_frontend.entitlements */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
@@ -240,6 +243,7 @@
 				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				E98167162C33BD33009088E1 /* GoogleService-Info.plist in Resources */,
+				E9E5AAF42C34F620002E8024 /* main.jsbundle in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
