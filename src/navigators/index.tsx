@@ -77,6 +77,7 @@ const MainNavigator = () => {
           if (remoteMessage.data?.roomId) {
             navigation.navigate(MainNavigatorScreens.ChatRoom, {
               roomId: remoteMessage.data.roomId as string,
+              chatRoomName: null,
               newMessageCount: 1,
             });
             return;

@@ -62,6 +62,7 @@ const NotificationItem = ({grayBg, notification}: NotificationItemProps) => {
     ) {
       navigation.navigate(MainNavigatorScreens.ChatRoom, {
         roomId: notification.data.roomId,
+        chatRoomName: null,
         newMessageCount: 1, // 메시지를 refetch 하기 위해 1로 설정
       });
       return;

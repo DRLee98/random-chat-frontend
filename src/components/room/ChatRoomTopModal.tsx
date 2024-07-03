@@ -12,8 +12,6 @@ import PinnedButton from '@app/components/room/PinnedButton';
 import ExitButton from '@app/components/room/ExitButton';
 import ProfileImg from '@app/components/user/ProfileImg';
 
-import {getChatRoomName} from '@app/utils/name';
-
 import {MainNavigatorScreens} from '@app/navigators';
 
 import type {MainNavigatorParamList} from '@app/navigators';
@@ -28,9 +26,15 @@ interface ChatRoomTopModalProps {
   roomId: string;
   roomDetail: RoomDetailQuery['roomDetail']['room'];
   me?: MeQuery['me']['me'];
+  chatRoomName: string;
 }
 
-const ChatRoomTopModal = ({roomId, roomDetail, me}: ChatRoomTopModalProps) => {
+const ChatRoomTopModal = ({
+  roomId,
+  roomDetail,
+  me,
+  chatRoomName,
+}: ChatRoomTopModalProps) => {
   const theme = useTheme();
   const navigation = useNavigation<NavigationProp<MainNavigatorParamList>>();
 
@@ -46,7 +50,7 @@ const ChatRoomTopModal = ({roomId, roomDetail, me}: ChatRoomTopModalProps) => {
     navigation.navigate(MainNavigatorScreens.ChatRoomEdit, {
       roomId,
       userRoomId: roomDetail.userRoom.id,
-      userRoomName: getChatRoomName(roomDetail),
+      userRoomName: chatRoomName,
     });
   };
 
@@ -72,7 +76,7 @@ const ChatRoomTopModal = ({roomId, roomDetail, me}: ChatRoomTopModalProps) => {
         headerRight: () => null,
         headerTitle: () => (
           <RoomNameBox>
-            <RoomName>{getChatRoomName(roomDetail)}</RoomName>
+            <RoomName>{chatRoomName}</RoomName>
             <EditButton onPress={onEditPress}>
               <Icon name="pencil" size={18} color={theme.fontColor} />
             </EditButton>
@@ -86,7 +90,7 @@ const ChatRoomTopModal = ({roomId, roomDetail, me}: ChatRoomTopModalProps) => {
             <Icon name="bars" size={18} color={theme.fontColor} />
           </ModalButton>
         ),
-        headerTitle: getChatRoomName(roomDetail),
+        headerTitle: chatRoomName,
       });
     }
   }, [modalVisible]);
@@ -167,7 +171,7 @@ const ChatRoomTopModal = ({roomId, roomDetail, me}: ChatRoomTopModalProps) => {
             </ButtonList>
             <ExitButton
               roomId={roomId}
-              roomName={getChatRoomName(roomDetail)}
+              roomName={chatRoomName}
               type="icon"
               onAfterDelete={deleteRoomAfterFn}
               color={theme.fontColor}

@@ -29,6 +29,7 @@ const RoomItem = ({userRoom}: RoomItemProps) => {
   const goChatRoom = () => {
     navigation.navigate(MainNavigatorScreens.ChatRoom, {
       roomId: userRoom.room.id,
+      chatRoomName: getHomeChatRoomName(userRoom),
       newMessageCount: userRoom.newMessage,
     });
   };

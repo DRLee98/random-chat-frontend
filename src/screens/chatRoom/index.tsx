@@ -45,6 +45,7 @@ export interface BundledMessage
 
 export interface ChatRoomScreenParams {
   roomId: string;
+  chatRoomName: string | null;
   newMessageCount: number;
 }
 
@@ -55,7 +56,7 @@ interface ChatRoomScreenProps
   > {}
 
 const ChatRoomScreen = ({route, navigation}: ChatRoomScreenProps) => {
-  const {roomId, newMessageCount} = route.params;
+  const {roomId, chatRoomName, newMessageCount} = route.params;
 
   const showModal = useModal();
 
@@ -223,6 +224,7 @@ const ChatRoomScreen = ({route, navigation}: ChatRoomScreenProps) => {
         />
       </InputBox>
       <ChatRoomTopModal
+        chatRoomName={chatRoomName ?? getChatRoomName(room?.roomDetail.room)}
         roomId={roomId}
         roomDetail={room?.roomDetail.room}
         me={me}
