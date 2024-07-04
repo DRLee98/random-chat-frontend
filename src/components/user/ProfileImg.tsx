@@ -1,7 +1,6 @@
-import {useMemo, useState} from 'react';
+import {useState} from 'react';
 import {useNavigation} from '@react-navigation/native';
 import useMe from '@app/graphql/hooks/user/useMe';
-import {useTheme} from 'styled-components/native';
 
 import styled from 'styled-components/native';
 import PicturePreviewModal from '../common/PicturePreivewModal';
@@ -16,8 +15,8 @@ interface ProfileImgProps {
   url?: string | null;
   size?: number;
   push?: boolean;
-  bgColor?: string;
-  textColor?: string;
+  bgColor?: string | null;
+  textColor?: string | null;
 }
 
 const ProfileImg = ({
@@ -28,7 +27,6 @@ const ProfileImg = ({
   bgColor,
   textColor,
 }: ProfileImgProps) => {
-  const theme = useTheme();
   const navigation = useNavigation<NavigationProp<MainNavigatorParamList>>();
 
   const {me} = useMe();
@@ -67,11 +65,8 @@ const ProfileImg = ({
   );
 };
 
-interface ImageProps {
-  url?: string | null;
+interface ImageProps extends Omit<ProfileImgProps, 'id' | 'push'> {
   size: number;
-  bgColor?: string;
-  textColor?: string;
 }
 
 const Image = ({url, size, bgColor, textColor}: ImageProps) => {
@@ -87,7 +82,7 @@ const Image = ({url, size, bgColor, textColor}: ImageProps) => {
 };
 
 interface DefaultProfileProps extends Required<Pick<ProfileImgProps, 'size'>> {
-  color?: string;
+  color?: string | null;
 }
 
 const Container = styled.TouchableOpacity``;

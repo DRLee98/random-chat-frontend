@@ -159,14 +159,14 @@ const ChatRoomTopModal = ({
                 userRoomId={roomDetail.userRoom.id}
                 noti={roomDetail.userRoom.noti}
                 color={theme.fontColor}
-                size={25}
+                size={22}
               />
               <PinnedButton
                 roomId={roomId}
                 userRoomId={roomDetail.userRoom.id}
                 pinned={Boolean(roomDetail.userRoom.pinnedAt)}
                 color={theme.fontColor}
-                size={25}
+                size={22}
               />
             </ButtonList>
             <ExitButton
@@ -175,7 +175,7 @@ const ChatRoomTopModal = ({
               type="icon"
               onAfterDelete={deleteRoomAfterFn}
               color={theme.fontColor}
-              size={25}
+              size={22}
             />
           </SpaceBetween>
         </ButtonBox>
@@ -219,7 +219,7 @@ const MeBox = styled.View`
   right: 0px;
 
   padding: 2px;
-  background-color: ${({theme}) => theme.red.default};
+  background-color: ${({theme}) => theme.primary.default};
   border-radius: 4px;
 `;
 

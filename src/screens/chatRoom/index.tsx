@@ -195,6 +195,11 @@ const ChatRoomScreen = ({route, navigation}: ChatRoomScreenProps) => {
 
   return (
     <Container>
+      <BackgroundTextBox>
+        <BackgroundText>
+          {`부적절하거나 불쾌감을 줄 수 있는\n내용을 작성할 경우 제재를 받을 수 있습니다.\n\n건전한 이용 부탁드립나다. 😊`}
+        </BackgroundText>
+      </BackgroundTextBox>
       <MessageBox
         inverted
         data={[...bundledMessages].reverse()}
@@ -212,6 +217,7 @@ const ChatRoomScreen = ({route, navigation}: ChatRoomScreenProps) => {
           value={value}
           onChange={e => setValue(e.nativeEvent.text)}
           returnKeyType="send"
+          placeholder="메시지를 입력해주세요."
           right={
             <SendButton disabled={loading}>
               {loading ? (
@@ -236,6 +242,24 @@ const ChatRoomScreen = ({route, navigation}: ChatRoomScreenProps) => {
 const Container = styled.SafeAreaView`
   flex: 1;
   background-color: ${({theme}) => theme.bgColor};
+`;
+
+const BackgroundTextBox = styled.View`
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 150px;
+
+  align-items: center;
+  justify-content: center;
+`;
+
+const BackgroundText = styled.Text`
+  font-size: 16px;
+  font-weight: 900;
+  color: ${({theme}) => theme.gray400.default};
+  text-align: center;
 `;
 
 const MessageBox = styled.FlatList<FlatListProps<BundledMessage>>`

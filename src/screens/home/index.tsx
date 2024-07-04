@@ -7,6 +7,8 @@ import styled from 'styled-components/native';
 import RoomItem from '@app/components/room/RoomItem';
 import Skeleton from '@app/components/common/Skeleton';
 import CreateRoomButton from '@app/components/room/CreateRoomButton';
+import InviteItem from '@app/components/room/InviteItem';
+import Divider from '@app/components/common/Divider';
 
 import {MainNavigatorScreens} from '@app/navigators';
 
@@ -63,6 +65,16 @@ const HomeScreen = (props: HomeScreenProps) => {
         data={rooms}
         renderItem={({item}) => <RoomItem userRoom={item} />}
         keyExtractor={item => item.id}
+        ListHeaderComponent={
+          <>
+            <SectionTitle>초대 목록</SectionTitle>
+            <InviteList>
+              <InviteItem />
+            </InviteList>
+            <Divider />
+            <SectionTitle>내 채팅방</SectionTitle>
+          </>
+        }
         ListFooterComponent={
           <>
             {hasNext && (
@@ -125,6 +137,18 @@ const FixedButton = styled.SafeAreaView`
   bottom: 40px;
   right: 20px;
   z-index: 1;
+`;
+
+const SectionTitle = styled.Text`
+  margin-top: 20px;
+  margin-left: 25px;
+
+  font-size: 12px;
+  color: ${({theme}) => theme.gray100.default};
+`;
+
+const InviteList = styled.View`
+  margin: 10px 0;
 `;
 
 export default HomeScreen;
