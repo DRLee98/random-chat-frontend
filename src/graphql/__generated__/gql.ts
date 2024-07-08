@@ -14,6 +14,7 @@ import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/
  */
 const documents = {
     "\n  fragment CommentBase on CommentObjectType {\n    id\n    text\n    createdAt\n    updatedAt\n    user {\n      id\n      nickname\n      profileUrl\n      profileBgColor\n      profileTextColor\n    }\n  }\n": types.CommentBaseFragmentDoc,
+    "\n  fragment InviteRoomBase on InviteRoom {\n    id\n    createdAt\n    updatedAt\n    invites {\n      id\n      status\n      createdAt\n      updatedAt\n      user {\n        id\n        nickname\n        profileUrl\n        profileBgColor\n        profileTextColor\n      }\n    }\n  }\n": types.InviteRoomBaseFragmentDoc,
     "\n  fragment MessageBase on MessageObjectType {\n    id\n    contents\n    type\n    readUsersId\n    user {\n      id\n      nickname\n      profileUrl\n      profileBgColor\n      profileTextColor\n    }\n    createdAt\n  }\n": types.MessageBaseFragmentDoc,
     "\n  fragment NotificationBase on NotificationObjectType {\n    id\n    title\n    message\n    read\n    type\n    data\n    createdAt\n  }\n": types.NotificationBaseFragmentDoc,
     "\n  fragment OpinionBase on OpinionObjectType {\n    id\n    title\n    content\n    imageUrls\n    category\n    status\n    createdAt\n    updatedAt\n  }\n": types.OpinionBaseFragmentDoc,
@@ -27,6 +28,10 @@ const documents = {
     "\n  mutation editComment($input: EditCommentInput!) {\n    editComment(input: $input) {\n      ok\n      error\n      comment {\n        ...CommentBase\n      }\n    }\n  }\n": types.EditCommentDocument,
     "\n  subscription newComment($input: NewCommentInput!) {\n    newComment(input: $input) {\n      ...CommentBase\n    }\n  }\n": types.NewCommentDocument,
     "\n  query viewComments($input: ViewCommentsInput!) {\n    viewComments(input: $input) {\n      ok\n      error\n      hasNext\n      comments {\n        ...CommentBase\n      }\n    }\n  }\n": types.ViewCommentsDocument,
+    "\n  mutation createInvite($input: CreateInviteInput!) {\n    createInvite(input: $input) {\n      ok\n      error\n      room {\n        ...InviteRoomBase\n      }\n    }\n  }\n": types.CreateInviteDocument,
+    "\n  query inviteTargets($input: InviteTargetsInput!) {\n    inviteTargets(input: $input) {\n      ok\n      error\n      targets {\n        id\n        nickname\n        bio\n        profileUrl\n        profileBgColor\n        profileTextColor\n      }\n    }\n  }\n": types.InviteTargetsDocument,
+    "\n  query myInvites {\n    myInvites {\n      ok\n      error\n      rooms {\n        ...InviteRoomBase\n      }\n    }\n  }\n": types.MyInvitesDocument,
+    "\n  subscription updateInviteStatus {\n    updateInviteStatus {\n      roomId\n      id\n      status\n    }\n  }\n": types.UpdateInviteStatusDocument,
     "\n  subscription newMessage($input: NewMessageInput!) {\n    newMessage(input: $input) {\n      ...MessageBase\n    }\n  }\n": types.NewMessageDocument,
     "\n  subscription readMessage($input: ReadMessageInput!) {\n    readMessage(input: $input) {\n      messages {\n        id\n        readUsersId\n      }\n    }\n  }\n": types.ReadMessageDocument,
     "\n  mutation sendMessage($input: SendMessageInput!) {\n    sendMessage(input: $input) {\n      ok\n      error\n      message {\n        ...MessageBase\n      }\n    }\n  }\n": types.SendMessageDocument,
@@ -89,6 +94,10 @@ export function graphql(source: "\n  fragment CommentBase on CommentObjectType {
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
+export function graphql(source: "\n  fragment InviteRoomBase on InviteRoom {\n    id\n    createdAt\n    updatedAt\n    invites {\n      id\n      status\n      createdAt\n      updatedAt\n      user {\n        id\n        nickname\n        profileUrl\n        profileBgColor\n        profileTextColor\n      }\n    }\n  }\n"): (typeof documents)["\n  fragment InviteRoomBase on InviteRoom {\n    id\n    createdAt\n    updatedAt\n    invites {\n      id\n      status\n      createdAt\n      updatedAt\n      user {\n        id\n        nickname\n        profileUrl\n        profileBgColor\n        profileTextColor\n      }\n    }\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
 export function graphql(source: "\n  fragment MessageBase on MessageObjectType {\n    id\n    contents\n    type\n    readUsersId\n    user {\n      id\n      nickname\n      profileUrl\n      profileBgColor\n      profileTextColor\n    }\n    createdAt\n  }\n"): (typeof documents)["\n  fragment MessageBase on MessageObjectType {\n    id\n    contents\n    type\n    readUsersId\n    user {\n      id\n      nickname\n      profileUrl\n      profileBgColor\n      profileTextColor\n    }\n    createdAt\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
@@ -138,6 +147,22 @@ export function graphql(source: "\n  subscription newComment($input: NewCommentI
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(source: "\n  query viewComments($input: ViewCommentsInput!) {\n    viewComments(input: $input) {\n      ok\n      error\n      hasNext\n      comments {\n        ...CommentBase\n      }\n    }\n  }\n"): (typeof documents)["\n  query viewComments($input: ViewCommentsInput!) {\n    viewComments(input: $input) {\n      ok\n      error\n      hasNext\n      comments {\n        ...CommentBase\n      }\n    }\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  mutation createInvite($input: CreateInviteInput!) {\n    createInvite(input: $input) {\n      ok\n      error\n      room {\n        ...InviteRoomBase\n      }\n    }\n  }\n"): (typeof documents)["\n  mutation createInvite($input: CreateInviteInput!) {\n    createInvite(input: $input) {\n      ok\n      error\n      room {\n        ...InviteRoomBase\n      }\n    }\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  query inviteTargets($input: InviteTargetsInput!) {\n    inviteTargets(input: $input) {\n      ok\n      error\n      targets {\n        id\n        nickname\n        bio\n        profileUrl\n        profileBgColor\n        profileTextColor\n      }\n    }\n  }\n"): (typeof documents)["\n  query inviteTargets($input: InviteTargetsInput!) {\n    inviteTargets(input: $input) {\n      ok\n      error\n      targets {\n        id\n        nickname\n        bio\n        profileUrl\n        profileBgColor\n        profileTextColor\n      }\n    }\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  query myInvites {\n    myInvites {\n      ok\n      error\n      rooms {\n        ...InviteRoomBase\n      }\n    }\n  }\n"): (typeof documents)["\n  query myInvites {\n    myInvites {\n      ok\n      error\n      rooms {\n        ...InviteRoomBase\n      }\n    }\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  subscription updateInviteStatus {\n    updateInviteStatus {\n      roomId\n      id\n      status\n    }\n  }\n"): (typeof documents)["\n  subscription updateInviteStatus {\n    updateInviteStatus {\n      roomId\n      id\n      status\n    }\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

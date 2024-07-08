@@ -121,10 +121,10 @@ export const useUpdateMyRooms = (input?: MyRoomsInput) => {
     );
   };
 
-  const appendMyRoom = (newRoom: FragmentType<typeof MY_ROOM_BASE>) => {
+  const appendMyRoom = (newRoom: MyRoomBaseFragment) => {
     const rooms = getPrevData();
-    const newRoomData = getFragmentData(MY_ROOM_BASE, newRoom);
-    const updateRooms = [...rooms, newRoomData];
+    const updateRooms = [...rooms, newRoom];
+    console.log('appendMyRoom', updateRooms);
     updateFn(updateRooms);
   };
 

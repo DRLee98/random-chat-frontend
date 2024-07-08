@@ -40,7 +40,7 @@ const UserRow = ({
             {nickname}
           </Nickname>
           <Bio ellipsizeMode="tail" numberOfLines={1}>
-            'sdfdsfsdfsfssdhjkfhdskjhgkjdfhgkdfhgksdhgklsfjhgklhfkladshfkshafklashkfhdskl'
+            {bio}
           </Bio>
         </UserInfo>
       </UserBox>
