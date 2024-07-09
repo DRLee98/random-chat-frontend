@@ -62,11 +62,10 @@ const CreateRoomButton = ({simple, size}: CreateRoomButtonProps) => {
     const {data} = await createRandomRoom();
     if (data?.createRandomRoom.room) {
       const userRoom = data.createRandomRoom.room;
-      const room = getFragmentData(MY_ROOM_BASE, userRoom);
-      appendMyRoom(room);
+      const userRoomData = getFragmentData(MY_ROOM_BASE, userRoom);
+      appendMyRoom(userRoomData);
       sortMyRooms();
 
-      const userRoomData = getFragmentData(MY_ROOM_BASE, userRoom);
       goChatRoom(userRoomData);
     }
     if (data?.createRandomRoom.error) {

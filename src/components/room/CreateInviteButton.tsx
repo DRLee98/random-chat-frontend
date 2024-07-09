@@ -14,14 +14,6 @@ import UserRow from '../user/UserRow';
 
 import Animated, {withTiming} from 'react-native-reanimated';
 
-import {getFragmentData} from '@app/graphql/__generated__';
-import {MY_ROOM_BASE} from '@app/graphql/fragments/room';
-
-import {MainNavigatorScreens} from '@app/navigators';
-
-import type {NavigationProp} from '@react-navigation/native';
-import type {MainNavigatorParamList} from '@app/navigators';
-import type {MyRoomBaseFragment} from '@app/graphql/__generated__/graphql';
 import type {LayoutChangeEvent, LayoutRectangle} from 'react-native';
 
 interface CreateRoomButtonProps {
@@ -77,6 +69,13 @@ const CreateRoomButton = ({simple, size}: CreateRoomButtonProps) => {
     if (data?.createInvite.room) {
       appendMyInvite(data.createInvite.room);
       onCloseModal();
+    }
+    if (data?.createInvite.error) {
+      showModal({
+        title: '채팅방 초대에 실패했어요',
+        message: data.createInvite.error,
+        buttons: [{text: '확인'}],
+      });
     }
   };
 

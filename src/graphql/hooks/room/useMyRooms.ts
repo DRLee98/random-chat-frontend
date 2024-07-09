@@ -89,17 +89,16 @@ export const useUpdateMyRooms = (input?: MyRoomsInput) => {
   };
 
   const updateFn = (rooms: MyRoomBaseFragment[]) => {
-    client.cache.updateQuery<MyRoomsQuery, QueryMyRoomsArgs>(
-      {query: MY_ROOMS, variables: {input: input ?? {}}},
-      prev =>
-        prev?.myRooms && {
-          ...prev,
-          myRooms: {
-            ...prev.myRooms,
-            rooms,
-          },
-        },
-    );
+    const data = client.cache.readQuery<MyRoomsQuery, QueryMyRoomsArgs>({
+      query: MY_ROOMS,
+      variables: {input: input ?? {}},
+    });
+    if (!data) return;
+    client.cache.writeQuery<MyRoomsQuery, QueryMyRoomsArgs>({
+      query: MY_ROOMS,
+      variables: {input: input ?? {}},
+      data: {myRooms: {...data?.myRooms, rooms}},
+    });
   };
 
   const updateMyRoom = (
@@ -124,7 +123,6 @@ export const useUpdateMyRooms = (input?: MyRoomsInput) => {
   const appendMyRoom = (newRoom: MyRoomBaseFragment) => {
     const rooms = getPrevData();
     const updateRooms = [...rooms, newRoom];
-    console.log('appendMyRoom', updateRooms);
     updateFn(updateRooms);
   };
 
