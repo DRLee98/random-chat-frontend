@@ -6,7 +6,7 @@ import useReadNotification from '@app/graphql/hooks/notification/useReadNotifica
 
 import styled from 'styled-components/native';
 
-import Icon from 'react-native-vector-icons/Entypo';
+import Icon from 'react-native-vector-icons/FontAwesome5';
 import SwipeableListItem from '../common/SwipeableListItem';
 
 import {getDateTimeString} from '@app/utils/date';
@@ -86,13 +86,15 @@ const NotificationItem = ({grayBg, notification}: NotificationItemProps) => {
       case NotificationType.System:
         return 'cog';
       case NotificationType.Event:
-        return 'megaphone';
+        return 'gift';
       case NotificationType.Room:
-        return 'mail';
+        return 'comments';
       case NotificationType.Message:
-        return 'message';
+        return 'comment';
       case NotificationType.Opinion:
-        return 'clipboard';
+        return 'bullhorn';
+      case NotificationType.Invite:
+        return 'envelope';
       default:
         return '';
     }

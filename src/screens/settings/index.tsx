@@ -13,6 +13,7 @@ import ProfileImg from '@app/components/user/ProfileImg';
 import SocialPlatformLogo from '@app/components/common/SocialPlatformLogo';
 import Switch from '@app/components/common/Switch';
 import Divider from '@app/components/common/Divider';
+import Skeleton from '@app/components/common/Skeleton';
 
 import {AppState} from 'react-native';
 import {openAppSettings} from '@app/utils/app';
@@ -171,7 +172,7 @@ const SettingsScreen = ({navigation}: SettingsScreenProps) => {
 
   return (
     <Container>
-      {me && (
+      {me ? (
         <MyProfile>
           <ProfileImg
             id={me.id}
@@ -193,6 +194,8 @@ const SettingsScreen = ({navigation}: SettingsScreenProps) => {
             </Bio>
           </MyProfileInfo>
         </MyProfile>
+      ) : (
+        <Skeleton height={120} borderRadius={10} />
       )}
       <Bundle>
         <ListItem>
