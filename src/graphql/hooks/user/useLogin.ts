@@ -13,6 +13,7 @@ const LOGIN = graphql(`
       ok
       error
       token
+      suspended
     }
   }
 `);

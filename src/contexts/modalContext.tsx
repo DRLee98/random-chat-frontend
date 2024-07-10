@@ -108,8 +108,7 @@ const ContentBox = styled.View`
 
   min-height: 120px;
 
-  padding: 25px;
-  padding-bottom: 10px;
+  padding: 10px 25px;
 `;
 
 const Title = styled.Text`

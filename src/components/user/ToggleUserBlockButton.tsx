@@ -8,6 +8,7 @@ import styled, {useTheme} from 'styled-components/native';
 import {getFragmentData} from '@app/graphql/__generated__';
 
 import {BLOCK_USER} from '@app/graphql/fragments/user';
+import useToggleBlock from '@app/hooks/useToggleBlock';
 
 interface ToggleUserBlockButtonProps {
   userId: string;
@@ -25,38 +26,10 @@ const ToggleUserBlockButton = ({
 
   const {me} = useMe();
 
-  const updateMe = useUpdateMe();
-  const updateMeDetail = useUpdateMeDetail();
+  const toggleBlock = useToggleBlock();
 
-  const [toggleBlockUser] = useToggleBlockUser();
-
-  const toggleBlockUserFn = async () => {
-    const {data} = await toggleBlockUser({
-      variables: {
-        input: {
-          id: userId,
-        },
-      },
-    });
-    if (data?.toggleBlockUser.updateBlockUsers) {
-      if (!me?.blockUserIds.includes(userId)) {
-        onAfterBlock?.();
-      }
-      const updateBlockUsers = getFragmentData(
-        BLOCK_USER,
-        data.toggleBlockUser.updateBlockUsers,
-      );
-      updateMe({
-        blockUserIds: updateBlockUsers.map(user => user.id),
-      });
-      updateMeDetail({blockUsers: data.toggleBlockUser.updateBlockUsers});
-    }
-    if (data?.toggleBlockUser.error) {
-      showModal({
-        message: data.toggleBlockUser.error,
-        buttons: [{text: '확인'}],
-      });
-    }
+  const toggleBlockFn = () => {
+    toggleBlock(userId, onAfterBlock);
   };
 
   const onPress = () => {
@@ -71,7 +44,7 @@ const ToggleUserBlockButton = ({
         },
         {
           text: me?.blockUserIds.includes(userId) ? '해제' : '차단',
-          onPress: toggleBlockUserFn,
+          onPress: toggleBlockFn,
           bgColor: me?.blockUserIds.includes(userId)
             ? theme.primary.default
             : undefined,

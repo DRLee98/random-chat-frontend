@@ -72,10 +72,10 @@ const LoginScreen = ({navigation}: LoginScreenProps) => {
       socialId: input.socialId,
       socialPlatform: input.socialPlatform,
     });
-    if (result) {
+    if (result === 'success') {
       setSociald(input);
       navigation.reset({routes: [{name: MainNavigatorScreens.Home}]});
-    } else {
+    } else if (result === 'fail') {
       navigation.navigate(MainNavigatorScreens.SignUp, input);
     }
   };

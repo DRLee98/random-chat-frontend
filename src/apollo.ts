@@ -66,11 +66,16 @@ const errorLink = onError(
   ({graphQLErrors, networkError, forward, operation}) => {
     if (graphQLErrors) {
       for (let err of graphQLErrors) {
-        switch (err.extensions?.code) {
-          case 'UNAUTHENTICATED':
-            tokenExpired = true;
+        if (err.message === 'Suspended') {
+          console.log(`[Suspended error]`);
+          return;
+        } else {
+          switch (err.extensions?.code) {
+            case 'UNAUTHENTICATED':
+              tokenExpired = true;
 
-            return forward(operation);
+              return forward(operation);
+          }
         }
       }
     }

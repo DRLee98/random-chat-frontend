@@ -12,6 +12,7 @@ import {MainNavigatorScreens} from '@app/navigators';
 
 import type {StackScreenProps} from '@react-navigation/stack';
 import type {MainNavigatorParamList} from '@app/navigators';
+import ProfileBottomSheet from '@app/components/user/ProfileBottomSheet';
 
 export interface UserScreenScreenParams {
   userId: string;
@@ -43,12 +44,9 @@ const UserScreen = ({route, navigation}: UserScreenProps) => {
         </NicknameBox>
         <Bio>{data.userProfile.user.bio}</Bio>
         {data.userProfile.user && (
-          <BlockButtonBox>
-            <ToggleUserBlockButton
-              userId={data.userProfile.user.id}
-              nickname={data.userProfile.user.nickname}
-            />
-          </BlockButtonBox>
+          <ButtonBox>
+            <ProfileBottomSheet userId={data.userProfile.user.id} />
+          </ButtonBox>
         )}
         <CloseButton onPress={navigation.goBack}>
           <Icon name="close" size={25} color={theme.fontColor} />
@@ -90,7 +88,7 @@ const Bio = styled.Text`
   color: ${({theme}) => theme.gray100.default};
 `;
 
-const BlockButtonBox = styled.View`
+const ButtonBox = styled.View`
   position: absolute;
   top: 20px;
   right: 15px;

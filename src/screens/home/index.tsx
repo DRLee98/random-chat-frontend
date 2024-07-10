@@ -1,4 +1,5 @@
-import {useState} from 'react';
+import {useEffect, useState} from 'react';
+import {useModal} from '@app/contexts/modalContext';
 import useMyRooms, {useUpdateMyRooms} from '@app/graphql/hooks/room/useMyRooms';
 import useMyInvites, {
   useUpdateMyInvites,
@@ -6,6 +7,7 @@ import useMyInvites, {
 import useNewRoomListener from '@app/graphql/hooks/room/useNewRoomListener';
 import useUpdateNewMessageListener from '@app/graphql/hooks/message/useUpdateNewMessageListener';
 import useUpdateInviteStatusListener from '@app/graphql/hooks/invite/useUpdateInviteStatusListener';
+import useMyAccusationInfo from '@app/graphql/hooks/accusation/useMyAccusationInfo';
 
 import styled from 'styled-components/native';
 import RoomItem from '@app/components/room/RoomItem';
@@ -37,6 +39,8 @@ interface HomeScreenProps
   extends StackScreenProps<MainNavigatorParamList, MainNavigatorScreens.Home> {}
 
 const HomeScreen = (props: HomeScreenProps) => {
+  const showModal = useModal();
+
   const {rooms, fetchMore, refetch, hasNext, loading, networkStatus} =
     useMyRooms();
   const {updateMyRoom, appendMyRoom, sortMyRooms} = useUpdateMyRooms();
@@ -46,6 +50,7 @@ const HomeScreen = (props: HomeScreenProps) => {
     networkStatus: inviteNetStatus,
   } = useMyInvites();
   const {updateMyInviteStatus} = useUpdateMyInvites();
+  const {data: myAccusationInfoData} = useMyAccusationInfo();
 
   const [simpleButton, setSimpleButton] = useState(false);
 
@@ -90,6 +95,16 @@ const HomeScreen = (props: HomeScreenProps) => {
     onData: ({data}) => updateInviteStatus(data.data?.updateInviteStatus),
   });
 
+  useEffect(() => {
+    if (myAccusationInfoData?.myAccusationInfo.message) {
+      showModal({
+        title: '신고 내역이 있습니다',
+        message: myAccusationInfoData.myAccusationInfo.message,
+        buttons: [{text: '확인'}],
+      });
+    }
+  }, [myAccusationInfoData]);
+
   if (loading) return <Container />;
   return (
     <Container>
@@ -109,11 +124,10 @@ const HomeScreen = (props: HomeScreenProps) => {
               <>
                 <SectionTitle>초대 목록</SectionTitle>
                 <InviteList>
-                  {inviteRooms.map(room => (
-                    <InviteItem
-                      key={`invite-room-${room.id}`}
-                      inviteRoom={room}
-                    />
+                  {inviteRooms.map((room, i) => (
+                    <ItemBg key={`invite-room-${room.id}`} odd={i % 2 === 0}>
+                      <InviteItem inviteRoom={room} />
+                    </ItemBg>
                   ))}
                 </InviteList>
               </>
@@ -195,7 +209,16 @@ const SectionTitle = styled.Text`
 `;
 
 const InviteList = styled.View`
-  margin: 10px 0;
+  margin-top: 10px;
+`;
+
+interface ItemBgProps {
+  odd: boolean;
+}
+
+const ItemBg = styled.View<ItemBgProps>`
+  background-color: ${({odd, theme}) =>
+    odd ? theme.gray700.default : theme.bgColor};
 `;
 
 export default HomeScreen;

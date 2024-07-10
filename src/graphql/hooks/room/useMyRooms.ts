@@ -63,8 +63,7 @@ const useMyRooms = (
     });
   };
 
-  const refetch = async () =>
-    result.refetch({input: {...input, take: rooms.length, skip: 0}});
+  const refetch = async () => result.refetch({input: input ?? {}});
 
   return {
     ...result,
@@ -89,16 +88,17 @@ export const useUpdateMyRooms = (input?: MyRoomsInput) => {
   };
 
   const updateFn = (rooms: MyRoomBaseFragment[]) => {
-    const data = client.cache.readQuery<MyRoomsQuery, QueryMyRoomsArgs>({
-      query: MY_ROOMS,
-      variables: {input: input ?? {}},
-    });
-    if (!data) return;
-    client.cache.writeQuery<MyRoomsQuery, QueryMyRoomsArgs>({
-      query: MY_ROOMS,
-      variables: {input: input ?? {}},
-      data: {myRooms: {...data?.myRooms, rooms}},
-    });
+    client.cache.updateQuery<MyRoomsQuery, QueryMyRoomsArgs>(
+      {query: MY_ROOMS, variables: {input: input ?? {}}},
+      prev =>
+        prev?.myRooms && {
+          ...prev,
+          myRooms: {
+            ...prev.myRooms,
+            rooms,
+          },
+        },
+    );
   };
 
   const updateMyRoom = (

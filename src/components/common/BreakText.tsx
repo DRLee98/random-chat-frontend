@@ -5,11 +5,12 @@ import type {TextStyle} from 'react-native';
 interface BreakTextProps {
   text: string;
   style?: TextStyle;
+  justify?: 'center' | 'flex-start' | 'flex-end';
 }
 
-const BreakText = ({text, style}: BreakTextProps) => {
+const BreakText = ({text, style, justify}: BreakTextProps) => {
   return (
-    <Container>
+    <Container justify={justify}>
       {text.split(' ').map((t, i) => (
         <Text key={`text-${i}`} style={style}>
           {t}
@@ -19,10 +20,11 @@ const BreakText = ({text, style}: BreakTextProps) => {
   );
 };
 
-const Container = styled.View`
+const Container = styled.View<Pick<BreakTextProps, 'justify'>>`
   flex-wrap: wrap;
   flex-direction: row;
-  justify-content: center;
+  align-items: center;
+  justify-content: ${({justify}) => justify || 'center'};
   column-gap: 4px;
 `;
 

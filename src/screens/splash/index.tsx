@@ -24,7 +24,7 @@ const SplashScreen = ({navigation}: SplashScreenProps) => {
     const socialData = await getSociald();
     if (socialData) {
       const result = await login(socialData);
-      if (result) {
+      if (result === 'success') {
         return navigation.replace(MainNavigatorScreens.Home);
       }
       removeSociald();

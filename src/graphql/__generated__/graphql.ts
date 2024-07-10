@@ -22,6 +22,36 @@ export type Scalars = {
   Upload: { input: any; output: any; }
 };
 
+export type AccusationInfoObjectType = {
+  __typename?: 'AccusationInfoObjectType';
+  accusations: Array<AccusationObjectType>;
+  count: Scalars['Float']['output'];
+  createdAt: Scalars['DateTime']['output'];
+  id: Scalars['ID']['output'];
+  showAlert: Scalars['Boolean']['output'];
+  updatedAt: Scalars['DateTime']['output'];
+  user: UserObjectType;
+};
+
+export type AccusationObjectType = {
+  __typename?: 'AccusationObjectType';
+  answer?: Maybe<Scalars['String']['output']>;
+  authorId: Scalars['ID']['output'];
+  content: Scalars['String']['output'];
+  createdAt: Scalars['DateTime']['output'];
+  id: Scalars['ID']['output'];
+  imageUrls?: Maybe<Array<Scalars['String']['output']>>;
+  info: AccusationInfoObjectType;
+  status: AccusationStatus;
+  updatedAt: Scalars['DateTime']['output'];
+};
+
+export enum AccusationStatus {
+  Accept = 'ACCEPT',
+  Reject = 'REJECT',
+  Wait = 'WAIT'
+}
+
 export type CommentCountInput = {
   postId: Scalars['ID']['input'];
 };
@@ -42,6 +72,18 @@ export type CommentObjectType = {
   text: Scalars['String']['output'];
   updatedAt: Scalars['DateTime']['output'];
   user: UserObjectType;
+};
+
+export type CreateAccusationInput = {
+  content: Scalars['String']['input'];
+  images?: InputMaybe<Array<Scalars['Upload']['input']>>;
+  targetUserId: Scalars['ID']['input'];
+};
+
+export type CreateAccusationOutput = {
+  __typename?: 'CreateAccusationOutput';
+  error?: Maybe<Scalars['String']['output']>;
+  ok: Scalars['Boolean']['output'];
 };
 
 export type CreateCommentInput = {
@@ -336,6 +378,7 @@ export type LoginOutput = {
   __typename?: 'LoginOutput';
   error?: Maybe<Scalars['String']['output']>;
   ok: Scalars['Boolean']['output'];
+  suspended?: Maybe<Scalars['Boolean']['output']>;
   token?: Maybe<Scalars['String']['output']>;
 };
 
@@ -351,6 +394,7 @@ export type Me = {
 
 export type MeDetail = {
   __typename?: 'MeDetail';
+  accusationInfo: AccusationInfoObjectType;
   allowMessage: Scalars['Boolean']['output'];
   autoTranslation: Scalars['Boolean']['output'];
   bio?: Maybe<Scalars['String']['output']>;
@@ -370,6 +414,7 @@ export type MeDetail = {
   profileUrl?: Maybe<Scalars['String']['output']>;
   replies: Array<ReplyObjectType>;
   socialPlatform: SocialPlatform;
+  suspensionEndAt?: Maybe<Scalars['DateTime']['output']>;
   updatedAt: Scalars['DateTime']['output'];
 };
 
@@ -407,6 +452,7 @@ export enum MessageType {
 
 export type Mutation = {
   __typename?: 'Mutation';
+  createAccusation: CreateAccusationOutput;
   createComment: CreateCommentOutput;
   createInvite: CreateInviteOutput;
   createNotice: CreateNoticeOutput;
@@ -431,10 +477,16 @@ export type Mutation = {
   readNotification: ReadNotificationOutput;
   sendMessage: SendMessageOutput;
   toggleBlockUser: ToggleBlockUserOutput;
+  updateAccusationStatus: UpdateAccusationStatusOutput;
   updateInvite: UpdateInviteOutput;
   updateOpinionStatus: UpdateOpinionStatusOutput;
   updateRoom: UpdateRoomOutput;
   updateUser: UpdateUserOutput;
+};
+
+
+export type MutationCreateAccusationArgs = {
+  input: CreateAccusationInput;
 };
 
 
@@ -538,6 +590,11 @@ export type MutationToggleBlockUserArgs = {
 };
 
 
+export type MutationUpdateAccusationStatusArgs = {
+  input: UpdateAccusationStatusInput;
+};
+
+
 export type MutationUpdateInviteArgs = {
   input: UpdateInviteInput;
 };
@@ -555,6 +612,13 @@ export type MutationUpdateRoomArgs = {
 
 export type MutationUpdateUserArgs = {
   input: UpdateUserInput;
+};
+
+export type MyAccusationInfoOutput = {
+  __typename?: 'MyAccusationInfoOutput';
+  error?: Maybe<Scalars['String']['output']>;
+  message?: Maybe<Scalars['String']['output']>;
+  ok: Scalars['Boolean']['output'];
 };
 
 export type MyInvitesOutput = {
@@ -670,6 +734,7 @@ export type NotificationObjectType = {
 };
 
 export enum NotificationType {
+  Accusation = 'ACCUSATION',
   Event = 'EVENT',
   Invite = 'INVITE',
   Message = 'MESSAGE',
@@ -722,6 +787,7 @@ export type Query = {
   login: LoginOutput;
   me: MeOutput;
   meDetail: MeDetailOutput;
+  myAccusationInfo: MyAccusationInfoOutput;
   myInvites: MyInvitesOutput;
   myOpinions: MyOpinionsOutput;
   myRooms: MyRoomsOutput;
@@ -733,6 +799,7 @@ export type Query = {
   roomDetail: RoomDetailOutput;
   unReadNotificationCount: UnReadNotificationCountOutput;
   userProfile: UserProfileOutput;
+  viewAccusations: ViewAccusationsOutput;
   viewComments: ViewCommentsOutput;
   viewMessages: ViewMessagesOutput;
   viewNotifications: ViewNotificationsOutput;
@@ -792,6 +859,11 @@ export type QueryRoomDetailArgs = {
 
 export type QueryUserProfileArgs = {
   input: UserProfileInput;
+};
+
+
+export type QueryViewAccusationsArgs = {
+  input: ViewAccusationsInput;
 };
 
 
@@ -979,6 +1051,19 @@ export type UnReadNotificationCountOutput = {
   ok: Scalars['Boolean']['output'];
 };
 
+export type UpdateAccusationStatusInput = {
+  answer?: InputMaybe<Scalars['String']['input']>;
+  id: Scalars['ID']['input'];
+  password: Scalars['String']['input'];
+  status: AccusationStatus;
+};
+
+export type UpdateAccusationStatusOutput = {
+  __typename?: 'UpdateAccusationStatusOutput';
+  error?: Maybe<Scalars['String']['output']>;
+  ok: Scalars['Boolean']['output'];
+};
+
 export type UpdateInviteInput = {
   id: Scalars['ID']['input'];
   status: InviteStatus;
@@ -1063,6 +1148,7 @@ export type User = {
 
 export type UserObjectType = {
   __typename?: 'UserObjectType';
+  accusationInfo: AccusationInfoObjectType;
   allowMessage: Scalars['Boolean']['output'];
   autoTranslation: Scalars['Boolean']['output'];
   bio?: Maybe<Scalars['String']['output']>;
@@ -1085,6 +1171,7 @@ export type UserObjectType = {
   rooms: Array<UserRoomObjectType>;
   socialId: Scalars['String']['output'];
   socialPlatform: SocialPlatform;
+  suspensionEndAt?: Maybe<Scalars['DateTime']['output']>;
   updatedAt: Scalars['DateTime']['output'];
 };
 
@@ -1110,6 +1197,20 @@ export type UserRoomObjectType = {
   room: Room;
   updatedAt: Scalars['DateTime']['output'];
   user: UserObjectType;
+};
+
+export type ViewAccusationsInput = {
+  password: Scalars['String']['input'];
+  skip?: Scalars['Float']['input'];
+  take?: Scalars['Float']['input'];
+};
+
+export type ViewAccusationsOutput = {
+  __typename?: 'ViewAccusationsOutput';
+  accusations?: Maybe<Array<AccusationObjectType>>;
+  error?: Maybe<Scalars['String']['output']>;
+  hasNext?: Maybe<Scalars['Boolean']['output']>;
+  ok: Scalars['Boolean']['output'];
 };
 
 export type ViewCommentsInput = {
@@ -1184,6 +1285,18 @@ export type UserRoomBaseFragment = { __typename?: 'UserRoomObjectType', id: stri
 export type MyRoomBaseFragment = { __typename?: 'MyRoom', id: string, name?: string | null, noti: boolean, pinnedAt?: any | null, newMessage: number, lastMessage: string, updatedAt: any, room: { __typename?: 'Room', id: string, updatedAt: any }, users: Array<{ __typename?: 'SimpleUser', id: string, nickname: string, profileUrl?: string | null, profileBgColor: string, profileTextColor: string }> } & { ' $fragmentName'?: 'MyRoomBaseFragment' };
 
 export type BlockUserFragment = { __typename?: 'UserObjectType', id: string, nickname: string, profileUrl?: string | null, profileBgColor: string, profileTextColor: string, bio?: string | null } & { ' $fragmentName'?: 'BlockUserFragment' };
+
+export type CreateAccusationMutationVariables = Exact<{
+  input: CreateAccusationInput;
+}>;
+
+
+export type CreateAccusationMutation = { __typename?: 'Mutation', createAccusation: { __typename?: 'CreateAccusationOutput', ok: boolean, error?: string | null } };
+
+export type MyAccusationInfoQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type MyAccusationInfoQuery = { __typename?: 'Query', myAccusationInfo: { __typename?: 'MyAccusationInfoOutput', ok: boolean, error?: string | null, message?: string | null } };
 
 export type CommentCountQueryVariables = Exact<{
   input: CommentCountInput;
@@ -1263,6 +1376,16 @@ export type MyInvitesQuery = { __typename?: 'Query', myInvites: { __typename?: '
       { __typename?: 'InviteRoom' }
       & { ' $fragmentRefs'?: { 'InviteRoomBaseFragment': InviteRoomBaseFragment } }
     )> | null } };
+
+export type UpdateInviteMutationVariables = Exact<{
+  input: UpdateInviteInput;
+}>;
+
+
+export type UpdateInviteMutation = { __typename?: 'Mutation', updateInvite: { __typename?: 'UpdateInviteOutput', ok: boolean, error?: string | null, room?: (
+      { __typename?: 'MyRoom' }
+      & { ' $fragmentRefs'?: { 'MyRoomBaseFragment': MyRoomBaseFragment } }
+    ) | null } };
 
 export type UpdateInviteStatusSubscriptionVariables = Exact<{ [key: string]: never; }>;
 
@@ -1524,7 +1647,7 @@ export type LoginQueryVariables = Exact<{
 }>;
 
 
-export type LoginQuery = { __typename?: 'Query', login: { __typename?: 'LoginOutput', ok: boolean, error?: string | null, token?: string | null } };
+export type LoginQuery = { __typename?: 'Query', login: { __typename?: 'LoginOutput', ok: boolean, error?: string | null, token?: string | null, suspended?: boolean | null } };
 
 export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -1577,6 +1700,8 @@ export const ReplyBaseFragmentDoc = {"kind":"Document","definitions":[{"kind":"F
 export const UserRoomBaseFragmentDoc = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"UserRoomBase"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"UserRoomObjectType"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"noti"}},{"kind":"Field","name":{"kind":"Name","value":"pinnedAt"}},{"kind":"Field","name":{"kind":"Name","value":"newMessage"}},{"kind":"Field","name":{"kind":"Name","value":"room"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}}]}}]} as unknown as DocumentNode<UserRoomBaseFragment, unknown>;
 export const MyRoomBaseFragmentDoc = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"MyRoomBase"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"MyRoom"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"noti"}},{"kind":"Field","name":{"kind":"Name","value":"pinnedAt"}},{"kind":"Field","name":{"kind":"Name","value":"newMessage"}},{"kind":"Field","name":{"kind":"Name","value":"lastMessage"}},{"kind":"Field","name":{"kind":"Name","value":"room"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"updatedAt"}}]}},{"kind":"Field","name":{"kind":"Name","value":"users"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"nickname"}},{"kind":"Field","name":{"kind":"Name","value":"profileUrl"}},{"kind":"Field","name":{"kind":"Name","value":"profileBgColor"}},{"kind":"Field","name":{"kind":"Name","value":"profileTextColor"}}]}},{"kind":"Field","name":{"kind":"Name","value":"updatedAt"}}]}}]} as unknown as DocumentNode<MyRoomBaseFragment, unknown>;
 export const BlockUserFragmentDoc = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"BlockUser"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"UserObjectType"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"nickname"}},{"kind":"Field","name":{"kind":"Name","value":"profileUrl"}},{"kind":"Field","name":{"kind":"Name","value":"profileBgColor"}},{"kind":"Field","name":{"kind":"Name","value":"profileTextColor"}},{"kind":"Field","name":{"kind":"Name","value":"bio"}}]}}]} as unknown as DocumentNode<BlockUserFragment, unknown>;
+export const CreateAccusationDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"createAccusation"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"CreateAccusationInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"createAccusation"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"ok"}},{"kind":"Field","name":{"kind":"Name","value":"error"}}]}}]}}]} as unknown as DocumentNode<CreateAccusationMutation, CreateAccusationMutationVariables>;
+export const MyAccusationInfoDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"myAccusationInfo"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"myAccusationInfo"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"ok"}},{"kind":"Field","name":{"kind":"Name","value":"error"}},{"kind":"Field","name":{"kind":"Name","value":"message"}}]}}]}}]} as unknown as DocumentNode<MyAccusationInfoQuery, MyAccusationInfoQueryVariables>;
 export const CommentCountDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"commentCount"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"CommentCountInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"commentCount"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"ok"}},{"kind":"Field","name":{"kind":"Name","value":"error"}},{"kind":"Field","name":{"kind":"Name","value":"count"}}]}}]}}]} as unknown as DocumentNode<CommentCountQuery, CommentCountQueryVariables>;
 export const CreateCommentDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"createComment"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"CreateCommentInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"createComment"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"ok"}},{"kind":"Field","name":{"kind":"Name","value":"error"}},{"kind":"Field","name":{"kind":"Name","value":"comment"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"CommentBase"}}]}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"CommentBase"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"CommentObjectType"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"text"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"updatedAt"}},{"kind":"Field","name":{"kind":"Name","value":"user"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"nickname"}},{"kind":"Field","name":{"kind":"Name","value":"profileUrl"}},{"kind":"Field","name":{"kind":"Name","value":"profileBgColor"}},{"kind":"Field","name":{"kind":"Name","value":"profileTextColor"}}]}}]}}]} as unknown as DocumentNode<CreateCommentMutation, CreateCommentMutationVariables>;
 export const DeleteCommentDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"deleteComment"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"DeleteCommentInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"deleteComment"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"ok"}},{"kind":"Field","name":{"kind":"Name","value":"error"}}]}}]}}]} as unknown as DocumentNode<DeleteCommentMutation, DeleteCommentMutationVariables>;
@@ -1586,6 +1711,7 @@ export const ViewCommentsDocument = {"kind":"Document","definitions":[{"kind":"O
 export const CreateInviteDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"createInvite"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"CreateInviteInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"createInvite"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"ok"}},{"kind":"Field","name":{"kind":"Name","value":"error"}},{"kind":"Field","name":{"kind":"Name","value":"room"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"InviteRoomBase"}}]}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"InviteRoomBase"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"InviteRoom"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"updatedAt"}},{"kind":"Field","name":{"kind":"Name","value":"invites"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"status"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"updatedAt"}},{"kind":"Field","name":{"kind":"Name","value":"user"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"nickname"}},{"kind":"Field","name":{"kind":"Name","value":"profileUrl"}},{"kind":"Field","name":{"kind":"Name","value":"profileBgColor"}},{"kind":"Field","name":{"kind":"Name","value":"profileTextColor"}}]}}]}}]}}]} as unknown as DocumentNode<CreateInviteMutation, CreateInviteMutationVariables>;
 export const InviteTargetsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"inviteTargets"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"InviteTargetsInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"inviteTargets"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"ok"}},{"kind":"Field","name":{"kind":"Name","value":"error"}},{"kind":"Field","name":{"kind":"Name","value":"targets"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"nickname"}},{"kind":"Field","name":{"kind":"Name","value":"bio"}},{"kind":"Field","name":{"kind":"Name","value":"profileUrl"}},{"kind":"Field","name":{"kind":"Name","value":"profileBgColor"}},{"kind":"Field","name":{"kind":"Name","value":"profileTextColor"}}]}}]}}]}}]} as unknown as DocumentNode<InviteTargetsQuery, InviteTargetsQueryVariables>;
 export const MyInvitesDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"myInvites"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"myInvites"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"ok"}},{"kind":"Field","name":{"kind":"Name","value":"error"}},{"kind":"Field","name":{"kind":"Name","value":"rooms"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"InviteRoomBase"}}]}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"InviteRoomBase"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"InviteRoom"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"updatedAt"}},{"kind":"Field","name":{"kind":"Name","value":"invites"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"status"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"updatedAt"}},{"kind":"Field","name":{"kind":"Name","value":"user"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"nickname"}},{"kind":"Field","name":{"kind":"Name","value":"profileUrl"}},{"kind":"Field","name":{"kind":"Name","value":"profileBgColor"}},{"kind":"Field","name":{"kind":"Name","value":"profileTextColor"}}]}}]}}]}}]} as unknown as DocumentNode<MyInvitesQuery, MyInvitesQueryVariables>;
+export const UpdateInviteDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"updateInvite"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"UpdateInviteInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"updateInvite"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"ok"}},{"kind":"Field","name":{"kind":"Name","value":"error"}},{"kind":"Field","name":{"kind":"Name","value":"room"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"MyRoomBase"}}]}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"MyRoomBase"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"MyRoom"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"noti"}},{"kind":"Field","name":{"kind":"Name","value":"pinnedAt"}},{"kind":"Field","name":{"kind":"Name","value":"newMessage"}},{"kind":"Field","name":{"kind":"Name","value":"lastMessage"}},{"kind":"Field","name":{"kind":"Name","value":"room"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"updatedAt"}}]}},{"kind":"Field","name":{"kind":"Name","value":"users"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"nickname"}},{"kind":"Field","name":{"kind":"Name","value":"profileUrl"}},{"kind":"Field","name":{"kind":"Name","value":"profileBgColor"}},{"kind":"Field","name":{"kind":"Name","value":"profileTextColor"}}]}},{"kind":"Field","name":{"kind":"Name","value":"updatedAt"}}]}}]} as unknown as DocumentNode<UpdateInviteMutation, UpdateInviteMutationVariables>;
 export const UpdateInviteStatusDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"subscription","name":{"kind":"Name","value":"updateInviteStatus"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"updateInviteStatus"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"roomId"}},{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"status"}}]}}]}}]} as unknown as DocumentNode<UpdateInviteStatusSubscription, UpdateInviteStatusSubscriptionVariables>;
 export const NewMessageDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"subscription","name":{"kind":"Name","value":"newMessage"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"NewMessageInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"newMessage"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"MessageBase"}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"MessageBase"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"MessageObjectType"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"contents"}},{"kind":"Field","name":{"kind":"Name","value":"type"}},{"kind":"Field","name":{"kind":"Name","value":"readUsersId"}},{"kind":"Field","name":{"kind":"Name","value":"user"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"nickname"}},{"kind":"Field","name":{"kind":"Name","value":"profileUrl"}},{"kind":"Field","name":{"kind":"Name","value":"profileBgColor"}},{"kind":"Field","name":{"kind":"Name","value":"profileTextColor"}}]}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}}]}}]} as unknown as DocumentNode<NewMessageSubscription, NewMessageSubscriptionVariables>;
 export const ReadMessageDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"subscription","name":{"kind":"Name","value":"readMessage"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ReadMessageInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"readMessage"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"messages"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"readUsersId"}}]}}]}}]}}]} as unknown as DocumentNode<ReadMessageSubscription, ReadMessageSubscriptionVariables>;
@@ -1619,7 +1745,7 @@ export const RoomDetailDocument = {"kind":"Document","definitions":[{"kind":"Ope
 export const UpdateRoomDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"updateRoom"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"UpdateRoomInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"updateRoom"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"ok"}},{"kind":"Field","name":{"kind":"Name","value":"error"}}]}}]}}]} as unknown as DocumentNode<UpdateRoomMutation, UpdateRoomMutationVariables>;
 export const CreateUserDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"createUser"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"CreateUserInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"createUser"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"ok"}},{"kind":"Field","name":{"kind":"Name","value":"error"}},{"kind":"Field","name":{"kind":"Name","value":"user"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}}]}}]}}]} as unknown as DocumentNode<CreateUserMutation, CreateUserMutationVariables>;
 export const DeleteUserDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"deleteUser"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"deleteUser"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"ok"}},{"kind":"Field","name":{"kind":"Name","value":"error"}}]}}]}}]} as unknown as DocumentNode<DeleteUserMutation, DeleteUserMutationVariables>;
-export const LoginDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"login"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"LoginInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"login"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"ok"}},{"kind":"Field","name":{"kind":"Name","value":"error"}},{"kind":"Field","name":{"kind":"Name","value":"token"}}]}}]}}]} as unknown as DocumentNode<LoginQuery, LoginQueryVariables>;
+export const LoginDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"login"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"LoginInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"login"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"ok"}},{"kind":"Field","name":{"kind":"Name","value":"error"}},{"kind":"Field","name":{"kind":"Name","value":"token"}},{"kind":"Field","name":{"kind":"Name","value":"suspended"}}]}}]}}]} as unknown as DocumentNode<LoginQuery, LoginQueryVariables>;
 export const MeDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"me"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"me"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"ok"}},{"kind":"Field","name":{"kind":"Name","value":"error"}},{"kind":"Field","name":{"kind":"Name","value":"me"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"nickname"}},{"kind":"Field","name":{"kind":"Name","value":"profileUrl"}},{"kind":"Field","name":{"kind":"Name","value":"profileBgColor"}},{"kind":"Field","name":{"kind":"Name","value":"profileTextColor"}},{"kind":"Field","name":{"kind":"Name","value":"blockUserIds"}}]}}]}}]}}]} as unknown as DocumentNode<MeQuery, MeQueryVariables>;
 export const MeDetailDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"meDetail"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"meDetail"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"ok"}},{"kind":"Field","name":{"kind":"Name","value":"error"}},{"kind":"Field","name":{"kind":"Name","value":"me"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"nickname"}},{"kind":"Field","name":{"kind":"Name","value":"profileUrl"}},{"kind":"Field","name":{"kind":"Name","value":"profileBgColor"}},{"kind":"Field","name":{"kind":"Name","value":"profileTextColor"}},{"kind":"Field","name":{"kind":"Name","value":"bio"}},{"kind":"Field","name":{"kind":"Name","value":"socialPlatform"}},{"kind":"Field","name":{"kind":"Name","value":"noti"}},{"kind":"Field","name":{"kind":"Name","value":"allowMessage"}},{"kind":"Field","name":{"kind":"Name","value":"language"}},{"kind":"Field","name":{"kind":"Name","value":"autoTranslation"}},{"kind":"Field","name":{"kind":"Name","value":"blockUsers"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"BlockUser"}}]}}]}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"BlockUser"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"UserObjectType"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"nickname"}},{"kind":"Field","name":{"kind":"Name","value":"profileUrl"}},{"kind":"Field","name":{"kind":"Name","value":"profileBgColor"}},{"kind":"Field","name":{"kind":"Name","value":"profileTextColor"}},{"kind":"Field","name":{"kind":"Name","value":"bio"}}]}}]} as unknown as DocumentNode<MeDetailQuery, MeDetailQueryVariables>;
 export const RandomNicknameDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"randomNickname"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"randomNickname"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"ok"}},{"kind":"Field","name":{"kind":"Name","value":"error"}},{"kind":"Field","name":{"kind":"Name","value":"nickname"}}]}}]}}]} as unknown as DocumentNode<RandomNicknameQuery, RandomNicknameQueryVariables>;

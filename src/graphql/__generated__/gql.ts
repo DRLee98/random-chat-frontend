@@ -22,6 +22,8 @@ const documents = {
     "\n  fragment UserRoomBase on UserRoomObjectType {\n    id\n    name\n    noti\n    pinnedAt\n    newMessage\n    room {\n      id\n    }\n  }\n": types.UserRoomBaseFragmentDoc,
     "\n  fragment MyRoomBase on MyRoom {\n    id\n    name\n    noti\n    pinnedAt\n    newMessage\n    lastMessage\n    room {\n      id\n      updatedAt\n    }\n    users {\n      id\n      nickname\n      profileUrl\n      profileBgColor\n      profileTextColor\n    }\n    updatedAt\n  }\n": types.MyRoomBaseFragmentDoc,
     "\n  fragment BlockUser on UserObjectType {\n    id\n    nickname\n    profileUrl\n    profileBgColor\n    profileTextColor\n    bio\n  }\n": types.BlockUserFragmentDoc,
+    "\n  mutation createAccusation($input: CreateAccusationInput!) {\n    createAccusation(input: $input) {\n      ok\n      error\n    }\n  }\n": types.CreateAccusationDocument,
+    "\n  query myAccusationInfo {\n    myAccusationInfo {\n      ok\n      error\n      message\n    }\n  }\n": types.MyAccusationInfoDocument,
     "\n  query commentCount($input: CommentCountInput!) {\n    commentCount(input: $input) {\n      ok\n      error\n      count\n    }\n  }\n": types.CommentCountDocument,
     "\n  mutation createComment($input: CreateCommentInput!) {\n    createComment(input: $input) {\n      ok\n      error\n      comment {\n        ...CommentBase\n      }\n    }\n  }\n": types.CreateCommentDocument,
     "\n  mutation deleteComment($input: DeleteCommentInput!) {\n    deleteComment(input: $input) {\n      ok\n      error\n    }\n  }\n": types.DeleteCommentDocument,
@@ -31,6 +33,7 @@ const documents = {
     "\n  mutation createInvite($input: CreateInviteInput!) {\n    createInvite(input: $input) {\n      ok\n      error\n      room {\n        ...InviteRoomBase\n      }\n    }\n  }\n": types.CreateInviteDocument,
     "\n  query inviteTargets($input: InviteTargetsInput!) {\n    inviteTargets(input: $input) {\n      ok\n      error\n      targets {\n        id\n        nickname\n        bio\n        profileUrl\n        profileBgColor\n        profileTextColor\n      }\n    }\n  }\n": types.InviteTargetsDocument,
     "\n  query myInvites {\n    myInvites {\n      ok\n      error\n      rooms {\n        ...InviteRoomBase\n      }\n    }\n  }\n": types.MyInvitesDocument,
+    "\n  mutation updateInvite($input: UpdateInviteInput!) {\n    updateInvite(input: $input) {\n      ok\n      error\n      room {\n        ...MyRoomBase\n      }\n    }\n  }\n": types.UpdateInviteDocument,
     "\n  subscription updateInviteStatus {\n    updateInviteStatus {\n      roomId\n      id\n      status\n    }\n  }\n": types.UpdateInviteStatusDocument,
     "\n  subscription newMessage($input: NewMessageInput!) {\n    newMessage(input: $input) {\n      ...MessageBase\n    }\n  }\n": types.NewMessageDocument,
     "\n  subscription readMessage($input: ReadMessageInput!) {\n    readMessage(input: $input) {\n      messages {\n        id\n        readUsersId\n      }\n    }\n  }\n": types.ReadMessageDocument,
@@ -64,7 +67,7 @@ const documents = {
     "\n  mutation updateRoom($input: UpdateRoomInput!) {\n    updateRoom(input: $input) {\n      ok\n      error\n    }\n  }\n": types.UpdateRoomDocument,
     "\n  mutation createUser($input: CreateUserInput!) {\n    createUser(input: $input) {\n      ok\n      error\n      user {\n        id\n      }\n    }\n  }\n": types.CreateUserDocument,
     "\n  mutation deleteUser {\n    deleteUser {\n      ok\n      error\n    }\n  }\n": types.DeleteUserDocument,
-    "\n  query login($input: LoginInput!) {\n    login(input: $input) {\n      ok\n      error\n      token\n    }\n  }\n": types.LoginDocument,
+    "\n  query login($input: LoginInput!) {\n    login(input: $input) {\n      ok\n      error\n      token\n      suspended\n    }\n  }\n": types.LoginDocument,
     "\n  query me {\n    me {\n      ok\n      error\n      me {\n        id\n        nickname\n        profileUrl\n        profileBgColor\n        profileTextColor\n        blockUserIds\n      }\n    }\n  }\n": types.MeDocument,
     "\n  query meDetail {\n    meDetail {\n      ok\n      error\n      me {\n        id\n        nickname\n        profileUrl\n        profileBgColor\n        profileTextColor\n        bio\n        socialPlatform\n        noti\n        allowMessage\n        language\n        autoTranslation\n        blockUsers {\n          ...BlockUser\n        }\n      }\n    }\n  }\n": types.MeDetailDocument,
     "\n  query randomNickname {\n    randomNickname {\n      ok\n      error\n      nickname\n    }\n  }\n": types.RandomNicknameDocument,
@@ -126,6 +129,14 @@ export function graphql(source: "\n  fragment BlockUser on UserObjectType {\n   
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
+export function graphql(source: "\n  mutation createAccusation($input: CreateAccusationInput!) {\n    createAccusation(input: $input) {\n      ok\n      error\n    }\n  }\n"): (typeof documents)["\n  mutation createAccusation($input: CreateAccusationInput!) {\n    createAccusation(input: $input) {\n      ok\n      error\n    }\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  query myAccusationInfo {\n    myAccusationInfo {\n      ok\n      error\n      message\n    }\n  }\n"): (typeof documents)["\n  query myAccusationInfo {\n    myAccusationInfo {\n      ok\n      error\n      message\n    }\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
 export function graphql(source: "\n  query commentCount($input: CommentCountInput!) {\n    commentCount(input: $input) {\n      ok\n      error\n      count\n    }\n  }\n"): (typeof documents)["\n  query commentCount($input: CommentCountInput!) {\n    commentCount(input: $input) {\n      ok\n      error\n      count\n    }\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
@@ -159,6 +170,10 @@ export function graphql(source: "\n  query inviteTargets($input: InviteTargetsIn
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(source: "\n  query myInvites {\n    myInvites {\n      ok\n      error\n      rooms {\n        ...InviteRoomBase\n      }\n    }\n  }\n"): (typeof documents)["\n  query myInvites {\n    myInvites {\n      ok\n      error\n      rooms {\n        ...InviteRoomBase\n      }\n    }\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  mutation updateInvite($input: UpdateInviteInput!) {\n    updateInvite(input: $input) {\n      ok\n      error\n      room {\n        ...MyRoomBase\n      }\n    }\n  }\n"): (typeof documents)["\n  mutation updateInvite($input: UpdateInviteInput!) {\n    updateInvite(input: $input) {\n      ok\n      error\n      room {\n        ...MyRoomBase\n      }\n    }\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
@@ -294,7 +309,7 @@ export function graphql(source: "\n  mutation deleteUser {\n    deleteUser {\n  
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n  query login($input: LoginInput!) {\n    login(input: $input) {\n      ok\n      error\n      token\n    }\n  }\n"): (typeof documents)["\n  query login($input: LoginInput!) {\n    login(input: $input) {\n      ok\n      error\n      token\n    }\n  }\n"];
+export function graphql(source: "\n  query login($input: LoginInput!) {\n    login(input: $input) {\n      ok\n      error\n      token\n      suspended\n    }\n  }\n"): (typeof documents)["\n  query login($input: LoginInput!) {\n    login(input: $input) {\n      ok\n      error\n      token\n      suspended\n    }\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

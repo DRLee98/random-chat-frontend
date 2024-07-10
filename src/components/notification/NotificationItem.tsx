@@ -8,6 +8,7 @@ import styled from 'styled-components/native';
 
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import SwipeableListItem from '../common/SwipeableListItem';
+import BreakText from '../common/BreakText';
 
 import {getDateTimeString} from '@app/utils/date';
 
@@ -95,6 +96,8 @@ const NotificationItem = ({grayBg, notification}: NotificationItemProps) => {
         return 'bullhorn';
       case NotificationType.Invite:
         return 'envelope';
+      case NotificationType.Accusation:
+        return 'exclamation-triangle';
       default:
         return '';
     }
@@ -120,8 +123,8 @@ const NotificationItem = ({grayBg, notification}: NotificationItemProps) => {
             />
           )}
           <ContentBox>
-            <Title>{notification.title}</Title>
-            <Message>{notification.message}</Message>
+            <Title text={notification.title} />
+            <Message text={notification.message} />
             <CreatedAt>{getDateTimeString(notification.createdAt)}</CreatedAt>
           </ContentBox>
         </Container>
@@ -160,13 +163,14 @@ const ContentBox = styled.View`
   width: 80%;
 `;
 
-const Title = styled.Text`
+const Title = styled(BreakText).attrs({justify: 'flex-start'})`
   font-size: 15px;
   font-weight: 600;
   color: ${({theme}) => theme.fontColor};
 `;
 
-const Message = styled.Text`
+const Message = styled(BreakText).attrs({justify: 'flex-start'})`
+  justify-content: flex-start;
   font-size: 13px;
   color: ${({theme}) => theme.fontColor};
 `;

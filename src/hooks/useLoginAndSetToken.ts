@@ -12,15 +12,17 @@ import type {
 } from '@app/graphql/__generated__/graphql';
 import type {LazyQueryHookOptions} from '@apollo/client';
 
+export type LoginResultType = 'success' | 'suspended' | 'fail';
+
 const useLoginAndSetToken = (
   options?: LazyQueryHookOptions<LoginQuery, QueryLoginArgs>,
 ) => {
-  // const showModal = useModal();
+  const showModal = useModal();
 
   const [login] = useLogin(options);
   const [updateUser] = useUpdateUser();
 
-  const loginFn = async (input: LoginInput) => {
+  const loginFn = async (input: LoginInput): Promise<LoginResultType> => {
     const data = await login({
       input,
     });
@@ -35,15 +37,17 @@ const useLoginAndSetToken = (
           },
         },
       });
-      return true;
+      return 'success';
     }
-    // if (data?.login.error)
-    //   showModal({
-    //     title: '로그인에 실패했어요',
-    //     message: data.login.error,
-    //     buttons: [{text: '확인'}],
-    //   });
-    return false;
+    if (data?.login.suspended) {
+      showModal({
+        title: '로그인에 실패했어요',
+        message: data.login.error ?? '정지된 계정입니다.',
+        buttons: [{text: '확인'}],
+      });
+      return 'suspended';
+    }
+    return 'fail';
   };
 
   return loginFn;

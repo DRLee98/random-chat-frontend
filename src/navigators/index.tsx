@@ -14,6 +14,7 @@ import MeScreen from '@app/screens/user/me';
 import UserScreen from '@app/screens/user';
 import ChatRoomEditScreen from '@app/screens/chatRoom/edit';
 import NotificationScreen from '@app/screens/notification';
+import AccusationScreen from '@app/screens/accusation';
 import SettingsNavigator, {SettingsNavigatorScreens} from './settings';
 import Icon from 'react-native-vector-icons/Ionicons';
 import HeaderBackIcon from '@app/components/common/HeaderBackIcon';
@@ -31,6 +32,7 @@ import type {ChatRoomScreenParams} from '@app/screens/chatRoom';
 import type {ChatRoomEditScreenParams} from '@app/screens/chatRoom/edit';
 import type {UserScreenScreenParams} from '@app/screens/user';
 import type {NavigationProp} from '@react-navigation/native';
+import type {AccusationScreenParams} from '@app/screens/accusation';
 
 export enum MainNavigatorScreens {
   Splash = 'Splash',
@@ -42,6 +44,7 @@ export enum MainNavigatorScreens {
   Me = 'Me',
   User = 'User',
   Notification = 'Notification',
+  Accusation = 'Accusation',
   SettingsStack = 'SettingsStack',
 }
 
@@ -55,6 +58,7 @@ export type MainNavigatorParamList = {
   Me: undefined;
   User: UserScreenScreenParams;
   Notification: undefined;
+  Accusation: AccusationScreenParams;
   SettingsStack: undefined;
 };
 
@@ -179,6 +183,13 @@ const MainNavigator = () => {
           component={NotificationScreen}
           options={{
             title: '알림 목록',
+          }}
+        />
+        <Stack.Screen
+          name={MainNavigatorScreens.Accusation}
+          component={AccusationScreen}
+          options={{
+            title: '신고하기',
           }}
         />
         <Stack.Screen
