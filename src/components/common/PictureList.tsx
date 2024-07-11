@@ -65,11 +65,13 @@ const PictureList = ({
           </PictureBox>
         ))}
       </List>
-      <PicturePreviewModal
-        urls={urls}
-        previewIndex={previewUriIndex}
-        onClose={() => setPreviewUriIndex(undefined)}
-      />
+      {previewUriIndex !== undefined && (
+        <PicturePreviewModal
+          urls={urls}
+          previewIndex={previewUriIndex}
+          onClose={() => setPreviewUriIndex(undefined)}
+        />
+      )}
     </>
   );
 };

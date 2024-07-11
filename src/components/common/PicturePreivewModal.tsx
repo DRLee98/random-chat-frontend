@@ -7,8 +7,11 @@ import Animated, {
   useSharedValue,
   withTiming,
 } from 'react-native-reanimated';
-import {Gesture, GestureDetector, 
-  GestureHandlerRootView,} from 'react-native-gesture-handler';
+import {
+  Gesture,
+  GestureDetector,
+  GestureHandlerRootView,
+} from 'react-native-gesture-handler';
 
 import type {
   GestureStateChangeEvent,
@@ -77,18 +80,18 @@ const PicturePreviewModal = ({
       transparent
       animationType="slide"
       visible={previewIndex !== undefined}>
-        <GestureHandlerRoot>
-      <ModalOverlay>
-        <GestureDetector gesture={pan}>
-          <GestureContainer activeOpacity={1} onPress={onClose}>
-            {urls.map((url, i) => (
-              <PictureBox key={`preview-img-${i}`} style={style(i)}>
-                <Picture source={{uri: url}} resizeMode="contain" />
-              </PictureBox>
-            ))}
-          </GestureContainer>
-        </GestureDetector>
-      </ModalOverlay>
+      <GestureHandlerRoot>
+        <ModalOverlay>
+          <GestureDetector gesture={pan}>
+            <GestureContainer activeOpacity={1} onPress={onClose}>
+              {urls.map((url, i) => (
+                <PictureBox key={`preview-img-${i}`} style={style(i)}>
+                  <Picture source={{uri: url}} resizeMode="contain" />
+                </PictureBox>
+              ))}
+            </GestureContainer>
+          </GestureDetector>
+        </ModalOverlay>
       </GestureHandlerRoot>
     </Modal>
   );
