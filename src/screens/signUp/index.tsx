@@ -69,6 +69,13 @@ const SignUpScreen = ({route, navigation}: SignUpScreenProps) => {
   const regist = async () => {
     try {
       if (values) {
+        if (!values.nickname) {
+          showModal({
+            message: '닉네임을 입력해주세요',
+            buttons: [{text: '확인'}],
+          });
+          return;
+        }
         const {data} = await createUser({
           variables: {
             input: {...values},
@@ -162,7 +169,7 @@ const SignUpScreen = ({route, navigation}: SignUpScreenProps) => {
         {...getProps('nickname')}
       />
 
-      <RegistButton onPress={regist} disabled={loading}>
+      <RegistButton onPress={regist} disabled={loading || !values.nickname}>
         <RegistText>
           {loading ? '잠시만 기다려 주세요' : '랜덤채팅 시작하기'}
         </RegistText>
