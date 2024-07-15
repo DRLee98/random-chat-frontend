@@ -17,11 +17,15 @@ import {getSociald, getToken, setToken} from '@app/utils/encStorage';
 
 import Config from 'react-native-config';
 
+let token: string | null = null;
 let tokenExpired = false;
 
 const loadToken = async () => {
   if (!tokenExpired) {
-    return await getToken();
+    if (token) return token;
+    const storageToken = await getToken();
+    token = storageToken;
+    return storageToken;
   }
   const socialData = await getSociald();
   if (!socialData) return;
