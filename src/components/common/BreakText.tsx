@@ -11,16 +11,28 @@ interface BreakTextProps {
 const BreakText = ({text, style, justify}: BreakTextProps) => {
   return (
     <Container justify={justify}>
-      {text.split(' ').map((t, i) => (
-        <Text key={`text-${i}`} style={style}>
-          {t}
-        </Text>
+      {text.split('\n').map((rowText, i) => (
+        <Row key={`row-${i}`}>
+          {rowText.split(' ').map((t, j) => (
+            <Text key={`text-${j}`} style={style}>
+              {t}
+            </Text>
+          ))}
+        </Row>
       ))}
     </Container>
   );
 };
 
 const Container = styled.View<Pick<BreakTextProps, 'justify'>>`
+  flex-wrap: wrap;
+  flex-direction: column;
+  align-items: center;
+  justify-content: ${({justify}) => justify || 'center'};
+  column-gap: 4px;
+`;
+
+const Row = styled.View<Pick<BreakTextProps, 'justify'>>`
   flex-wrap: wrap;
   flex-direction: row;
   align-items: center;

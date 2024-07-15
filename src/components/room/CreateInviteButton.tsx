@@ -66,9 +66,9 @@ const CreateRoomButton = ({simple, size}: CreateRoomButtonProps) => {
     const {data} = await createInvite({
       variables: {input: {targetIds: [selectUserId]}},
     });
+    onCloseModal();
     if (data?.createInvite.room) {
       appendMyInvite(data.createInvite.room);
-      onCloseModal();
     }
     if (data?.createInvite.error) {
       showModal({
