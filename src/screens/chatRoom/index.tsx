@@ -1,4 +1,4 @@
-import {useEffect, useLayoutEffect, useMemo, useState} from 'react';
+import {useEffect, useMemo, useState} from 'react';
 import {useUpdateMyRooms} from '@app/graphql/hooks/room/useMyRooms';
 import useRoomDetail from '@app/graphql/hooks/room/useRoomDetail';
 import useViewMessages, {
@@ -55,7 +55,7 @@ interface ChatRoomScreenProps
     MainNavigatorScreens.ChatRoom
   > {}
 
-const ChatRoomScreen = ({route, navigation}: ChatRoomScreenProps) => {
+const ChatRoomScreen = ({route}: ChatRoomScreenProps) => {
   const {roomId, chatRoomName, newMessageCount} = route.params;
 
   const showModal = useModal();
@@ -211,6 +211,8 @@ const ChatRoomScreen = ({route, navigation}: ChatRoomScreenProps) => {
         ListFooterComponent={<HeightBox />}
         onEndReached={fetchMore}
         onEndReachedThreshold={0.5}
+        refreshing={networkStatus === 4}
+        onRefresh={refetch}
       />
       <InputBox>
         <Input
@@ -272,6 +274,7 @@ const HeightBox = styled.View`
 
 const InputBox = styled.View`
   padding: 5px 12px;
+  padding-top: 10px;
   border-top-width: 1px;
   border-style: solid;
   border-color: ${({theme}) => theme.gray300.default};
