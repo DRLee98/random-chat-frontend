@@ -10,9 +10,9 @@ interface BreakTextProps {
 
 const BreakText = ({text, style, justify}: BreakTextProps) => {
   return (
-    <Container justify={justify}>
+    <Container>
       {text.split('\n').map((rowText, i) => (
-        <Row key={`row-${i}`}>
+        <Row key={`row-${i}`} justify={justify}>
           {rowText.split(' ').map((t, j) => (
             <Text key={`text-${j}`} style={style}>
               {t}
@@ -24,11 +24,10 @@ const BreakText = ({text, style, justify}: BreakTextProps) => {
   );
 };
 
-const Container = styled.View<Pick<BreakTextProps, 'justify'>>`
+const Container = styled.View`
   flex-wrap: wrap;
   flex-direction: column;
   align-items: center;
-  justify-content: ${({justify}) => justify || 'center'};
   column-gap: 4px;
 `;
 
