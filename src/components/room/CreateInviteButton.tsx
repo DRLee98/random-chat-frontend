@@ -48,8 +48,18 @@ const CreateRoomButton = ({simple, size}: CreateRoomButtonProps) => {
   };
 
   const onPressCreateButton = async () => {
-    await inviteTargets({variables: {input: {count: 3}}});
-    setShowInviteModal(true);
+    const {data} = await inviteTargets({variables: {input: {count: 3}}});
+
+    if (data?.inviteTargets.ok) {
+      setShowInviteModal(true);
+    }
+    if (data?.inviteTargets.error) {
+      showModal({
+        title: '유저 목록을 불러오지 못했어요',
+        message: data.inviteTargets.error,
+        buttons: [{text: '확인'}],
+      });
+    }
   };
 
   const onCloseModal = () => {

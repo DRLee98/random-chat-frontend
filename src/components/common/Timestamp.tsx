@@ -27,7 +27,7 @@ const Timestamp = ({date, type}: TimestampProps) => {
     updateTimeStr();
     const timer = setInterval(updateTimeStr, 60000);
     return () => clearInterval(timer);
-  }, []);
+  }, [date]);
   return <Text>{timeStr}</Text>;
 };
 
