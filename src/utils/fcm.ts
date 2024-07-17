@@ -18,7 +18,7 @@ export async function getFcmToken() {
   try {
     const enabled = await messagingEnabled();
     if (!enabled) return undefined;
-    await messaging().registerDeviceForRemoteMessages();
+    // await messaging().registerDeviceForRemoteMessages();
     return messaging().getToken();
   } catch (error) {
     return undefined;

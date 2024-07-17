@@ -14,6 +14,7 @@ import MainNavigator from './navigators';
 import ModalProvider from './contexts/modalContext';
 
 import {Appearance, Platform} from 'react-native';
+import {requestUserPermission} from './utils/fcm';
 import messaging from '@react-native-firebase/messaging';
 
 messaging().setBackgroundMessageHandler(async remoteMessage => {
@@ -30,6 +31,7 @@ function App() {
   }, []);
 
   useLayoutEffect(() => {
+    requestUserPermission();
     const initTheme = Appearance.getColorScheme();
     setTheme(initTheme === 'dark' ? darkTheme : lightTheme);
     Appearance.addChangeListener(({colorScheme}) => {

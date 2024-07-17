@@ -8,6 +8,8 @@ import useNewRoomListener from '@app/graphql/hooks/room/useNewRoomListener';
 import useUpdateNewMessageListener from '@app/graphql/hooks/message/useUpdateNewMessageListener';
 import useUpdateInviteStatusListener from '@app/graphql/hooks/invite/useUpdateInviteStatusListener';
 import useMyAccusationInfo from '@app/graphql/hooks/accusation/useMyAccusationInfo';
+import useNotificationListener from '@app/hooks/useNotificationListener';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 import styled from 'styled-components/native';
 import RoomItem from '@app/components/room/RoomItem';
@@ -39,6 +41,7 @@ interface HomeScreenProps
   extends StackScreenProps<MainNavigatorParamList, MainNavigatorScreens.Home> {}
 
 const HomeScreen = (props: HomeScreenProps) => {
+  const insets = useSafeAreaInsets();
   const showModal = useModal();
 
   const {rooms, fetchMore, refetch, hasNext, loading, networkStatus} =
@@ -85,6 +88,7 @@ const HomeScreen = (props: HomeScreenProps) => {
     updateMyInviteStatus(roomId, id, status);
   };
 
+  useNotificationListener();
   useNewRoomListener({
     onData: ({data}) => updateNewRoom(data.data?.newRoom),
   });
@@ -149,7 +153,7 @@ const HomeScreen = (props: HomeScreenProps) => {
                 <Skeleton height={60} borderRadius={10} />
               </SkeletonContainer>
             )}
-            <Footer />
+            <Footer bottom={insets.bottom} />
           </>
         }
         onEndReached={fetchMore}
@@ -169,8 +173,12 @@ const Container = styled.View`
 
 const List = styled.FlatList<FlatListProps<MyRoomBaseFragment>>``;
 
-const Footer = styled.View`
-  height: 30px;
+interface FooterProps {
+  bottom: number;
+}
+
+const Footer = styled.View<FooterProps>`
+  height: ${({bottom}) => bottom + 40}px;
 `;
 
 const SkeletonContainer = styled.View`
@@ -195,7 +203,7 @@ const EmptyText = styled.Text`
 
 const FixedButton = styled.SafeAreaView`
   position: absolute;
-  bottom: 40px;
+  bottom: 20px;
   right: 20px;
   z-index: 1;
 `;

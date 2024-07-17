@@ -1,6 +1,4 @@
-import {useEffect} from 'react';
 import styled, {useTheme} from 'styled-components/native';
-import {useNavigation} from '@react-navigation/native';
 
 import {createStackNavigator} from '@react-navigation/stack';
 
@@ -15,23 +13,17 @@ import UserScreen from '@app/screens/user';
 import ChatRoomEditScreen from '@app/screens/chatRoom/edit';
 import NotificationScreen from '@app/screens/notification';
 import AccusationScreen from '@app/screens/accusation';
-import SettingsNavigator, {SettingsNavigatorScreens} from './settings';
+import SettingsNavigator from './settings';
 import Icon from 'react-native-vector-icons/Ionicons';
 import HeaderBackIcon from '@app/components/common/HeaderBackIcon';
 import NotificationIcon from '@app/components/notification/NotificationIcon';
 
-import {StackActions} from '@react-navigation/native';
-
-import messaging from '@react-native-firebase/messaging';
-
-import {requestUserPermission} from '@app/utils/fcm';
 import {bottomToTopScreen, getDefaultScreenOptions} from './utils';
 
 import type {SignUpScreenParams} from '@app/screens/signUp';
 import type {ChatRoomScreenParams} from '@app/screens/chatRoom';
 import type {ChatRoomEditScreenParams} from '@app/screens/chatRoom/edit';
 import type {UserScreenScreenParams} from '@app/screens/user';
-import type {NavigationProp} from '@react-navigation/native';
 import type {AccusationScreenParams} from '@app/screens/accusation';
 
 export enum MainNavigatorScreens {
@@ -66,50 +58,9 @@ const Stack = createStackNavigator<MainNavigatorParamList>();
 
 const MainNavigator = () => {
   const theme = useTheme();
-  const navigation = useNavigation<NavigationProp<MainNavigatorParamList>>();
 
   const defaultScreenOptions = getDefaultScreenOptions({theme});
 
-  useEffect(() => {
-    requestUserPermission();
-
-    const messageModule = messaging();
-
-    const unsubscribeOpenApp = messageModule.onNotificationOpenedApp(
-      remoteMessage => {
-        if (remoteMessage.data) {
-          if (remoteMessage.data?.roomId) {
-            navigation.navigate(MainNavigatorScreens.ChatRoom, {
-              roomId: remoteMessage.data.roomId as string,
-              chatRoomName: null,
-              newMessageCount: 1,
-            });
-            return;
-          }
-          if (remoteMessage.data?.opinionId) {
-            const action = StackActions.push(
-              MainNavigatorScreens.SettingsStack,
-              {
-                screen: SettingsNavigatorScreens.OpinionDetail,
-                params: {id: remoteMessage.data.opinionId},
-              },
-            );
-            navigation.dispatch(action);
-            return;
-          }
-        }
-      },
-    );
-
-    const unsubscribe = messageModule.onMessage(async remoteMessage => {
-      console.log('A new FCM message arrived!', JSON.stringify(remoteMessage));
-    });
-
-    return () => {
-      unsubscribe();
-      unsubscribeOpenApp();
-    };
-  }, []);
   return (
     <Container behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
       <Stack.Navigator
