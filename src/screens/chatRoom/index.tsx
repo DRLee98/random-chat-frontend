@@ -103,7 +103,7 @@ const ChatRoomScreen = ({route}: ChatRoomScreenProps) => {
   };
 
   const sendMessageFn = async () => {
-    if (!me || !value) return;
+    if (!value) return;
     if (loading) return;
     const {data} = await sendMessage({
       variables: {
@@ -217,7 +217,7 @@ const ChatRoomScreen = ({route}: ChatRoomScreenProps) => {
       <InputBox>
         <Input
           value={value}
-          onChange={e => setValue(e.nativeEvent.text)}
+          onChangeText={setValue}
           returnKeyType="send"
           placeholder="메시지를 입력해주세요."
           right={
@@ -273,7 +273,7 @@ const HeightBox = styled.View`
 `;
 
 const InputBox = styled.View`
-  padding: 5px 12px;
+  padding: 8px 12px;
   padding-top: 10px;
   border-top-width: 1px;
   border-style: solid;

@@ -69,7 +69,9 @@ export const getTimestamp = (date: string) => {
   const hour = newDate.getHours();
   const minute = newDate.getMinutes();
 
-  return `${hour >= 12 ? '오후' : '오전'} ${hour % 12}:${formatNumber(minute)}`;
+  return `${hour >= 12 ? '오후' : '오전'} ${
+    hour > 12 ? hour % 12 : hour
+  }:${formatNumber(minute)}`;
 };
 
 export const isToday = (date: string) => {
