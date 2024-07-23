@@ -146,7 +146,6 @@ const ChatRoomTopModal = ({
               <ToggleUserBlockButton
                 userId={user.id}
                 nickname={user.nickname}
-                onAfterBlock={onAfterBlockFn}
               />
             </UserList>
           ))}

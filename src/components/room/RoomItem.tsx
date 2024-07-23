@@ -71,10 +71,10 @@ const RoomItem = ({userRoom}: RoomItemProps) => {
       }>
       <Container onPress={goChatRoom} activeOpacity={1}>
         <ProfileImg
-          id={userRoom.users[0].id}
-          url={userRoom.users[0].profileUrl}
-          bgColor={userRoom.users[0].profileBgColor}
-          textColor={userRoom.users[0].profileTextColor}
+          id={userRoom.users[0]?.id}
+          url={userRoom.users[0]?.profileUrl}
+          bgColor={userRoom.users[0]?.profileBgColor}
+          textColor={userRoom.users[0]?.profileTextColor}
           size={50}
         />
         <ContentsBox>

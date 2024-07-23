@@ -13,6 +13,7 @@ export const getHomeChatRoomName = (
 
   if (short) {
     const usersLength = userRoom.users.length;
+    if (usersLength < 1) return '채팅방';
     return `${userRoom.users[0].nickname}${
       usersLength > 1 ? ` 외 ${usersLength - 1}명` : ''
     }`;
