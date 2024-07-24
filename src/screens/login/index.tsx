@@ -41,7 +41,7 @@ const LoginScreen = ({navigation}: LoginScreenProps) => {
     loginFn({
       socialId: profile.id,
       socialPlatform: SocialPlatform.Naver,
-      nickname: profile.nickname + '',
+      nickname: profile.nickname ?? '',
       profileUrl: profile.profile_image ?? undefined,
     });
   };

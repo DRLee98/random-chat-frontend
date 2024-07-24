@@ -138,6 +138,9 @@ const SignUpScreen = ({route, navigation}: SignUpScreenProps) => {
       initValues.profile = file;
     }
     setValues(initValues);
+    if (!initValues.nickname) {
+      createRandomNickname();
+    }
   }, [route.params]);
 
   return (

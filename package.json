@@ -13,7 +13,8 @@
     "test": "jest",
     "pod-install": "cd ios && pod install && cd ..",
     "codegen": "graphql-codegen --config src/graphql/__generated__/codegen.ts",
-    "clear": "rm -rf yarn.lock package-lock.json node_modules && rm -rf android/app/build && rm -rf ios/Pods ios/Podfile.lock && yarn && yarn pod-install"
+    "clear": "rm -rf yarn.lock package-lock.json node_modules && rm -rf android/app/build && rm -rf ios/Pods ios/Podfile.lock && yarn && yarn pod-install",
+    "build:ios": "rm -rf ios/random_chat_frontend/main.jsbundle && react-native bundle --entry-file='index.js' --bundle-output='./ios/random_chat_frontend/main.jsbundle' --dev=false --platform='ios'"
   },
   "dependencies": {
     "@apollo/client": "^3.9.4",
